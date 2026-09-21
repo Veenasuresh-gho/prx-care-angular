@@ -1,0 +1,228 @@
+<div class="relative">
+
+  <!-- Notification Button -->
+  <button
+    type="button"
+    class="relative flex h-10 w-10 items-center justify-center rounded-full transition-all hover:bg-slate-100"
+    (click)="togglePopover()"
+    aria-label="Notifications"
+  >
+
+    <!-- Bell -->
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      class="h-5 w-5 text-slate-700"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      stroke-width="1.8"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75V9a6 6 0 00-12 0v.75c0 2.137-.75 4.1-2.05 5.772a23.848 23.848 0 005.454 1.31m5.453 0a24.255 24.255 0 01-5.453 0m5.453 0a3 3 0 11-5.453 0"
+      />
+    </svg>
+
+    <!-- Unread Indicator -->
+    @if (hasUnreadNotifications) {
+      <span
+        class="absolute right-2 top-2 h-2.5 w-2.5 rounded-full bg-red"
+      ></span>
+
+      <span
+        class="absolute right-2 top-2 h-2.5 w-2.5 animate-ping rounded-full bg-red opacity-50"
+      ></span>
+    }
+
+  </button>
+
+
+  <!-- Popover -->
+  @if (isOpen()) {
+
+    <!-- Overlay -->
+    <div
+      class="fixed inset-0 z-40"
+      (click)="closePopover()"
+    ></div>
+
+    <!-- Content -->
+    <div
+      class="absolute right-0 z-50 mt-3 w-[420px] overflow-hidden rounded-3xl border-0 bg-white p-0 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.25)]"
+    >
+
+      <!-- Header -->
+      <div class="relative overflow-hidden border-b">
+
+        <div
+          class="absolute inset-0 bg-gradient-to-r from-blue-50 via-white to-purple-50"
+        ></div>
+
+        <div
+          class="relative flex items-center justify-between px-6 py-5"
+        >
+
+          <div>
+
+            <h3 class="text-lg font-semibold tracking-tight text-black">
+              Notifications
+            </h3>
+
+            <p class="mt-1 text-xs text-slate-500">
+              Stay updated with your appointments
+            </p>
+
+          </div>
+
+          @if (hasUnreadNotifications) {
+            <div
+              class="rounded-full bg-red-light px-3 py-1 text-xs font-medium text-red"
+            >
+              New
+            </div>
+          }
+
+        </div>
+
+      </div>
+
+
+      <!-- Body -->
+      <div class="max-h-[500px] overflow-y-auto">
+
+        <!-- Loading -->
+        @if (loading()) {
+
+          <div class="flex justify-center py-14">
+
+            <div class="flex gap-1">
+
+              <span
+                class="h-2 w-2 animate-bounce rounded-full bg-primary"
+              ></span>
+
+              <span
+                class="h-2 w-2 animate-bounce rounded-full bg-primary [animation-delay:150ms]"
+              ></span>
+
+              <span
+                class="h-2 w-2 animate-bounce rounded-full bg-primary [animation-delay:300ms]"
+              ></span>
+
+            </div>
+
+          </div>
+
+        }
+
+        <!-- Empty -->
+        @else if (notifications().length === 0) {
+
+          <div
+            class="flex flex-col items-center justify-center px-6 py-16"
+          >
+
+            <div
+              class="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-100"
+            >
+
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-8 w-8 text-slate-500"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.5"
+                  d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z"
+                />
+              </svg>
+
+            </div>
+
+            <h4 class="font-semibold text-black">
+              Nothing new right now
+            </h4>
+
+            <p class="mt-2 text-center text-sm text-slate-500">
+              We'll notify you when there's something important.
+            </p>
+
+          </div>
+
+        }
+
+        <!-- Notifications -->
+        @else {
+
+          <div class="p-3">
+
+            @for (
+              notification of notifications();
+              track notification.id
+            ) {
+
+              <div
+                class="group relative mb-2 cursor-pointer rounded-2xl border border-transparent bg-white p-4 transition-all hover:-translate-y-0.5 hover:border-slate-200 hover:bg-slate-50 hover:shadow-md"
+              >
+
+                @if (!notification.isRead) {
+                  <div
+                    class="absolute bottom-0 left-0 top-0 w-1 rounded-l-2xl bg-primary"
+                  ></div>
+                }
+
+                <div class="pl-2">
+
+                  <div
+                    class="flex items-start justify-between gap-4"
+                  >
+
+                    <h4
+                      class="text-sm font-semibold text-slate-900"
+                    >
+                      {{ notification.title }}
+                    </h4>
+
+                    @if (!notification.isRead) {
+                      <div
+                        class="mt-1 h-2.5 w-2.5 rounded-full bg-blue-500"
+                      ></div>
+                    }
+
+                  </div>
+
+                  <p
+                    class="mt-2 text-sm leading-relaxed text-slate-600"
+                  >
+                    {{ notification.message }}
+                  </p>
+
+                  <div class="mt-3 flex items-center gap-2">
+
+                    <p class="text-xs text-slate-400">
+                      {{ getTimeAgo(notification.date) }}
+                    </p>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            }
+
+          </div>
+
+        }
+
+      </div>
+
+    </div>
+  }
+
+</div>
