@@ -1,0 +1,63 @@
+@if (open) {
+
+  <!-- Overlay -->
+  <div
+    class="fixed inset-0 z-40 bg-black/40"
+    (click)="close()"
+  ></div>
+
+  <!-- Sheet -->
+  <div
+    [ngClass]="[sheetClasses, 'sheet-' + side]"
+    [style.width]="side === 'left' || side === 'right' ? width : null"
+  >
+
+    <!-- Header -->
+    <div
+      class="sticky top-0 z-10 flex items-start justify-between gap-4
+             border-b border-gray-200 bg-white px-5 py-4 shadow-sm"
+    >
+
+      <div class="min-w-0">
+        @if (title) {
+          <h2 class="text-lg font-semibold text-gray-900">
+            {{ title }}
+          </h2>
+        }
+
+        @if (description) {
+          <p class="mt-1 text-sm text-gray-500">
+            {{ description }}
+          </p>
+        }
+      </div>
+
+      @if (showClose) {
+        <button
+          type="button"
+          class="flex h-8 w-8 shrink-0 items-center justify-center
+                 rounded-md text-gray-500
+                 hover:bg-gray-100 hover:text-gray-900"
+          (click)="close()"
+        >
+          <span class="text-xl leading-none">&times;</span>
+        </button>
+      }
+
+    </div>
+
+    <!-- Body -->
+    <div class="flex-1 overflow-y-auto bg-white p-5">
+      <ng-content></ng-content>
+    </div>
+
+    <!-- Footer -->
+    <div
+      class="sticky bottom-0 z-10 border-t border-gray-200
+             bg-white px-5 py-4 shadow-inner"
+    >
+      <ng-content select="[sheet-footer]"></ng-content>
+    </div>
+
+  </div>
+}

@@ -1,0 +1,23 @@
+.sheet-right {
+  top: 0;
+  right: 0;
+  height: 100%;
+}
+
+.sheet-left {
+  top: 0;
+  left: 0;
+  height: 100%;
+}
+
+.sheet-top {
+  top: 0;
+  left: 0;
+  width: 100% !important;
+}
+
+.sheet-bottom {
+  bottom: 0;
+  left: 0;
+  width: 100% !important;
+}
