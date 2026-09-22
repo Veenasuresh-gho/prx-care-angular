@@ -2,6 +2,6 @@ export const environment = {
   production: true,
 
   application: {
-    apiUrl: 'https://ghoapps.com/prx/iin'
+    apiUrl: 'https://ghoapps.com/abi/iin'
   }
 };

@@ -1,42 +1,41 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
-import { ghoiin, tags, ghoresult } from '../models/gho-model';
 import { environment } from '../../enviornments/environment';
+import { ghoiin, ghoresult, tags } from '../models/gho-model';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 export class GHOService {
 
-    private http = inject(HttpClient);
+  private http = inject(HttpClient);
 
-    private url = environment.application.apiUrl;
+  private url = environment.application.apiUrl;
 
-    getdata(
-        action: string,
-        ts: tags[]
-    ): Observable<ghoresult> {
+  getdata(
+    action: string,
+    ts: tags[]
+  ): Observable<ghoresult> {
 
-        const request: ghoiin = {
-            Token: '',
-            Action: action,
-            Lts: new Date().toString(),
-            BrowseInfo: navigator.userAgent,
-            Mode: 'WEB-HIS',
-            Tags: ts
-        };
+    const request: ghoiin = {
+      Token: sessionStorage.getItem('tkn') ?? '',
+      Action: action,
+      Lts: new Date().toString(),
+      BrowseInfo: navigator.userAgent,
+      Mode: 'WEB',
+      Tags: ts
+    };
 
-        const headers = new HttpHeaders({
-            'Content-Type': 'application/json',
-            'Cache-Control': 'no-cache'
-        });
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Cache-Control': 'no-cache'
+    });
 
-        return this.http.post<ghoresult>(
-            this.url,
-            request,
-            { headers }
-        );
-    }
+    return this.http.post<ghoresult>(
+      this.url,
+      request,
+      { headers }
+    );
+  }
 }

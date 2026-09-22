@@ -1,0 +1,91 @@
+<div class="flex min-h-screen items-center justify-center px-6">
+
+    <div
+        class="w-full max-w-md overflow-hidden rounded-2xl bg-white shadow-[0_20px_60px_-15px_rgba(45,70,128,0.25)] ring-1 ring-black/5">
+
+        <!-- Top gradient -->
+        <div class="h-1.5 w-full bg-gradient-to-r from-[#2D4680] to-[#4A67A3]"></div>
+
+        <div class="flex flex-col gap-6 p-8">
+
+            <!-- Header -->
+            <div class="flex flex-col gap-2">
+
+                <h1 class="font-serif text-3xl tracking-tight text-[#1F3159]">
+                    Enter verification code
+                </h1>
+
+                <p class="text-sm leading-relaxed text-grey">
+                    Enter the verification code sent to your phone.
+                </p>
+
+            </div>
+
+            <div class="flex items-center gap-3 py-1" aria-hidden="true">
+
+                <span class="h-px flex-1 bg-border"></span>
+
+                <svg width="72" height="16" viewBox="0 0 72 16" fill="none">
+                    <path d="M0 8H20L24 2L30 14L34 8H72" stroke="#2D4680" stroke-width="1.6" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                </svg>
+
+                <span class="h-px flex-1 bg-border"></span>
+
+            </div>
+
+            <!-- OTP -->
+            <div class="flex flex-col items-center gap-6">
+
+                <div class="flex justify-center gap-2">
+
+                    @for (digit of [0, 1, 2, 3, 4, 5]; track digit) {
+
+                    <mat-form-field appearance="outline" class="w-12">
+
+                        <input matInput [id]="'otp-' + digit" type="text" maxlength="1" inputmode="numeric"
+                            autocomplete="one-time-code" [value]="otp[digit]" (input)="onOtpInput($event, digit)"
+                            (keydown)="onOtpKeyDown($event, digit)"
+                            class="text-center text-lg font-semibold text-[#1F3159]" />
+
+                    </mat-form-field>
+
+                    }
+
+                </div>
+
+                <!-- Resend -->
+                <div class="flex items-center gap-1.5 text-sm text-grey">
+
+                    <span>Didn't get the code?</span>
+
+                    <button type="button" (click)="resendOtp()" [disabled]="resendLoading"
+                        class="h-auto px-0 font-medium text-primary hover:underline disabled:cursor-not-allowed disabled:opacity-50">
+
+                        @if (resendLoading) {
+                        Sending...
+                        } @else {
+                        Resend
+                        }
+
+                    </button>
+
+                </div>
+
+                <!-- Verify -->
+                <button type="button" (click)="verifyOtp()"
+                    class="h-11 w-full rounded-lg bg-gradient-to-r from-[#2D4680] to-[#4A67A3] font-medium text-white transition-opacity hover:opacity-90">
+                    @if (loading) {
+                    Verifying...
+                    } @else {
+                    Verify & continue
+                    }
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
