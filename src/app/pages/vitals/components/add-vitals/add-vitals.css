@@ -1,0 +1,140 @@
+.add-vitals {
+    width: 100%;
+    padding: 8px;
+}
+
+
+/* =========================================================
+   Form
+   ========================================================= */
+
+.vitals-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+
+.heart-rate-field {
+    width: 100%;
+}
+
+
+/* =========================================================
+   Grid
+   ========================================================= */
+
+.vitals-grid {
+    display: grid;
+
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 20px;
+}
+
+
+.vital-field {
+    width: 100%;
+}
+
+
+::ng-deep .vital-field .mat-mdc-text-field-wrapper {
+    background-color: #ffffff;
+}
+
+
+::ng-deep .vital-field .mat-mdc-form-field-flex {
+    min-height: 56px;
+}
+
+
+::ng-deep .vital-field .mat-mdc-floating-label {
+    font-size: 14px;
+}
+
+
+::ng-deep .vital-field input {
+    font-size: 14px;
+}
+
+
+
+.vital-prefix-icon {
+    margin-right: 8px;
+
+    color: #64748b;
+
+    font-size: 20px;
+}
+
+
+.unit {
+    color: #64748b;
+    font-size: 13px;
+    font-weight: 500;
+    white-space: nowrap;
+    padding-right: 15px;
+}
+
+
+.form-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    width: 100%;
+}
+
+
+.submit-button {
+    flex: 1;
+
+    min-height: 44px;
+
+    background-color: #2d4680 !important;
+    color: #ffffff !important;
+
+    border-radius: 6px;
+}
+
+
+.cancel-button {
+    min-height: 44px;
+
+    border-radius: 6px;
+}
+
+
+/* Spinner */
+
+.submit-button mat-spinner {
+    margin-right: 8px;
+}
+
+
+@media (max-width: 768px) {
+
+    .vitals-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .add-vitals {
+        padding: 4px;
+    }
+
+}
+
+
+@media (max-width: 480px) {
+
+    .form-actions {
+        flex-direction: column-reverse;
+    }
+
+    .submit-button,
+    .cancel-button {
+        width: 100%;
+    }
+
+}

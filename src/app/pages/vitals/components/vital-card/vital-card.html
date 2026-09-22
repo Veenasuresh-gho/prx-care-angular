@@ -1,0 +1,70 @@
+<div class="vitals-grid">
+
+    @for (vital of vitals; track vital.title) {
+
+        <div
+            class="vital-card"
+            [style.background-color]="vital.color"
+        >
+
+            <!-- Left Content -->
+            <div class="vital-content">
+
+                <div>
+
+                    <p class="vital-title">
+                        {{ vital.title }}
+                    </p>
+
+                    <div class="vital-value-row">
+
+                        <span class="vital-value">
+                            {{ vital.value !== null && vital.value !== undefined && vital.value !== ''
+                                ? vital.value
+                                : '-' }}
+                        </span>
+
+                        @if (vital.unit) {
+                            <span class="vital-unit">
+                                {{ vital.unit }}
+                            </span>
+                        }
+
+                    </div>
+
+                </div>
+
+
+                <!-- Normal Range -->
+                <div class="vital-normal">
+
+                    @if (vital.normal) {
+                        <span>
+                            Normal : {{ vital.normal }}
+                        </span>
+                    }
+
+                </div>
+
+            </div>
+
+
+            <!-- Icon -->
+            <div
+                class="vital-icon"
+                [style.background-color]="vital.iconColor + '20'"
+            >
+
+                <mat-icon
+                    [style.color]="vital.iconColor"
+                >
+                    {{ vital.icon }}
+                </mat-icon>
+
+            </div>
+
+        </div>
+
+    }
+
+</div>

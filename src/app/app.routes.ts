@@ -4,6 +4,7 @@ import { authGuard } from './guards/auth-guards';
 import { Dashboard } from './features/dashboard/dashboard';
 import { MedicationsComponent } from './pages/medications/medications';
 import { SignUp } from './features/auth/sign-up/sign-up';
+import { VitalsComponent } from './pages/vitals/vitals';
 
 export const routes: Routes = [
     {
@@ -22,6 +23,10 @@ export const routes: Routes = [
     {
         path: 'medications',
         component: MedicationsComponent
+    },
+     {
+        path: 'vitals',
+        component: VitalsComponent
     },
     {
         path: '**',
