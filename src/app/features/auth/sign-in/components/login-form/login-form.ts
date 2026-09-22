@@ -6,6 +6,7 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { GHOService } from '../../../../../services/gho.service';
+import { AuthService } from '../../../../../services/auth-service';
 
 @Component({
   selector: 'app-login-form',
@@ -19,6 +20,7 @@ export class LoginForm {
   private fb = inject(FormBuilder);
   private router = inject(Router);
   private ghoService = inject(GHOService);
+  authService = inject(AuthService);
 
   isLoading = false;
   otpRequested = output<string>();
@@ -82,7 +84,8 @@ export class LoginForm {
         }
         const token = response.Data?.[0]?.[0]?.Token;
         if (token) {
-          sessionStorage.setItem('tkn', token);
+          this.authService.setToken(token);
+          this.router.navigate(['/dashboard']);
         }
         this.isLoading = false;
         if (data.useOtp) {

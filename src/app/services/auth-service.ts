@@ -6,7 +6,7 @@ import { Injectable, signal } from '@angular/core';
 export class AuthService {
 
   private token = signal<string | null>(
-    sessionStorage.getItem('token')
+    sessionStorage.getItem('tkn')
   );
 
   isAuthenticated(): boolean {
@@ -18,12 +18,14 @@ export class AuthService {
   }
 
   setToken(token: string): void {
-    sessionStorage.setItem('token', token);
+    sessionStorage.setItem('tkn', token);
     this.token.set(token);
   }
 
   clearToken(): void {
-    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('tkn');
+    sessionStorage.removeItem('id');
+
     this.token.set(null);
   }
-}   
+}

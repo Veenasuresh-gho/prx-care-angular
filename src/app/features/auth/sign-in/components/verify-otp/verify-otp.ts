@@ -10,6 +10,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ToastrService } from 'ngx-toastr';
 import { GHOService } from '../../../../../services/gho.service';
+import { AuthService } from '../../../../../services/auth-service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-verify-otp',
@@ -26,6 +28,8 @@ export class VerifyOtp {
 
   srv = inject(GHOService);
   toastr = inject(ToastrService);
+  authService = inject(AuthService);
+  router = inject(Router)
 
   @Input() phone = '';
   @Input() id = '';
@@ -136,46 +140,24 @@ export class VerifyOtp {
     this.srv.getdata('patient', tv).subscribe({
 
       next: (res) => {
-
-        console.log('OTP Response:', res);
-        console.log('OTP Data:', res.Data);
-
         if (res.Status === 1) {
 
           const result = res.Data?.[0]?.[0];
 
-          console.log('OTP Result:', result);
-
           const token = result?.Token;
           const userId = result?.id;
 
-          console.log('Token:', token);
-          console.log('ID:', userId);
-
-          // Store ID independently
           if (userId) {
             sessionStorage.setItem('id', userId);
           }
 
-          // Store token independently
           if (token) {
-            sessionStorage.setItem('tkn', token);
+            this.authService.setToken(token);
+            
           }
-
-          console.log(
-            'Stored token:',
-            sessionStorage.getItem('tkn')
-          );
-
-          console.log(
-            'Stored id:',
-            sessionStorage.getItem('id')
-          );
-
           this.toastr.success('OTP verified successfully');
-
+          this.router.navigate(['/dashboard']);
           this.verified.emit();
-
           return;
         }
 
@@ -187,14 +169,7 @@ export class VerifyOtp {
       },
 
       error: (error) => {
-
-        console.error(
-          'OTP verification error:',
-          error
-        );
-
         this.loading = false;
-
         this.toastr.error(
           'Something went wrong'
         );
