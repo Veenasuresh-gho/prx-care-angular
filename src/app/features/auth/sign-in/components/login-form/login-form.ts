@@ -23,9 +23,7 @@ export class LoginForm {
   authService = inject(AuthService);
 
   isLoading = false;
-  otpRequested = output<string>();
-  id: string = '';
-
+  otpRequested = output<{ id: string; phone: string }>(); id: string = '';
   form = this.fb.group({
     phone: ['', Validators.required],
     password: [''],
@@ -89,7 +87,10 @@ export class LoginForm {
         }
         this.isLoading = false;
         if (data.useOtp) {
-          this.otpRequested.emit(this.id);
+          this.otpRequested.emit({
+            id: this.id,
+            phone: data.phone ?? ''
+          });
         }
       },
       error: (error) => {

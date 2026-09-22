@@ -10,9 +10,11 @@ import { VerifyOtp } from './components/verify-otp/verify-otp';
 export class SignIn {
   showVerifyOtp = false;
   id = '';
+  phone = '';
 
-  handleOtpRequested(id: string): void {
-    this.id = id;
+  handleOtpRequested(data: { id: string; phone: string }): void {
+    this.id = data.id;
+    this.phone = data.phone;
     this.showVerifyOtp = true;
   }
 }

@@ -12,12 +12,6 @@ export interface ghoiin {
   Tags: tags[];
 }
 
-// export interface ghoresult {
-//   Status: number;
-//   Message?: string;
-//   Data?: any;
-// }
-
 export class ghoresult 
 {
   Status: number =0;

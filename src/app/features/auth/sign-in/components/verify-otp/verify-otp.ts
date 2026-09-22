@@ -76,7 +76,8 @@ export class VerifyOtp {
 
     const tv = [
       { T: 'dk1', V: this.phone },
-      { T: 'dk2', V: 'otp' }
+      { T: 'dk2', V: 'otp' },
+      { T: 'c10', V: '9' }
     ];
 
     this.srv.getdata('patient', tv).subscribe({
@@ -153,7 +154,7 @@ export class VerifyOtp {
 
           if (token) {
             this.authService.setToken(token);
-            
+
           }
           this.toastr.success('OTP verified successfully');
           this.router.navigate(['/dashboard']);

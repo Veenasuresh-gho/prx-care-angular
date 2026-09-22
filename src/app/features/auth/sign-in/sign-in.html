@@ -1,12 +1,9 @@
 <div class="flex min-h-screen items-center justify-center">
 
     @if (!showVerifyOtp) {
-
     <app-login-form (otpRequested)="handleOtpRequested($event)" />
     } @else {
-
-    <app-verify-otp [id]="id" />
-
+    <app-verify-otp [phone]="phone" [id]="id" />
     }
 
 </div>
