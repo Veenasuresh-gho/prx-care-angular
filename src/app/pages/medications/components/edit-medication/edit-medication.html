@@ -1,81 +1,107 @@
-<form [formGroup]="medicationForm" (ngSubmit)="submit()" class="flex flex-col h-full">
+<form [formGroup]="medicationForm" (ngSubmit)="submit()" class="flex h-full min-w-0 flex-col overflow-x-hidden">
+    <div class="min-w-0 flex-1 space-y-6
+               overflow-x-hidden overflow-y-auto px-1">
 
-    <div class="flex-1 space-y-6 overflow-y-auto">
+        <div class="min-w-0">
 
-        <!-- Medication Name -->
-        <div>
+            <mat-form-field appearance="outline" class="w-full" subscriptSizing="dynamic">
 
-            <label class="block text-sm font-medium text-gray-700 mb-2">
-                Medication Name
-            </label>
+                <mat-label>
+                    Medication Name
+                </mat-label>
 
-            <input type="text" formControlName="medicationName" placeholder="Enter medication name" class="w-full rounded-lg border border-gray-300
-                       px-3 py-2.5 text-sm
-                       outline-none
-                       focus:border-primary
-                       focus:ring-1 focus:ring-primary" />
+                <input matInput type="text" formControlName="medicationName" placeholder="Enter medication name" />
 
-            @if (
-            medicationForm.controls.medicationName.touched &&
-            medicationForm.controls.medicationName.invalid
-            ) {
+                @if (
+                medicationForm.controls.medicationName.touched &&
+                medicationForm.controls.medicationName.hasError('required')
+                ) {
 
-            <p class="mt-1 text-xs text-red-500">
-                Medication name is required.
-            </p>
+                <mat-error>
+                    Medication name is required.
+                </mat-error>
 
-            }
+                }
 
-        </div>
-
-
-        <!-- Start Date -->
-        <div>
-
-            <label class="block text-sm font-medium text-gray-700 mb-2">
-                Start Date
-            </label>
-
-            <input type="date" formControlName="startDate" class="w-full rounded-lg border border-gray-300
-                       px-3 py-2.5 text-sm
-                       outline-none
-                       focus:border-primary
-                       focus:ring-1 focus:ring-primary" />
+            </mat-form-field>
 
         </div>
 
+        <div class="min-w-0">
 
-        <!-- End Date -->
-        <div>
+            <mat-form-field appearance="outline" class="w-full" subscriptSizing="dynamic">
 
-            <label class="block text-sm font-medium text-gray-700 mb-2">
-                End Date
-            </label>
+                <mat-label>
+                    Start Date
+                </mat-label>
 
-            <input type="date" formControlName="endDate" class="w-full rounded-lg border border-gray-300
-                       px-3 py-2.5 text-sm
-                       outline-none
-                       focus:border-primary
-                       focus:ring-1 focus:ring-primary" />
+                <input matInput [matDatepicker]="startPicker" formControlName="startDate"
+                    placeholder="Select start date" />
+
+                <mat-datepicker-toggle matIconSuffix [for]="startPicker" />
+
+                <mat-datepicker #startPicker />
+
+                @if (
+                medicationForm.controls.startDate.touched &&
+                medicationForm.controls.startDate.hasError('required')
+                ) {
+
+                <mat-error>
+                    Start date is required.
+                </mat-error>
+
+                }
+
+            </mat-form-field>
 
         </div>
 
+        <div class="min-w-0">
 
-        <!-- Frequency -->
-        <div>
+            <mat-form-field appearance="outline" class="w-full" subscriptSizing="dynamic">
 
-            <label class="block text-sm font-medium text-gray-700 mb-3">
+                <mat-label>
+                    End Date
+                </mat-label>
+
+                <input matInput [matDatepicker]="endPicker" formControlName="endDate" placeholder="Select end date" />
+
+                <mat-datepicker-toggle matIconSuffix [for]="endPicker" />
+
+                <mat-datepicker #endPicker />
+
+                @if (
+                medicationForm.controls.endDate.touched &&
+                medicationForm.controls.endDate.hasError('required')
+                ) {
+
+                <mat-error>
+                    End date is required.
+                </mat-error>
+
+                }
+
+            </mat-form-field>
+
+        </div>
+
+        <div class="min-w-0">
+
+            <label class="mb-2 block text-sm font-medium text-gray-700">
                 Frequency
             </label>
 
-            <div class="grid grid-cols-2 gap-3">
+
+            <div class="grid grid-cols-2 gap-2">
 
                 @for (
                 option of frequencyOptions;
                 track option
                 ) {
 
-                <button type="button" (click)="toggleFrequency(option)" class="rounded-lg border px-4 py-3
+                <button type="button" (click)="toggleFrequency(option)" class="min-w-0 rounded-lg border
+                               px-3 py-2.5
                                text-sm font-medium
                                transition-all" [class.bg-primary]="
                             isFrequencySelected(option)
@@ -97,34 +123,53 @@
 
             </div>
 
+
+            @if (
+            medicationForm.controls.frequency.touched &&
+            medicationForm.controls.frequency.invalid
+            ) {
+
+            <p class="mt-1 text-xs text-red-500">
+                Please select at least one frequency.
+            </p>
+
+            }
+
         </div>
 
     </div>
 
 
     <!-- Footer -->
-    <div class="sticky bottom-0
-               bg-white
+    <div class="sticky bottom-0 mt-3 min-w-0
                border-t border-gray-200
-               pt-4 mt-6">
+               bg-white pt-3">
 
         <button type="submit" [disabled]="isLoading" class="w-full rounded-lg
-                   bg-primary text-white
-                   px-4 py-3
+                   bg-primary
+                   px-4 py-2.5
                    text-sm font-medium
+                   text-white
+                   transition
                    hover:opacity-90
                    disabled:opacity-50">
 
             @if (isLoading) {
 
-            Updating...
+            <span>
+                Updating...
+            </span>
 
             } @else {
 
-            Update Medication
+            <span>
+                Update Medication
+            </span>
 
             }
 
         </button>
+
     </div>
+
 </form>

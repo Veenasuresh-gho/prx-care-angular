@@ -11,6 +11,11 @@ import {
     Validators
 } from '@angular/forms';
 
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+
 import { GHOService } from '../../../../services/gho.service';
 import { GHOUtitity } from '../../../../services/utilities';
 import { ghoresult, tags } from '../../../../models/gho-model';
@@ -20,20 +25,33 @@ import { ToastrService } from 'ngx-toastr';
     selector: 'app-add-medication',
     standalone: true,
     imports: [
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatDatepickerModule,
+        MatNativeDateModule
     ],
     templateUrl: './add-medication.html',
     styleUrl: './add-medication.css'
 })
 export class AddMedication {
+
     private fb = inject(FormBuilder);
+
     srv = inject(GHOService);
     utl = inject(GHOUtitity);
-    @Output() saved = new EventEmitter<void>();
-    isLoading = false;
-    tv: tags[] = [];
-    res: ghoresult = new ghoresult();
+
     private toastr = inject(ToastrService);
+
+    @Output() saved = new EventEmitter<void>();
+
+    isLoading = false;
+
+    tv: tags[] = [];
+
+    res: ghoresult = new ghoresult();
+
+
     medicationForm = this.fb.group({
 
         medicationName: [
@@ -42,12 +60,12 @@ export class AddMedication {
         ],
 
         startDate: [
-            '',
+            null as Date | null,
             Validators.required
         ],
 
         endDate: [
-            '',
+            null as Date | null,
             Validators.required
         ],
 
@@ -67,11 +85,13 @@ export class AddMedication {
     ];
 
 
-
     toggleFrequency(option: string): void {
+
         const current =
             this.medicationForm.controls.frequency.value ?? [];
+
         if (current.includes(option)) {
+
             this.medicationForm.controls.frequency.setValue(
                 current.filter(item => item !== option)
             );
@@ -98,54 +118,64 @@ export class AddMedication {
 
     }
 
-
-    formatDate(dateValue: string): string {
+    formatDate(dateValue: Date | null): string {
         if (!dateValue) {
             return '';
         }
 
-        const date = new Date(dateValue);
-        if (isNaN(date.getTime())) {
+        if (!(dateValue instanceof Date) || isNaN(dateValue.getTime())) {
             return '';
         }
-        return date.toLocaleDateString('en-GB', {
+        return dateValue.toLocaleDateString('en-GB', {
             day: 'numeric',
             month: 'long',
             year: 'numeric'
         });
+
     }
 
+
     submit(): void {
+
         if (this.medicationForm.invalid) {
+
             this.medicationForm.markAllAsTouched();
+
             return;
         }
 
-        const userId = sessionStorage.getItem('id');
+
+        const userId =
+            sessionStorage.getItem('id');
+
+
         if (!userId) {
+
             console.error(
                 'User ID not found in session storage'
             );
+
+            this.toastr.error(
+                'User ID not found'
+            );
+
             return;
         }
 
 
-        // Get form values
         const formData =
             this.medicationForm.getRawValue();
 
-
-        // Format dates
         const startDate =
             this.formatDate(
-                formData.startDate ?? ''
+                formData.startDate
             );
+
 
         const endDate =
             this.formatDate(
-                formData.endDate ?? ''
+                formData.endDate
             );
-
         const frequency =
             (formData.frequency ?? []).join(',');
         const tv: tags[] = [
@@ -186,62 +216,60 @@ export class AddMedication {
             }
 
         ];
-
-
         this.isLoading = true;
-
         this.srv
-            .getdata('patientmedication', tv)
+            .getdata(
+                'patientmedication',
+                tv
+            )
             .subscribe({
-
                 next: (r) => {
-
                     this.isLoading = false;
-
                     if (r.Status === 1) {
-
                         const successMessage =
                             r.Data?.[0]?.[0]?.msg ??
                             'Medication added successfully';
-
                         this.toastr.success(
                             successMessage
                         );
-
                         this.medicationForm.reset({
                             medicationName: '',
-                            startDate: '',
-                            endDate: '',
+                            startDate: null,
+                            endDate: null,
                             frequency: []
+
                         });
+
 
                         this.saved.emit();
 
                         return;
                     }
-
                     const errorMessage =
                         r.Info ||
                         'Failed to add medication';
-
                     this.toastr.error(
                         errorMessage
                     );
+
                 },
 
+
                 error: (err) => {
+
                     console.error(
                         'Medication API Error:',
                         err
                     );
-
                     this.isLoading = false;
                     this.toastr.error(
                         err?.Message ||
                         err?.error?.Info ||
                         'Something went wrong while adding medication'
                     );
+
                 }
+
             });
 
     }

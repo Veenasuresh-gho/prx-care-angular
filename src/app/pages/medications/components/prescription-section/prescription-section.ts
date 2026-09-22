@@ -54,9 +54,10 @@ export class PrescriptionSection implements OnInit {
                 T: 'dk1',
                 V: userId
             },
+            
             {
                 T: 'c10',
-                V: '6'
+                V: '16'
             }
         ];
 
