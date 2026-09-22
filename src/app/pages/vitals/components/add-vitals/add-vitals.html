@@ -1,0 +1,147 @@
+<div class="add-vitals">
+
+    <form
+        [formGroup]="vitalsForm"
+        (ngSubmit)="submit()"
+        class="vitals-form"
+    >
+
+        <!-- Heart Rate -->
+        <div class="heart-rate-field">
+
+            <mat-form-field
+                appearance="outline"
+                class="vital-field"
+            >
+
+                <mat-label>
+                    Heart Rate
+                </mat-label>
+
+                <mat-icon
+                    matPrefix
+                    class="vital-prefix-icon"
+                >
+                    favorite
+                </mat-icon>
+
+                <input
+                    matInput
+                    type="number"
+                    formControlName="heartRate"
+                    placeholder="Enter value"
+                />
+
+                <span
+                    matSuffix
+                    class="unit"
+                >
+                    bpm
+                </span>
+
+                @if (
+                    vitalsForm.get('heartRate')?.hasError('required') &&
+                    vitalsForm.get('heartRate')?.touched
+                ) {
+                    <mat-error>
+                        Heart Rate is required
+                    </mat-error>
+                }
+
+            </mat-form-field>
+
+        </div>
+
+
+        <!-- Other Vitals -->
+        <div class="vitals-grid">
+
+            @for (field of vitalFields.slice(1); track field.name) {
+
+                <mat-form-field
+                    appearance="outline"
+                    class="vital-field"
+                >
+
+                    <mat-label>
+                        {{ field.label }}
+                    </mat-label>
+
+                    <mat-icon
+                        matPrefix
+                        class="vital-prefix-icon"
+                    >
+                        {{ field.icon }}
+                    </mat-icon>
+
+                    <input
+                        matInput
+                        type="number"
+                        [formControlName]="field.name"
+                        [placeholder]="field.placeholder"
+                    />
+
+                    <span
+                        matSuffix
+                        class="unit"
+                    >
+                        {{ field.unit }}
+                    </span>
+
+                </mat-form-field>
+
+            }
+
+        </div>
+
+
+        <!-- Buttons -->
+        <div class="form-actions">
+
+            @if (editData) {
+
+                <button
+                    mat-stroked-button
+                    type="button"
+                    class="cancel-button"
+                    [disabled]="isLoading"
+                    (click)="cancelEdit()"
+                >
+                    Cancel
+                </button>
+
+            }
+
+            <button
+                mat-flat-button
+                type="submit"
+                class="submit-button"
+                [disabled]="isLoading"
+            >
+
+                @if (isLoading) {
+
+                    <mat-spinner
+                        diameter="18"
+                    >
+                    </mat-spinner>
+
+                    <span>
+                        Saving...
+                    </span>
+
+                } @else {
+
+                    <span>
+                        {{ editData ? 'Update Vitals' : 'Add Vitals' }}
+                    </span>
+
+                }
+
+            </button>
+
+        </div>
+
+    </form>
+
+</div>

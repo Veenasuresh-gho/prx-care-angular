@@ -1,0 +1,80 @@
+.vitals-history {
+    width: 100%;
+}
+
+
+/* =========================================================
+   Header
+   ========================================================= */
+
+.history-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    width: 100%;
+    margin-bottom: 16px;
+}
+
+
+.created-by {
+    margin: 0;
+
+    font-size: 14px;
+    color: #6b7280;
+}
+
+
+.created-by span {
+    margin-left: 4px;
+
+    font-weight: 700;
+    color: #111827;
+}
+
+
+/* =========================================================
+   Edit Button
+   ========================================================= */
+
+.edit-button {
+    display: inline-flex !important;
+    align-items: center;
+    gap: 5px;
+
+    min-width: auto !important;
+
+    padding: 0 8px !important;
+
+    font-size: 14px;
+}
+
+
+.edit-button mat-icon {
+    width: 18px;
+    height: 18px;
+
+    font-size: 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+/* =========================================================
+   Mobile
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+    .history-header {
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .created-by {
+        font-size: 13px;
+    }
+
+}

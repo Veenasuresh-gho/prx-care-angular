@@ -1,0 +1,40 @@
+<div class="vitals-history">
+
+    <!-- Top Section -->
+    <div class="history-header">
+
+        <p class="created-by">
+            Created By :
+            <span>
+                {{ vitalsByDate?.createdBy || '-' }}
+            </span>
+        </p>
+
+
+        <button
+            mat-button
+            type="button"
+            class="edit-button"
+            (click)="onEdit()"
+        >
+
+            <mat-icon>
+                edit
+            </mat-icon>
+
+            <span>
+                Edit
+            </span>
+
+        </button>
+
+    </div>
+
+
+    <!-- Vital Cards -->
+    <app-vital-card
+        [recentVitals]="vitalsByDate"
+    >
+    </app-vital-card>
+
+</div>
