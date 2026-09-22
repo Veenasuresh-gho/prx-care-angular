@@ -7,11 +7,13 @@ import {
 import { Router } from '@angular/router';
 import { GHOService } from '../../../../../services/gho.service';
 import { AuthService } from '../../../../../services/auth-service';
+import { CustomInput } from '../../../../../components/input/input';
+import { Button } from '../../../../../components/button/button';
 
 @Component({
   selector: 'app-login-form',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, CustomInput,Button],
   templateUrl: './login-form.html'
 })
 
@@ -100,6 +102,6 @@ export class LoginForm {
   }
 
   goToSignup(): void {
-    this.router.navigate(['/auth/signup']);
+    this.router.navigate(['/auth/sign-up']);
   }
 }

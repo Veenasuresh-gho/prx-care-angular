@@ -12,6 +12,7 @@ import { ToastrService } from 'ngx-toastr';
 import { GHOService } from '../../../../../services/gho.service';
 import { AuthService } from '../../../../../services/auth-service';
 import { Router } from '@angular/router';
+import { Button } from '../../../../../components/button/button';
 
 @Component({
   selector: 'app-verify-otp',
@@ -19,7 +20,8 @@ import { Router } from '@angular/router';
   imports: [
     FormsModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    Button
   ],
   templateUrl: './verify-otp.html'
 })

@@ -1,0 +1,65 @@
+<div class="flex w-full flex-col gap-1 py-1">
+
+  @if (label) {
+    <label
+      [for]="id"
+      class="text-sm font-medium text-black"
+    >
+      {{ label }}
+
+      @if (required) {
+        <span class="text-red">*</span>
+      }
+    </label>
+  }
+
+  <div class="relative">
+
+    <input
+      [id]="id"
+      [name]="name"
+      [type]="type"
+      [value]="value"
+      [placeholder]="placeholder"
+      [disabled]="disabled"
+      [required]="required"
+      (input)="onInput($event)"
+      (blur)="onBlur()"
+      class="
+        h-11 w-full rounded-lg
+        border border-border
+        bg-white
+        px-3.5
+        text-sm text-primary-dark
+        outline-none
+        transition-all duration-200
+        placeholder:text-grey
+
+        hover:border-grey
+
+        focus:border-primary
+        focus:ring-4
+        focus:ring-primary/10
+
+        disabled:cursor-not-allowed
+        disabled:bg-light-grey
+        disabled:text-grey
+      "
+      [class.border-red]="error"
+      [class.focus:border-red]="error"
+      [class.focus:ring-red/10]="error"
+    />
+
+  </div>
+
+  @if (error) {
+    <p class="text-xs text-red">
+      {{ error }}
+    </p>
+  } @else if (hint) {
+    <p class="text-xs text-grey">
+      {{ hint }}
+    </p>
+  }
+
+</div>

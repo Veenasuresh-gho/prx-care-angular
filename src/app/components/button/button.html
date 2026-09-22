@@ -1,0 +1,50 @@
+<button
+  [type]="type()"
+  [disabled]="disabled()"
+  class="
+    inline-flex
+    h-11
+    items-center
+    justify-center
+    gap-2
+    rounded-lg
+    px-5
+    text-sm
+    font-medium
+    transition-all
+    duration-200
+    outline-none
+    focus:ring-4
+    disabled:cursor-not-allowed
+    disabled:opacity-50
+  "
+  [class.w-full]="fullWidth()"
+
+  [class.bg-primary]="variant() === 'primary'"
+  [class.text-white]="variant() === 'primary'"
+  [class.hover:bg-primary-dark]="variant() === 'primary'"
+  [class.focus:ring-primary-light]="variant() === 'primary'"
+
+  [class.border]="variant() === 'outline'"
+  [class.border-primary]="variant() === 'outline'"
+  [class.bg-white]="variant() === 'outline'"
+  [class.text-primary]="variant() === 'outline'"
+  [class.hover:bg-primary-light]="variant() === 'outline'"
+  [class.focus:ring-primary-light]="variant() === 'outline'"
+
+  [class.text-primary]="variant() === 'ghost'"
+  [class.hover:bg-primary-light]="variant() === 'ghost'"
+  [class.focus:ring-primary-light]="variant() === 'ghost'"
+
+  [class.bg-green]="variant() === 'success'"
+  [class.!text-white]="variant() === 'success'"
+  [class.hover:bg-green/90]="variant() === 'success'"
+  [class.focus:ring-green-light]="variant() === 'success'"
+
+  [class.bg-red]="variant() === 'destructive'"
+  [class.!text-white]="variant() === 'destructive'"
+  [class.hover:bg-red/90]="variant() === 'destructive'"
+  [class.focus:ring-red-light]="variant() === 'destructive'"
+>
+  <ng-content></ng-content>
+</button>

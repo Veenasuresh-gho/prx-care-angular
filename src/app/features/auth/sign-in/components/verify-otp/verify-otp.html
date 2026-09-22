@@ -73,14 +73,14 @@
                 </div>
 
                 <!-- Verify -->
-                <button type="button" (click)="verifyOtp()"
-                    class="h-11 w-full rounded-lg bg-gradient-to-r from-[#2D4680] to-[#4A67A3] font-medium text-white transition-opacity hover:opacity-90">
+                <app-button type="button" variant="primary" [disabled]="loading" [fullWidth]="true"
+                    (click)="verifyOtp()">
                     @if (loading) {
                     Verifying...
                     } @else {
                     Verify & continue
                     }
-                </button>
+                </app-button>
 
             </div>
 

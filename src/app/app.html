@@ -1,10 +1,11 @@
 <div class="min-h-screen font-sans">
+
   @if (isAuthenticated()) {
-  <div class="mx-auto max-w-7xl px-6">
-    <app-navbar />
-  </div>
-  }@else {
-  <app-auth></app-auth>
+    <div class="mx-auto max-w-7xl px-6">
+      <app-navbar />
+    </div>
   }
+
   <router-outlet />
+
 </div>

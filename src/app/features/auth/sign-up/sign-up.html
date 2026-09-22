@@ -1,1 +1,161 @@
-<p>sign-up works!</p>
+<div
+    class="min-h-screen flex items-center justify-center bg-gradient-to-b from-[#F7F8FC] to-[#EEF1F8] px-4 py-10 sm:px-8 md:px-12 lg:px-20">
+    <div
+        class="w-full max-w-2xl overflow-hidden rounded-2xl bg-white shadow-[0_20px_60px_-15px_rgba(45,70,128,0.25)] ring-1 ring-black/5">
+        <!-- Top gradient -->
+        <div class="h-1.5 w-full bg-gradient-to-r from-[#2D4680] to-[#4A67A3]"></div>
+        <div class="p-8">
+            <!-- Header -->
+            <h1 class="text-center font-serif text-3xl tracking-tight text-[#1F3159] md:text-left">
+                Your healthcare journey starts here
+            </h1>
+            <p class="pt-2 pb-1 text-center text-sm leading-relaxed text-gray-500 md:text-left">
+                Join PRx and take the first step towards managing your healthcare
+                journey effortlessly — appointments, care plans, and updates, all
+                in one place.
+            </p>
+            <!-- Divider -->
+            <div class="flex items-center gap-3 py-4">
+                <span class="h-px flex-1 bg-gray-200"></span>
+                <svg width="72" height="16" viewBox="0 0 72 16" fill="none">
+                    <path d="M0 8H20L24 2L30 14L34 8H72" stroke="#2D4680" stroke-width="1.6" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                </svg>
+                <span class="h-px flex-1 bg-gray-200"></span>
+            </div>
+            <!-- Form -->
+            <form [formGroup]="form" (ngSubmit)="submit()" class="mt-4 space-y-4">
+                <!-- First name / Last name -->
+                <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                    <app-input label="First name" placeholder="Enter first name" type="text" id="firstName"
+                        formControlName="firstName" [required]="true" />
+                    <app-input label="Last name" placeholder="Enter last name" type="text" id="lastName"
+                        formControlName="lastName" [required]="true" />
+                </div>
+                <!-- Gender / DOB -->
+                <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                    <!-- Gender -->
+                    <div class="flex w-full flex-col gap-1.5">
+                        <label for="gender" class="text-sm font-medium text-[#1F3159]">
+                            Gender
+                            <span class="text-red-500">*</span>
+                        </label>
+                        <mat-select id="gender" formControlName="gender"
+                            class="h-11 rounded-lg border border-gray-200 bg-white px-3.5 pt-3 text-sm text-[#1F3159]">
+                            <mat-option value="M">
+                                Male
+                            </mat-option>
+                            <mat-option value="F">
+                                Female
+                            </mat-option>
+                        </mat-select>
+                    </div>
+
+                    <!-- Date of birth -->
+                    <app-input label="Date of birth" type="date" id="dob" formControlName="dob" [required]="true" />
+                </div>
+                <!-- Nationality -->
+                <div class="flex w-full flex-col gap-1.5">
+                    <label for="nationality" class="text-sm font-medium text-[#1F3159]">
+                        Nationality
+                        <span class="text-red-500">*</span>
+                    </label>
+                    <mat-select id="nationality" formControlName="nationality"
+                        class="h-11 rounded-lg border border-gray-200 bg-white px-3.5 pt-3 text-sm text-[#1F3159]">
+                        @for (country of countryList[0]; track country.CountryID) {
+                        <mat-option [value]="country.CountryID">
+                            {{ country.CountryName }}
+                        </mat-option>
+                        }
+                    </mat-select>
+                </div>
+                <!-- Phone -->
+                <div class="flex flex-col gap-3 sm:flex-row">
+                    <!-- Country code -->
+                    <div class="w-full sm:w-1/4">
+                        <div class="flex w-full flex-col gap-1.5">
+                            <label for="countrycode" class="text-sm font-medium text-[#1F3159]">
+                                Code
+                                <span class="text-red-500">*</span>
+                            </label>
+                            <mat-select id="countrycode" formControlName="countrycode"
+                                class="h-11 rounded-lg border border-gray-200 bg-white px-3.5 pt-3 text-sm text-[#1F3159]">
+                                <!-- Selected value: show only +code -->
+                                <mat-select-trigger>
+                                    @if (form.controls.countrycode.value) {
+                                    +{{ form.controls.countrycode.value }}
+                                    } @else {
+                                    Select code
+                                    }
+                                </mat-select-trigger>
+                                <!-- Dropdown: show (code) CountryName -->
+                                @for (country of countryList[0]; track country.CountryID) {
+                                <mat-option [value]="country.CountryCode">
+                                    ({{ country.CountryCode }}) {{ country.CountryName }}
+                                </mat-option>
+                                }
+                            </mat-select>
+                        </div>
+                    </div>
+                    <!-- Phone -->
+                    <div class="flex-1">
+                        <app-input label="Phone number" placeholder="Enter phone number" type="tel" id="phone"
+                            formControlName="phone" [required]="true" />
+                    </div>
+                </div>
+                <!-- Email -->
+                <app-input label="Email" placeholder="Enter your email" type="email" id="email" formControlName="email"
+                    [required]="true" [error]="
+            form.controls.email.touched &&
+            form.controls.email.hasError('required')
+              ? 'Email is required'
+              : form.controls.email.touched &&
+                form.controls.email.hasError('email')
+                ? 'Please enter a valid email'
+                : ''
+          " />
+                <!-- Password -->
+                <app-input label="Password" placeholder="Create a password" type="password" id="password"
+                    formControlName="password" [required]="true" [error]="
+            form.controls.password.touched &&
+            form.controls.password.hasError('required')
+              ? 'Password is required'
+              : form.controls.password.touched &&
+                form.controls.password.hasError('minlength')
+                ? 'Password must be at least 6 characters'
+                : ''
+          " />
+                <!-- Terms -->
+                <div class="flex items-start gap-2">
+                    <mat-checkbox [checked]="agreeTerms" (change)="agreeTerms = $event.checked">
+                    </mat-checkbox>
+                    <label class="text-sm leading-snug text-grey py-2.5 ">
+                        I agree to the
+                        <a routerLink="/terms-of-use" class="font-medium text-[#2D4680] hover:underline">
+                            Terms of Use
+                        </a>
+                        and
+                        <a routerLink="/privacy-policy" class="font-medium text-[#2D4680] hover:underline">
+                            Privacy Policy
+                        </a>.
+                    </label>
+                </div>
+                <!-- Submit -->
+                <app-button type="submit" variant="primary" [disabled]="!agreeTerms || isLoading" [fullWidth]="true">
+                    @if (isLoading) {
+                    Creating your account...
+                    } @else {
+                    Continue
+                    }
+                </app-button>
+            </form>
+            <!-- Sign in -->
+            <p class="mt-6 text-center text-sm text-gray-500">
+                Already have an account?
+                <button type="button" (click)="goToSignIn()" class="font-medium text-[#2D4680] hover:underline">
+                    Sign in
+                </button>
+            </p>
+        </div>
+    </div>
+</div>
