@@ -1,0 +1,18 @@
+<button
+  type="button"
+  class="rounded-md bg-primary px-4 py-2 text-white"
+  (click)="openSheet()"
+>
+  Update Leave Request
+</button>
+
+<app-sheet
+  [(open)]="isSheetOpen"
+  side="right"
+  width="500px"
+  title="Medications"
+  description="Add new medication."
+>
+
+
+</app-sheet>

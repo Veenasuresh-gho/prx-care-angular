@@ -1,0 +1,41 @@
+.medication-tabs {
+width: 100%;
+}
+
+.medication-tabs ::ng-deep .mat-mdc-tab-header {
+width: fit-content;
+background-color: #f3f4f6;
+border-radius: 10px;
+padding: 4px;
+}
+
+.medication-tabs ::ng-deep .mat-mdc-tab {
+min-width: 150px !important;
+width: 205px !important;
+padding: 0 !important;
+border-radius: 8px;
+}
+
+.medication-tabs ::ng-deep .mat-mdc-tab .mdc-tab__content {
+width: 100%;
+justify-content: center;
+}
+
+.medication-tabs ::ng-deep .tab-label {
+font-size: 14px;
+font-weight: 500;
+padding: 8px 12px;
+}
+
+.medication-tabs ::ng-deep .mat-mdc-tab.mdc-tab--active {
+background-color: #ffffff !important;
+}
+
+.medication-tabs ::ng-deep .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
+color: #111827 !important;
+font-weight: 600;
+}
+
+.medication-tabs ::ng-deep .mdc-tab-indicator__content--underline {
+display: none !important;
+}
