@@ -1,18 +1,119 @@
-<button
-  type="button"
-  class="rounded-md bg-primary px-4 py-2 text-white"
-  (click)="openSheet()"
->
-  Update Leave Request
-</button>
+<!-- Header -->
+<div class="flex justify-between items-center py-6">
+    <h2 class="font-bold text-lg">
+        Medications
+    </h2>
+    <button type="button" class="flex items-center justify-center
+               w-9 h-9 rounded-md
+               border border-gray-200
+               shadow-sm
+               hover:bg-gray-50
+               transition" (click)="openAddSheet()">
+        <mat-icon>add</mat-icon>
+    </button>
+</div>
 
-<app-sheet
-  [(open)]="isSheetOpen"
-  side="right"
-  width="500px"
-  title="Medications"
-  description="Add new medication."
->
+@if (loading) {
+<div class="flex justify-center py-10">
+    <mat-spinner diameter="32"></mat-spinner>
+</div>
 
+}
+
+
+@else if (medications.length === 0) {
+<!-- <div class="flex flex-col items-center justify-center
+                py-12 text-center
+                border border-dashed border-gray-300
+                rounded-xl">
+
+    <mat-icon class="text-gray-400 text-4xl">
+        medication
+    </mat-icon>
+    <p class="mt-3 text-gray-500">
+        No medications were added.
+    </p>
+    <button type="button" class="mt-4 px-4 py-2
+                   rounded-md
+                   bg-primary
+                   text-white
+                   hover:opacity-90" (click)="openAddSheet()">
+        Add Medication
+    </button>
+</div> -->
+    <app-empty-message
+        message="No medications found."
+        [showButton]="true"
+        buttonText="Add Medication"
+        buttonIcon="add"
+        (buttonClick)="openAddSheet()"
+    />
+
+}
+
+@else {
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
+    @for (medication of medications; track medication.medicationId) {
+    <div class="rounded-xl border border-gray-200
+                       bg-white p-4 shadow-sm">
+
+        <div class="flex items-start justify-between">
+            <div>
+
+                <h3 class="font-semibold text-gray-900">
+                    {{ medication.MedicationName }}
+                </h3>
+
+                <p class="text-sm text-gray-500 mt-1">
+                    {{ medication.StartDate }}
+                </p>
+                <p class="text-sm text-gray-500 mt-1">
+                    {{ medication.Timing }}
+                </p>
+
+            </div>
+
+            <div class="flex gap-1">
+                <button type="button" class="w-8 h-8 rounded-md cursor-pointer
+                                   hover:bg-gray-100" (click)="openEditSheet(medication)">
+                    <mat-icon class="text-gray-600">
+                        edit
+                    </mat-icon>
+                </button>
+                <button type="button" class="w-8 h-8 rounded-md cursor-pointer
+                                   hover:bg-red-50" (click)="deleteMedication(medication)">
+                    <mat-icon class="text-red-500">
+                        delete
+                    </mat-icon>
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    }
+
+</div>
+
+}
+
+
+<app-sheet [(open)]="isSheetOpen" side="right" width="500px" [title]="isEditMode
+        ? 'Edit Medication'
+        : 'Add Medication'" [description]="isEditMode
+        ? 'Update medication details.'
+        : 'Add a new medication.'">
+
+    @if (isEditMode) {
+    <app-edit-medication [medication]="selectedMedication" (saved)="medicationSaved()" />
+
+    }
+    @else {
+    <app-add-medication (saved)="medicationSaved()"></app-add-medication>
+
+    }
 
 </app-sheet>

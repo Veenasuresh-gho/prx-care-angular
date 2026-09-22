@@ -1,0 +1,30 @@
+<div class="flex flex-col items-center justify-center gap-4 p-6 text-center">
+
+    <!-- Empty Image -->
+    <img
+        src="empty.gif"
+        alt="No data"
+        class="h-40 w-40 object-contain"
+    />
+
+    <!-- Message -->
+    <p class="text-sm text-gray-500">
+        {{ message }}
+    </p>
+
+    <!-- Action Button -->
+    @if (showButton) {
+        <button
+            type="button"
+            (click)="onButtonClick()"
+            class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-white transition hover:opacity-90"
+        >
+            <mat-icon class="!h-5 !w-5 !text-[20px]">
+                {{ buttonIcon }}
+            </mat-icon>
+
+            {{ buttonText }}
+        </button>
+    }
+
+</div>
