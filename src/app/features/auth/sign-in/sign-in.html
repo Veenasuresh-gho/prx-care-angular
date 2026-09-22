@@ -1,1 +1,12 @@
-<p>sign-in works!</p>
+<div class="flex min-h-screen items-center justify-center">
+
+    @if (!showVerifyOtp) {
+
+    <app-login-form (otpRequested)="handleOtpRequested($event)" />
+    } @else {
+
+    <app-verify-otp [id]="id" />
+
+    }
+
+</div>
