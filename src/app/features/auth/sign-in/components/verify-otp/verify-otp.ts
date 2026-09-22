@@ -158,7 +158,6 @@ export class VerifyOtp {
             this.authService.setToken(token);
 
           }
-          this.toastr.success('OTP verified successfully');
           this.router.navigate(['/dashboard']);
           this.verified.emit();
           return;

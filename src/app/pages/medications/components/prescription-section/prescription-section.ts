@@ -75,14 +75,11 @@ export class PrescriptionSection implements OnInit {
             }
         });
     }
-
     openPrescription(prescription: any): void {
-    console.log('Selected Prescription:', prescription);
 
-    
-}
+    }
 
 
-  
+
 
 }

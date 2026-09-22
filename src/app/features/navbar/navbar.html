@@ -18,19 +18,15 @@
 
     @if (isAuthenticated()) {
 
-      <app-profile-popover
-        [patient]="patient"
-      />
+    <app-profile-popover />
 
     } @else {
 
-      <button
-        type="button"
-        class="flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-dark"
-        (click)="signIn()"
-      >
-        Sign In
-      </button>
+    <button type="button"
+      class="flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-dark"
+      (click)="signIn()">
+      Sign In
+    </button>
 
     }
 

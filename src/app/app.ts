@@ -2,10 +2,11 @@ import { Component, inject, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Navbar } from './features/navbar/navbar';
 import { AuthService } from './services/auth-service';
+import { DashboardLayout } from './layouts/dashboard-layout/dashboard-layout';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Navbar],
+  imports: [RouterOutlet, Navbar,DashboardLayout],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })

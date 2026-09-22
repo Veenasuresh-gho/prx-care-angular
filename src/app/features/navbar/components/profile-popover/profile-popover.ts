@@ -38,9 +38,6 @@ export class ProfilePopover {
 
   viewProfile() {
     this.closePopover();
-
-    // We will connect your Angular profile route here.
-    console.log('View profile');
   }
 
   logout() {
@@ -53,8 +50,5 @@ export class ProfilePopover {
     }
 
     this.closePopover();
-
-    // We will connect your auth service here.
-    console.log('Logout');
   }
 }

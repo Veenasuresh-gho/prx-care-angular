@@ -1,0 +1,290 @@
+@if (isLoading) {
+
+<!-- ================= SKELETON ================= -->
+
+<div class="overflow-hidden rounded-xl border border-border bg-white">
+
+    <!-- Card Content -->
+    <div class="space-y-4 p-5">
+
+        <!-- Status Skeleton -->
+        <div class="flex flex-wrap items-center justify-between gap-2">
+
+            <div class="h-6 w-28 animate-pulse rounded-full bg-light-grey"></div>
+
+            <div class="h-6 w-24 animate-pulse rounded-full bg-light-grey"></div>
+
+        </div>
+
+
+        <!-- Doctor Skeleton -->
+        <div class="flex items-center justify-between gap-4">
+
+            <!-- Doctor Details -->
+            <div class="flex min-w-0 items-center gap-3.5">
+
+                <!-- Doctor Image -->
+                <div
+                    class="h-11 w-11 shrink-0 animate-pulse rounded-full bg-light-grey">
+                </div>
+
+
+                <!-- Doctor Name & Specialty -->
+                <div class="min-w-0 space-y-2">
+
+                    <div class="h-4 w-32 animate-pulse rounded bg-light-grey"></div>
+
+                    <div class="h-3 w-24 animate-pulse rounded bg-light-grey"></div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Bystander -->
+            <div class="h-8 w-28 animate-pulse rounded-md bg-light-grey"></div>
+
+        </div>
+
+
+        <!-- Date & Time Skeleton -->
+        <div class="flex items-center gap-3.5 py-1">
+
+            <div
+                class="h-11 w-11 shrink-0 animate-pulse rounded-full bg-light-grey">
+            </div>
+
+            <div class="space-y-2">
+
+                <div class="h-3 w-16 animate-pulse rounded bg-light-grey"></div>
+
+                <div class="h-4 w-36 animate-pulse rounded bg-light-grey"></div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Meta Chips Skeleton -->
+        <div class="flex flex-wrap gap-2 pt-1">
+
+            <div class="h-7 w-36 animate-pulse rounded-lg bg-light-grey"></div>
+
+            <div class="h-7 w-24 animate-pulse rounded-lg bg-light-grey"></div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Footer Skeleton -->
+    <div class="flex justify-end gap-2 border-t border-slate-100 px-5 py-4">
+
+        <div class="h-10 w-28 animate-pulse rounded-lg bg-light-grey"></div>
+
+        <div class="h-10 w-36 animate-pulse rounded-lg bg-light-grey"></div>
+
+    </div>
+
+</div>
+
+
+} @else if (appointment) {
+
+<!-- ================= ACTUAL CARD ================= -->
+
+<div class="overflow-hidden rounded-xl border border-border bg-white">
+
+    <!-- Card Content -->
+    <div class="space-y-4 p-5">
+
+        <!-- Status -->
+        <div class="flex flex-wrap items-center justify-between gap-2">
+
+            <!-- Appointment Status -->
+            <app-status-badge
+                [status]="appointment.AppointmentStatus"
+            />
+
+            <!-- Payment Status -->
+            @if (appointment.AppointmentStatus !== 'Cancelled') {
+
+            <span
+                class="inline-flex items-center gap-1.5 rounded-full bg-light-grey px-2.5 py-1 text-xs font-medium text-grey">
+
+                <span class="material-icons text-sm">
+                    info
+                </span>
+
+                Payment {{ paymentStatus }}
+
+            </span>
+
+            }
+
+        </div>
+
+
+        <!-- Doctor -->
+        <div class="flex items-center justify-between gap-4">
+
+            <!-- Doctor Details -->
+            <div class="flex min-w-0 items-center gap-3.5">
+
+                <!-- Doctor Image -->
+                <div
+                    class="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-full bg-primary-light">
+
+                    @if (appointment.drImg) {
+
+                    <img
+                        [ngSrc]="appointment.drImg"
+                        [alt]="appointment.Doctor || 'Doctor'"
+                        width="44"
+                        height="44"
+                        priority
+                        class="h-full w-full object-cover object-top"
+                    />
+
+                    } @else {
+
+                    <span class="material-icons text-primary">
+                        person
+                    </span>
+
+                    }
+
+                </div>
+
+
+                <!-- Doctor Name & Specialty -->
+                <div class="min-w-0">
+
+                    <p class="truncate text-[14.5px] font-semibold text-black">
+                        {{ appointment.Doctor || 'N/A' }}
+                    </p>
+
+                    <p class="truncate text-[13px] text-grey">
+                        {{ appointment.Specialty || '—' }}
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- Bystander -->
+            @if (appointment.Telemedicine === 0) {
+
+            <div class="flex shrink-0 items-center gap-2">
+
+                <button
+                    type="button"
+                    class="flex items-center gap-1.5 rounded-md px-2 py-1.5 text-[13px] font-medium text-primary transition-colors hover:bg-primary-light">
+
+                    <span class="material-icons text-[15px]">
+                        group_add
+                    </span>
+
+                    Add bystander
+
+                </button>
+
+            </div>
+
+            }
+
+        </div>
+
+
+        <!-- Date & Time -->
+        <div class="flex items-center gap-3.5 py-1">
+
+            <div
+                class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-primary-light">
+
+                <span class="material-icons text-primary">
+                    calendar_month
+                </span>
+
+            </div>
+
+            <div>
+
+                <p class="text-xs text-grey">
+                    Date &amp; time
+                </p>
+
+                <p class="text-[14.5px] font-semibold text-black">
+                    {{ appointment.ApptDate || '—' }}
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- Meta Chips -->
+        <div class="flex flex-wrap gap-2 pt-1">
+
+            <!-- Hospital -->
+            <span
+                class="inline-flex items-center gap-1.5 rounded-lg bg-light-grey px-2.5 py-1 text-[12.5px] font-medium text-grey">
+
+                <span class="material-icons text-[14px]">
+                    local_hospital
+                </span>
+
+                {{ appointment.TenantName || '—' }}
+
+            </span>
+
+
+            <!-- Appointment ID -->
+            <span
+                class="inline-flex items-center gap-1.5 rounded-lg bg-light-grey px-2.5 py-1 font-mono text-[12.5px] font-medium text-grey">
+
+                <span class="material-icons text-[14px]">
+                    info
+                </span>
+
+                {{ appointment.ID || '—' }}
+
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- Footer -->
+    <div class="flex justify-end gap-2 border-t border-slate-100 px-5 py-4">
+
+        <!-- View Details -->
+        <button
+            type="button"
+            class="h-10 rounded-lg border border-primary bg-white px-4 text-sm font-medium text-primary transition-colors hover:bg-primary-light">
+
+            View details
+
+        </button>
+
+
+        <!-- Cancel Appointment -->
+        @if (appointment.AppointmentStatus === 'Confirmed') {
+
+        <button
+            type="button"
+            class="h-10 rounded-lg bg-red px-4 text-sm font-medium text-white hover:bg-red/90">
+
+            Cancel appointment
+
+        </button>
+
+        }
+
+    </div>
+
+</div>
+
+}
