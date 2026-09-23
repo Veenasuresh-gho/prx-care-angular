@@ -1,6 +1,6 @@
 <div class="space-y-4">
   <div>
-    <app-welcome-card [patientDetails]="patientDetails()"></app-welcome-card>
+    <app-welcome-card [patientDetails]="outletData().patientDetails"></app-welcome-card>
   </div>
   <div>
     <app-services-section></app-services-section>
@@ -10,5 +10,8 @@
   </div>
   <div>
     <app-video-consultation-card></app-video-consultation-card>
+  </div>
+  <div>
+    <app-advertisements-section [advertisements]="outletData().advertisements"></app-advertisements-section>
   </div>
 </div>

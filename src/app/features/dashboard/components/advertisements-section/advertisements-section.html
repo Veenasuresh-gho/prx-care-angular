@@ -1,0 +1,51 @@
+@if (advertisements.length > 0) {
+<div class="relative w-full overflow-hidden rounded-2xl">
+    <!-- Carousel -->
+    <div class="relative aspect-[16/7] w-full">
+        <img [src]="advertisements[currentIndex].ThumbnailUrl" [alt]="advertisements[currentIndex].Title"
+            class="h-full w-full object-cover" />
+        <!-- Overlay -->
+        <div class="absolute inset-0 flex items-end bg-gradient-to-t from-black/70 via-black/20 to-transparent">
+            <div class="w-full p-5 text-white sm:p-7">
+                <h3 class="text-xl font-semibold">
+                    {{ advertisements[currentIndex].Title }}
+                </h3>
+                @if (advertisements[currentIndex].Subtitle) {
+                <p class="mt-1 text-sm text-white/90">
+                    {{ advertisements[currentIndex].Subtitle }}
+                </p>
+                }
+                @if (advertisements[currentIndex].HealthInsightUrl) {
+                <button type="button"
+                    class="mt-4 rounded-lg bg-white px-4 py-2 text-sm font-medium text-[#2D4680] transition hover:bg-white/90"
+                    (click)="openAdvertisement(advertisements[currentIndex])">
+                    Watch Video
+                </button>
+                }
+            </div>
+        </div>
+        <!-- Previous -->
+        <button type="button"
+            class="absolute left-3 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-black/40 text-xl text-white backdrop-blur-sm transition hover:bg-black/60"
+            (click)="previous()" aria-label="Previous advertisement">
+            &#10094;
+        </button>
+        <!-- Next -->
+        <button type="button"
+            class="absolute right-3 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-black/40 text-xl text-white backdrop-blur-sm transition hover:bg-black/60"
+            (click)="next()" aria-label="Next advertisement">
+            &#10095;
+        </button>
+    </div>
+    <!-- Dots -->
+    <div class="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-2">
+        @for (ad of advertisements; track ad.AdID; let i = $index) {
+        <button type="button" class="h-2 rounded-full transition-all" [class.w-6]="i === currentIndex"
+            [class.w-2]="i !== currentIndex" [class.bg-white]="i === currentIndex"
+            [class.bg-white/50]="i !== currentIndex" (click)="currentIndex = i"
+            [attr.aria-label]="'Go to advertisement ' + (i + 1)"></button>
+        }
+    </div>
+
+</div>
+}

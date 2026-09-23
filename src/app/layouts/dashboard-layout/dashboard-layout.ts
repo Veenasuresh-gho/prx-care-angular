@@ -22,6 +22,7 @@ export class DashboardLayout implements OnInit {
 
   appointmentDetails: any = null;
   patientDetails: any = null;
+  advertisements: any[] = [];
 
   patientId: string | null = null;
   isLoading = true;
@@ -54,9 +55,11 @@ export class DashboardLayout implements OnInit {
         if (res.Status === 1) {
           this.appointmentDetails = res.Data?.[1]?.[0] ? { ...res.Data[1][0] } : null;
           this.patientDetails = res.Data?.[0]?.[0] ? { ...res.Data[0][0] } : null;
+          this.advertisements = res.Data?.[3] ?? [];
         } else {
           this.appointmentDetails = null;
           this.patientDetails = null;
+          this.advertisements = [];
         }
         this.isLoading = false;
         this.cdr.markForCheck();
