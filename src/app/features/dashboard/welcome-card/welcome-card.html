@@ -1,0 +1,45 @@
+<div
+    class="relative my-4 overflow-hidden rounded-2xl border border-border bg-white shadow-[0_12px_40px_-15px_rgba(45,70,128,0.2)]">
+    <!-- Top accent -->
+    <div class="h-1.5 w-full bg-gradient-to-r from-primary to-primary-dark"></div>
+    <div class="p-4">
+        <div class="flex flex-col items-center gap-4 text-center sm:flex-row sm:items-start sm:gap-5 sm:text-left">
+            <!-- Avatar -->
+            <div class="shrink-0">
+                @if (patientDetails?.imageUrl) {
+                <div
+                    class="h-10 w-10 overflow-hidden rounded-full ring-2 ring-primary/25 ring-offset-2 md:h-[60px] md:w-[60px]">
+                    <img [src]="patientDetails.imageUrl" alt="User" class="h-full w-full object-cover" />
+                </div>
+                } @else {
+                <div
+                    class="flex h-10 w-10 items-center justify-center rounded-full bg-primary-light ring-2 ring-primary/25 ring-offset-2 md:h-[60px] md:w-[60px]">
+                    <span class="material-icons text-primary">
+                        person
+                    </span>
+                </div>
+                }
+            </div>
+            <!-- Content -->
+            <div class="flex min-w-0 flex-col gap-2">
+                <!-- Greeting -->
+                <h2 class="text-base font-semibold text-primary-dark md:text-lg">
+                    Hi {{ patientDetails?.FirstName }},
+                  
+                </h2>
+                <!-- Description -->
+                <div class="space-y-1 text-sm">
+                    <p class="font-medium text-primary">
+                        Welcome to Aaroghyam by Aabind — your all-in-one digital health
+                        companion.
+                    </p>
+                    <p class="leading-relaxed text-grey text-xs">
+                        From booking appointments and managing health records to accessing
+                        expert care and trusted medical services, Aaroghyam makes every
+                        step of your healthcare journey simpler, smarter, and secure.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

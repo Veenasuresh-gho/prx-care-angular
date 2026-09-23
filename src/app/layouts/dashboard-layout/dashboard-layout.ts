@@ -21,6 +21,7 @@ export class DashboardLayout implements OnInit {
   private cdr = inject(ChangeDetectorRef);
 
   appointmentDetails: any = null;
+  patientDetails: any = null;
 
   patientId: string | null = null;
   isLoading = true;
@@ -52,15 +53,17 @@ export class DashboardLayout implements OnInit {
       next: (res) => {
         if (res.Status === 1) {
           this.appointmentDetails = res.Data?.[1]?.[0] ? { ...res.Data[1][0] } : null;
+          this.patientDetails = res.Data?.[0]?.[0] ? { ...res.Data[0][0] } : null;
         } else {
           this.appointmentDetails = null;
+          this.patientDetails = null;
         }
         this.isLoading = false;
         this.cdr.markForCheck();
       },
       error: (error) => {
-        console.error('Dashboard API error:', error);
         this.appointmentDetails = null;
+        this.patientDetails = null;
         this.isLoading = false;
         this.cdr.markForCheck();
       }
