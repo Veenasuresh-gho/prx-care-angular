@@ -1,0 +1,25 @@
+<div
+  role="button"
+  tabindex="0"
+  (click)="navigate()"
+  (keydown)="handleKeyDown($event)"
+  class="h-24 cursor-pointer rounded-lg border-0 bg-white shadow-sm transition-shadow duration-150 hover:shadow-md focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary focus-visible:ring-offset-2"
+>
+  <div
+    class="flex h-full flex-col items-center justify-center gap-2 p-2"
+  >
+    <img
+      [src]="service.icon"
+      [alt]="service.title"
+      width="20"
+      height="20"
+      class="h-5 w-5 shrink-0 object-contain"
+    />
+
+    <p
+      class="text-center text-xs leading-tight text-grey"
+    >
+      {{ service.title }}
+    </p>
+  </div>
+</div>

@@ -1,0 +1,37 @@
+<div class="space-y-2">
+
+    <!-- Personal -->
+    <section>
+        <div class="grid grid-cols-2 gap-2 md:grid-cols-5">
+            @for (service of services.Personal; track service.title) {
+            <app-service-card [service]="service" />
+            }
+        </div>
+    </section>
+
+    <!-- Connect -->
+    <section>
+        <h2 class="font-semibold text-light-grey py-1">
+            HOSPITAL CONNECT
+        </h2>
+
+        <div class="grid grid-cols-2 gap-2 md:grid-cols-5">
+            @for (service of services.Connect; track service.title) {
+            <app-service-card [service]="service" />
+            }
+        </div>
+    </section>
+
+    <section>
+        <h2 class=" font-semibold text-light-grey py-1">
+            MY ESSENTIALS
+        </h2>
+
+        <div class="grid grid-cols-2 gap-2 md:grid-cols-5">
+            @for (service of services.Essentials; track service.title) {
+            <app-service-card [service]="service" />
+            }
+        </div>
+    </section>
+
+</div>

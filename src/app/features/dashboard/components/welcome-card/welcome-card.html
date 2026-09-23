@@ -2,8 +2,8 @@
     class="relative my-4 overflow-hidden rounded-2xl border border-border bg-white shadow-[0_12px_40px_-15px_rgba(45,70,128,0.2)]">
     <!-- Top accent -->
     <div class="h-1.5 w-full bg-gradient-to-r from-primary to-primary-dark"></div>
-    <div class="p-4">
-        <div class="flex flex-col items-center gap-4 text-center sm:flex-row sm:items-start sm:gap-5 sm:text-left">
+    <div class="p-6">
+        <div class="flex flex-col items-center gap-2 text-center sm:flex-row sm:items-start sm:gap-5 sm:text-left">
             <!-- Avatar -->
             <div class="shrink-0">
                 @if (patientDetails?.imageUrl) {
@@ -24,7 +24,7 @@
             <div class="flex min-w-0 flex-col gap-2">
                 <!-- Greeting -->
                 <h2 class="text-base font-semibold text-primary-dark md:text-lg">
-                    Hi {{ patientDetails?.FirstName }},
+                    Hi {{ patientDetails?.FullName }},
                   
                 </h2>
                 <!-- Description -->
@@ -33,7 +33,7 @@
                         Welcome to Aaroghyam by Aabind — your all-in-one digital health
                         companion.
                     </p>
-                    <p class="leading-relaxed text-grey text-xs">
+                    <p class="leading-relaxed text-grey text-sm">
                         From booking appointments and managing health records to accessing
                         expert care and trusted medical services, Aaroghyam makes every
                         step of your healthcare journey simpler, smarter, and secure.
