@@ -55,7 +55,6 @@ export class MedicationSection implements OnInit {
             console.error('User ID not found');
             return;
         }
-
         this.loading = true;
         const tv: tags[] = [
             {

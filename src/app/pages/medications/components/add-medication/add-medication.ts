@@ -40,9 +40,7 @@ export class AddMedication {
 
     srv = inject(GHOService);
     utl = inject(GHOUtitity);
-
     private toastr = inject(ToastrService);
-
     @Output() saved = new EventEmitter<void>();
 
     isLoading = false;

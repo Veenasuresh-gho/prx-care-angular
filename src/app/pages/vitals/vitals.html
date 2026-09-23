@@ -1,85 +1,43 @@
 <div class="vitals-container">
-
-    <!-- Header -->
     <div class="vitals-header">
-
         <div class="vitals-title">
             Vitals
         </div>
-
-        <!-- Calendar -->
         @if (activeTab === 1 || activeTab === 2) {
+        <div class="date-picker-wrapper">
+            <mat-form-field appearance="outline" class="date-field">
+                <mat-label>Select date</mat-label>
+                <input matInput [matDatepicker]="picker" [ngModel]="selectedDate" (ngModelChange)="onDateChange($event)"
+                    readonly />
 
-            <div class="date-picker-wrapper">
+                <mat-datepicker-toggle matIconSuffix [for]="picker">
+                </mat-datepicker-toggle>
 
-                <mat-form-field
-                    appearance="outline"
-                    class="date-field"
-                >
+                <mat-datepicker #picker>
+                </mat-datepicker>
 
-                    <mat-label>Select date</mat-label>
+            </mat-form-field>
 
-                    <input
-                        matInput
-                        [matDatepicker]="picker"
-                        [ngModel]="selectedDate"
-                        (ngModelChange)="onDateChange($event)"
-                        readonly
-                    />
-
-                    <mat-datepicker-toggle
-                        matIconSuffix
-                        [for]="picker"
-                    >
-                    </mat-datepicker-toggle>
-
-                    <mat-datepicker
-                        #picker
-                    >
-                    </mat-datepicker>
-
-                </mat-form-field>
-
-            </div>
+        </div>
 
         }
 
     </div>
-
-
-    <!-- Tabs -->
-    <mat-tab-group
-        [(selectedIndex)]="activeTab"
-        (selectedIndexChange)="onTabChange($event)"
-        class="vitals-tabs"
-    >
+    <mat-tab-group [(selectedIndex)]="activeTab" (selectedIndexChange)="onTabChange($event)" class="vitals-tabs">
         <mat-tab label="Recent Vitals">
             <div class="tab-content">
                 <app-recent-vitals></app-recent-vitals>
             </div>
         </mat-tab>
-
-
-
         <mat-tab label="Vitals History">
             <div class="tab-content">
-              <app-vitals-history></app-vitals-history>
+                <app-vitals-history></app-vitals-history>
             </div>
         </mat-tab>
-
-
-
-
         <mat-tab label="Add Vitals">
-
             <div class="tab-content">
-
-               <app-add-vitals></app-add-vitals>
-
+                <app-add-vitals></app-add-vitals>
             </div>
-
         </mat-tab>
-
     </mat-tab-group>
-
 </div>
