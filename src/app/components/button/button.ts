@@ -18,4 +18,6 @@ export class Button {
   type = input<'button' | 'submit' | 'reset'>('button');
   disabled = input(false);
   fullWidth = input(false);
+
+  customClass = input('');
 }

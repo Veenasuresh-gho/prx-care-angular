@@ -1,0 +1,43 @@
+<div class="w-full overflow-hidden rounded-2xl border border-border bg-white font-sans shadow-sm">
+    <div class="relative flex flex-col items-stretch sm:flex-row">
+        <!-- Photo -->
+        <div class="relative min-h-[180px] w-full sm:min-h-[190px] sm:w-[38%]">
+            <img src="/assets/ambulance.jpg" alt="Ambulance parked and ready for dispatch"
+                class="absolute inset-0 h-full w-full object-cover" />
+            <div
+                class="pointer-events-none absolute inset-0 bg-gradient-to-r from-transparent to-white/0 sm:bg-gradient-to-r sm:from-transparent sm:via-transparent sm:to-white">
+            </div>
+        </div>
+        <!-- Content -->
+        <div class="relative px-6 py-6 sm:items-center sm:px-8 sm:py-7">
+            <div>
+                <!-- Availability -->
+                <div class="mb-2 flex items-center gap-2">
+                    <span class="relative flex h-[7px] w-[7px]">
+                        <span
+                            class="absolute inline-flex h-full w-full animate-ping rounded-full bg-red opacity-70"></span>
+                        <span class="relative inline-flex h-[7px] w-[7px] rounded-full bg-red"></span>
+                    </span>
+                    <span class="text-xs font-medium text-grey">
+                        Dispatch available now
+                    </span>
+                </div>
+                <!-- Heading -->
+                <h3 class="font-semibold text-black text-lg">
+                    Book an ambulance for immediate assistance
+                </h3>
+                <!-- Description -->
+                <p class="mt-1.5 text-sm text-grey">
+                    Trained crews, real-time tracking, nearest hospital routing.
+                </p>
+            </div>
+            <!-- Button -->
+            <app-button
+                customClass="text-xs mt-1"
+                (click)="handleBookAmbulance()"
+            >
+                Book ambulance
+            </app-button>
+        </div>
+    </div>
+</div>
