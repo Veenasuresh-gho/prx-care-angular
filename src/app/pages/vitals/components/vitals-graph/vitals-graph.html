@@ -1,0 +1,62 @@
+<div class="vital-graph">
+    <div class="graph-header">
+        <div>
+            <h2>
+                {{ data?.title }}
+            </h2>
+        </div>
+        <button type="button" class="close-btn" (click)="close()">
+            ×
+        </button>
+    </div>
+
+    <div class="range-container">
+        <div class="range-selector">
+            @for (range of rangeOptions; track range) {
+            <button type="button" [class.active]="selectedRange === range" (click)="changeRange(range)">
+                {{ range }}
+            </button>
+            }
+        </div>
+    </div>
+
+    <div class="chart-container">
+        @if (loading) {
+        <div class="chart-message">
+            Loading...
+        </div>
+        }
+        @else if (vitalGraphData.length === 0) {
+        <div class="chart-message">
+            No data available for this range
+        </div>
+        }
+        @else {
+        <apx-chart [series]="chartSeries" [chart]="chartDetails" [xaxis]="chartXAxis" [yaxis]="chartYAxis"
+            [dataLabels]="chartDataLabels" [grid]="chartGrid" [tooltip]="chartTooltip" [stroke]="chartStroke"
+            [fill]="chartFill" [markers]="chartMarkers">
+        </apx-chart>
+
+        }
+    </div>
+    <div class="statistics">
+        <div class="stat-card">
+            <p>Minimum</p>
+            <strong>
+                {{ minimum }}
+            </strong>
+        </div>
+        <div class="stat-card">
+            <p>Average</p>
+            <strong>
+                {{ average }}
+            </strong>
+        </div>
+        <div class="stat-card">
+            <p>Maximum</p>
+            <strong>
+                {{ maximum }}
+            </strong>
+        </div>
+    </div>
+</div>

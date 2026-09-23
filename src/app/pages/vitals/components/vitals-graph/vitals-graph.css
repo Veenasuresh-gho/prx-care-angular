@@ -1,0 +1,176 @@
+
+.vital-graph {
+    background: #f8fafc;
+    padding: 20px;
+    border-radius: 10px;
+    min-height: 100%;
+    box-sizing: border-box;
+}
+
+.graph-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 5px;
+}
+
+.graph-header h2 {
+    margin: 0;
+    color: #0f172a;
+    font-size: 22px;
+    font-weight: 500;
+}
+
+.close-btn {
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 50%;
+    background: #f1f5f9;
+    color: #64748b;
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.close-btn:hover {
+    background: #e2e8f0;
+    color: #0f172a;
+}
+
+.range-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 24px;
+}
+
+.range-selector {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px;
+    border-radius: 999px;
+    background: #f1f5f9;
+}
+
+.range-selector button {
+    border: none;
+    background: transparent;
+    color: #94a3b8;
+    padding: 8px 18px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.range-selector button:hover {
+    color: #475569;
+}
+
+.range-selector button.active {
+    background: #ffffff;
+    color: #2563eb;
+    box-shadow:
+        0 1px 3px rgba(15, 23, 42, 0.08),
+        0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+
+.chart-container {
+    width: 100%;
+    min-height: 320px;
+    padding: 20px 16px 12px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    box-sizing: border-box;
+}
+
+.chart-container apx-chart {
+    display: block;
+    width: 100%;
+}
+
+.chart-message {
+    min-height: 280px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #94a3b8;
+    font-size: 14px;
+}
+
+.statistics {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 24px;
+}
+
+.stat-card {
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 16px;
+    text-align: center;
+}
+
+.stat-card p {
+    margin: 0 0 6px;
+    color: #3b82f6;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.stat-card strong {
+    color: #0f172a;
+    font-size: 19px;
+    font-weight: 700;
+}
+
+
+@media (max-width: 600px) {
+    .vital-graph {
+        padding: 20px 16px;
+    }
+    .graph-header h2 {
+        font-size: 19px;
+    }
+    .range-selector {
+        width: 100%;
+        justify-content: space-between;
+    }
+    .range-selector button {
+        flex: 1;
+        padding: 7px 8px;
+        font-size: 12px;
+    }
+    .chart-container {
+        padding: 12px 4px;
+    }
+    .statistics {
+        gap: 8px;
+    }
+    .stat-card {
+        padding: 12px 6px;
+    }
+    .stat-card p {
+        font-size: 12px;
+    }
+    .stat-card strong {
+        font-size: 16px;
+    }
+}
+
+
+.vital-graph-dialog .mat-mdc-dialog-surface {
+    padding: 0 !important;
+    border-radius: 16px !important;
+    overflow: hidden;
+}

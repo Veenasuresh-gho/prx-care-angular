@@ -1,0 +1,215 @@
+.prescription-dialog {
+    width: 100%;
+    background: #ffffff;
+}
+.dialog-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 20px 24px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.header-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #eef2ff;
+    color: #4f46e5;
+}
+
+.header-icon mat-icon {
+    font-size: 22px;
+    width: 22px;
+    height: 22px;
+}
+
+.dialog-header h2 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #111827;
+}
+
+.dialog-header p {
+    margin: 4px 0 0;
+    font-size: 12px;
+    color: #6b7280;
+}
+
+.prescription-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 20px 24px;
+    padding: 16px;
+
+    border-radius: 10px;
+    background: #f9fafb;
+    border: 1px solid #f0f0f0;
+}
+
+.info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.info-label {
+    font-size: 12px;
+    color: #6b7280;
+}
+
+.info-value {
+    font-size: 13px;
+    font-weight: 500;
+    color: #111827;
+}
+
+.medicine-total {
+    text-align: right;
+}
+
+.medicine-count {
+    font-size: 16px;
+    font-weight: 600;
+    color: #4f46e5;
+}
+
+.medicine-section {
+    padding: 0 24px;
+}
+
+.section-title {
+    margin-bottom: 12px;
+}
+
+.section-title h3 {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: #111827;
+}
+
+.section-title span {
+    display: block;
+    margin-top: 3px;
+    font-size: 12px;
+    color: #9ca3af;
+}
+
+.medicine-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 380px;
+    overflow-y: auto;
+}
+
+.medicine-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 12px;
+    border: 1px solid #e5e7eb;
+    border-radius: 9px;
+    transition: background 0.15s ease;
+}
+
+.medicine-item:hover {
+    background: #f9fafb;
+}
+
+.medicine-number {
+    width: 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: #f3f4f6;
+    color: #4b5563;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.medicine-icon {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border-radius: 8px;
+    background: #eef2ff;
+    color: #4f46e5;
+}
+
+.medicine-icon mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+}
+
+.medicine-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.medicine-name {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 500;
+    color: #1f2937;
+    word-break: break-word;
+}
+
+
+/* Footer */
+
+.dialog-footer {
+    display: flex;
+    justify-content: flex-end;
+    padding: 16px 24px;
+    margin-top: 20px;
+    border-top: 1px solid #e5e7eb;
+}
+
+
+/* Mobile */
+
+@media (max-width: 600px) {
+
+    .dialog-header {
+        padding: 16px;
+    }
+
+    .prescription-info {
+        margin: 16px;
+    }
+
+    .medicine-section {
+        padding: 0 16px;
+    }
+
+    .dialog-footer {
+        padding: 14px 16px;
+    }
+
+    .medicine-list {
+        max-height: 300px;
+    }
+
+}

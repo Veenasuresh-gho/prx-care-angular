@@ -1,0 +1,88 @@
+<div class="custom-calendar">
+   <button type="button" class="date-picker-button" [class.open]="isOpen" (click)="toggleCalendar()">
+
+        <mat-icon class="calendar-icon">
+            calendar_today
+        </mat-icon>
+
+        <span class="date-text">
+            {{ displayDate }}
+        </span>
+
+    </button>
+
+    @if (isOpen) {
+
+    <div class="calendar-dropdown" [style.top.px]="dropdownTop" [style.left.px]="dropdownLeft">
+        <div class="calendar-header">
+            <button type="button" class="navigation-button" (click)="previousMonth()">
+                <mat-icon>
+                    chevron_left
+                </mat-icon>
+            </button>
+
+
+            <div class="month-year">
+                {{ monthYear }}
+            </div>
+
+
+            <button type="button" class="navigation-button" (click)="nextMonth()">
+
+                <mat-icon>
+                    chevron_right
+                </mat-icon>
+
+            </button>
+
+        </div>
+
+        <div class="week-days">
+
+            @for (
+            weekDay of weekDays;
+            track weekDay
+            ) {
+
+            <div class="week-day">
+                {{ weekDay }}
+            </div>
+
+            }
+
+        </div>
+
+
+        <div class="calendar-grid">
+
+            @for (
+            day of calendarDays;
+            track day.date.getTime()
+            ) {
+
+            <button type="button" class="calendar-day" [class.outside]="
+                            !day.isCurrentMonth
+                        " [class.today]="
+                            day.isToday
+                        " [class.selected]="
+                            day.isSelected
+                        " [class.disabled]="
+                            day.isDisabled
+                        " [disabled]="
+                            day.isDisabled ||
+                            !day.isCurrentMonth
+                        " (click)="selectDate(day)">
+
+                {{ day.day }}
+
+            </button>
+
+            }
+
+        </div>
+
+    </div>
+
+    }
+
+</div>

@@ -1,40 +1,15 @@
 <div class="vitals-history">
-
-    <!-- Top Section -->
+    @if (recentVitals.length > 0) {
     <div class="history-header">
-
         <p class="created-by">
             Created By :
             <span>
-                
+                {{ recentVitals[0].CreatedBy }} <span class="created-date">( {{ formatDate(recentVitals[0]?.CreatedAt)
+                    }})</span>
             </span>
         </p>
-
-
-        <button
-            mat-button
-            type="button"
-            class="edit-button"
-            (click)="onEdit()"
-        >
-
-            <mat-icon>
-                edit
-            </mat-icon>
-
-            <span>
-                Edit
-            </span>
-
-        </button>
-
     </div>
-
-
-    <!-- Vital Cards -->
-    <app-vital-card
-       
-    >
-    </app-vital-card>
+    <app-vital-card [recentVitals]="recentVitals[0]"></app-vital-card>
+    }
 
 </div>

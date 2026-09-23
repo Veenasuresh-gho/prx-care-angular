@@ -1,0 +1,126 @@
+<div class="prescription-dialog">
+    <div class="dialog-header">
+
+        <div class="header-content">
+
+            <div class="header-icon">
+                <mat-icon>
+                    receipt_long
+                </mat-icon>
+            </div>
+
+            <div>
+
+                <h2>
+                    Prescription Details
+                </h2>
+
+                <p>
+                    {{ data.ii }}
+                </p>
+
+            </div>
+
+        </div>
+
+        <button mat-icon-button mat-dialog-close type="button" aria-label="Close">
+
+            <mat-icon>
+                close
+            </mat-icon>
+
+        </button>
+
+    </div>
+
+
+    <!-- Prescription Information -->
+    <div class="prescription-info">
+
+        <div class="info-item">
+
+            <span class="info-label">
+                Prescription Date
+            </span>
+
+            <span class="info-value">
+                {{ data.dt }}
+            </span>
+
+        </div>
+
+
+        <div class="info-item medicine-total">
+
+            <span class="info-label">
+                Total Medicines
+            </span>
+
+            <span class="medicine-count">
+                {{ data.d?.length || 0 }}
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- Medicines -->
+    <div class="medicine-section">
+
+        <div class="section-title">
+
+            <div>
+                <h3>
+                    Medicines
+                </h3>
+
+                <span>
+                    {{ data.d?.length || 0 }} items
+                </span>
+            </div>
+
+        </div>
+
+
+        <div class="medicine-list">
+
+            @for (
+            medicine of data.d;
+            track medicine.i
+            ) {
+
+            <div class="medicine-item">
+
+                <!-- Number -->
+                <div class="medicine-number">
+                    {{ $index + 1 }}
+                </div>
+                <div class="medicine-icon">
+
+                    <mat-icon>
+                        medication
+                    </mat-icon>
+
+                </div>
+                <div class="medicine-content">
+
+                    <p class="medicine-name">
+                        {{ medicine.n }}
+                    </p>
+
+                </div>
+
+            </div>
+
+            }
+
+        </div>
+
+    </div>
+    <div class="dialog-footer">
+        <button mat-stroked-button mat-dialog-close type="button">
+            Close
+        </button>
+    </div>
+</div>
