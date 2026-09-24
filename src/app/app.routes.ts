@@ -5,6 +5,9 @@ import { Dashboard } from './features/dashboard/dashboard';
 import { MedicationsComponent } from './pages/medications/medications';
 import { SignUp } from './features/auth/sign-up/sign-up';
 import { VitalsComponent } from './pages/vitals/vitals';
+import { ConsultationHistoryComponent } from './pages/consultation-history/consultattion-history';
+import { LabResults } from './pages/lab-results/lab-results';
+import { EmergencyContacts } from './pages/emergency-contacts/emergency-contcacts';
 import { ScheduleAppointment } from './pages/schedule-appointment/schedule-appointment';
 import { DoctorDetails } from './pages/doctor-details/doctor-details';
 
@@ -38,6 +41,15 @@ export const routes: Routes = [
         path: 'vitals',
         component: VitalsComponent
     },
+    {
+        path: 'consultation-history',
+        component: ConsultationHistoryComponent
+    },
+    {
+        path: 'lab-records',
+        component: LabResults
+    },
+  
     {
         path: '**',
         redirectTo: 'auth/sign-in'

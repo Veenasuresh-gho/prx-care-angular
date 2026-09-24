@@ -1,0 +1,140 @@
+.doctor-info {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 8px 0 24px;
+}
+
+.doctor-avatar {
+  width: 52px;
+  height: 52px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 50%;
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+}
+
+.doctor-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.doctor-avatar mat-icon {
+  color: #64748b;
+}
+
+.doctor-info h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.doctor-info p {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: #64748b;
+}
+
+.rating-section {
+  padding: 4px 0 24px;
+}
+
+.field-label {
+  margin: 0 0 8px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.stars {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.star-button {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  cursor: pointer;
+}
+
+.star-button mat-icon {
+  width: 28px;
+  height: 28px;
+  font-size: 28px;
+  color: #f6b93b;
+}
+
+.rating-hint {
+  display: block;
+  margin-top: 4px;
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.field-label {
+  margin: 0 0 10px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #334155;
+}
+.recommend-options {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.radio-option {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #334155;
+}
+.radio-option input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.radio-circle {
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #94a3b8;
+  border-radius: 50%;
+  box-sizing: border-box;
+}
+.radio-option input:checked + .radio-circle {
+  border-color: #2d4680;
+}
+.radio-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #2d4680;
+}
+.full-width {
+  width: 100%;
+  margin-top: 24px;
+}
+.dialog-header{
+    font-size: 16px;
+    font-weight: 500;
+}

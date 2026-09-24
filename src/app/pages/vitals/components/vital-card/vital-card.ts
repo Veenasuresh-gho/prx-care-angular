@@ -22,7 +22,7 @@ interface VitalItem {
   imports: [
     CommonModule,
     MatIconModule,
-    VitalGraphComponent,
+    
   ],
   templateUrl: './vital-card.html',
   styleUrl: './vital-card.css',

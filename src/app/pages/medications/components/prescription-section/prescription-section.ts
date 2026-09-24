@@ -25,7 +25,7 @@ import { PrescriptionDetails } from '../prescription-details/prescription-detail
         MatProgressSpinnerModule,
         MatDialogModule,
         EmptyMessageComponent,
-        PrescriptionDetails
+        
     ],
     templateUrl: './prescription-section.html',
     styleUrl: './prescription-section.css'

@@ -1,0 +1,277 @@
+.test-details {
+    width: 100%;
+    background: #fff;
+}
+
+.dialog-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 24px;
+    border-bottom: 1px solid #eef0f4;
+}
+
+.dialog-header h2 {
+    margin: 0;
+    color: #172b4d;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.close-btn {
+    color: #64748b;
+}
+
+mat-dialog-content {
+    padding: 20px 24px 24px !important;
+    margin: 0;
+    max-height: 75vh;
+}
+
+.doctor-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 18px;
+    border: 1px solid #e8ebf0;
+    border-radius: 16px;
+    background: #fff;
+}
+
+.doctor-avatar {
+    width: 50px;
+    height: 50px;
+    min-width: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #eef4ff;
+    color: #1688c4;
+}
+
+.doctor-avatar mat-icon {
+    width: 26px;
+    height: 26px;
+    font-size: 26px;
+}
+
+.doctor-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.doctor-info h3 {
+    margin: 0;
+    color: #172b4d;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.status-badge {
+    padding: 7px 12px;
+    border-radius: 16px;
+    background: #e8f7ef;
+    color: #16805a;
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.result-card {
+    margin-top: 16px;
+    padding: 22px 24px 24px;
+    border: 1px solid #e8ebf0;
+    border-radius: 16px;
+    background: #fff;
+}
+
+.result-card h2 {
+    margin: 0 0 10px;
+    color: #172b4d;
+    font-size: 17px;
+    font-weight: 500;
+}
+
+.result-value {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+}
+
+.result-value span {
+    color: #102957;
+    font-size: 36px;
+    font-weight: 600;
+    line-height: 1;
+}
+
+.result-value small {
+    color: #64748b;
+    font-size: 15px;
+    font-weight: 400;
+}
+
+.reference-range {
+    margin: 14px 0 0;
+    color: #718096;
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.reference-range span {
+    color: #64748b;
+    font-weight: 500;
+}
+
+.range-container {
+    position: relative;
+    margin-top: 32px;
+    padding-bottom: 22px;
+}
+
+.range-value {
+    position: absolute;
+    top: -24px;
+    transform: translateX(-50%);
+    color: #20a968;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.range-bar {
+    position: relative;
+    width: 100%;
+    height: 7px;
+    border-radius: 10px;
+    background: linear-gradient(
+        to right,
+        #c44a42 0%,
+        #20c46b 10%,
+        #20c46b 90%,
+        #c44a42 100%
+    );
+}
+
+.range-marker {
+    position: absolute;
+    top: 50%;
+    width: 13px;
+    height: 13px;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background: #20c46b;
+    border: 2px solid #fff;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+.range-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 7px;
+    color: #a0a9b8;
+    font-size: 11px;
+    font-weight: 400;
+}
+
+.details-card {
+    margin-top: 16px;
+    padding: 20px 24px;
+    border: 1px solid #e8ebf0;
+    border-radius: 16px;
+    background: #fff;
+}
+
+.details-card h3 {
+    margin: 0 0 18px;
+    color: #172b4d;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.details-table {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.table-header,
+.table-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1.5fr;
+    gap: 16px;
+    align-items: center;
+    min-width: 580px;
+}
+
+.table-header {
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.table-header span {
+    color: #94a3b8;
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.table-row {
+    padding-top: 14px;
+}
+
+.table-row span,
+.table-row strong {
+    color: #475569;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.5;
+}
+
+.table-row strong {
+    color: #172b4d;
+    font-weight: 600;
+}
+
+@media (max-width: 600px) {
+
+    .dialog-header {
+        padding: 16px 18px;
+    }
+
+    mat-dialog-content {
+        padding: 16px 18px 20px !important;
+    }
+
+    .doctor-card {
+        padding: 14px;
+    }
+
+    .doctor-avatar {
+        width: 44px;
+        height: 44px;
+        min-width: 44px;
+    }
+
+    .doctor-avatar mat-icon {
+        width: 23px;
+        height: 23px;
+        font-size: 23px;
+    }
+
+    .status-badge {
+        padding: 6px 10px;
+        font-size: 11px;
+    }
+
+    .result-card {
+        padding: 20px;
+    }
+
+    .result-value span {
+        font-size: 32px;
+    }
+
+    .details-card {
+        padding: 18px;
+    }
+}
