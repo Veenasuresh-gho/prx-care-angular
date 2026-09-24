@@ -8,6 +8,8 @@ import { VitalsComponent } from './pages/vitals/vitals';
 import { ConsultationHistoryComponent } from './pages/consultation-history/consultattion-history';
 import { LabResults } from './pages/lab-results/lab-results';
 import { EmergencyContacts } from './pages/emergency-contacts/emergency-contcacts';
+import { ScheduleAppointment } from './pages/schedule-appointment/schedule-appointment';
+import { DoctorDetails } from './pages/doctor-details/doctor-details';
 
 export const routes: Routes = [
     {
@@ -22,6 +24,14 @@ export const routes: Routes = [
     {
         path: 'auth/sign-up',
         component: SignUp
+    },
+    {
+        path: 'schedule-appointment',
+        component: ScheduleAppointment
+    },
+    {
+        path: "schedule-appointment/:id",
+        component: DoctorDetails
     },
     {
         path: 'medications',

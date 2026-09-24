@@ -1,35 +1,37 @@
-<nav class="flex h-20 items-center justify-between">
+<nav class="sticky top-0 z-50 w-full bg-white ">
+  <div class="flex  h-20 items-center justify-between mx-auto max-w-7xl px-6">
+    <div class="flex items-center gap-x-6">
 
-  <div class="flex items-center gap-x-6">
+      <div class="flex items-center">
 
-    <div class="flex items-center">
+        <app-logo />
 
-      <app-logo />
+      </div>
 
     </div>
 
-  </div>
+    <div class="flex items-center gap-x-6">
 
-  <div class="flex items-center gap-x-6">
+      <div class="relative">
+        <app-notification-popover />
+      </div>
 
-    <div class="relative">
-      <app-notification-popover />
+      @if (isAuthenticated()) {
+
+      <app-profile-popover />
+
+      } @else {
+
+      <button type="button"
+        class="flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-dark"
+        (click)="signIn()">
+        Sign In
+      </button>
+
+      }
+
     </div>
-
-    @if (isAuthenticated()) {
-
-    <app-profile-popover />
-
-    } @else {
-
-    <button type="button"
-      class="flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-dark"
-      (click)="signIn()">
-      Sign In
-    </button>
-
-    }
-
   </div>
+
 
 </nav>

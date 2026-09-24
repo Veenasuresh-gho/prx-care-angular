@@ -1,0 +1,54 @@
+<div class="rounded-xl border border-primary-light bg-white p-4">
+    <!-- Doctor Details -->
+    <div class="flex items-center gap-4">
+        <!-- Doctor Image -->
+        <div
+            class="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-full border border-border bg-primary-light">
+            @if (doctor.imageUrl || doctor._url) {
+            <img [src]="doctor.imageUrl || doctor._url" [alt]="doctor.Doctor"
+                class="h-full w-full object-cover object-top" />
+            } @else {
+            <mat-icon class="!h-10 !w-10 !text-[40px] text-primary">
+                person
+            </mat-icon>
+            }
+        </div>
+        <!-- Doctor Name & Speciality -->
+        <div class="min-w-0">
+            <p class="text-lg font-semibold">
+                {{ doctor.Doctor }}
+            </p>
+            <p class="text-sm text-[#7482A3]">
+                {{ doctor.Specialty }}
+            </p>
+        </div>
+    </div>
+    <!-- Hospital & Location -->
+    <div class="mt-4 space-y-2">
+        <!-- Hospital -->
+        <div class="flex min-w-0 items-center gap-2">
+            <mat-icon class="!h-5 !w-5 !text-base text-primary">
+                local_hospital
+            </mat-icon>
+            <span class="truncate text-grey text-sm">
+                {{ doctor.Hospital }}
+            </span>
+        </div>
+        <!-- Location -->
+        <div class="flex min-w-0 items-center gap-2">
+            <mat-icon class="!h-5 !w-5 !text-base text-primary">
+                location_on
+            </mat-icon>
+            <span class="truncate text-grey text-sm">
+                {{ doctor.Location }}
+            </span>
+        </div>
+    </div>
+    <!-- View Timings -->
+    <div class="mt-4">
+        <button type="button" (click)="handleViewTimings()"
+            class="w-full rounded-md bg-primary-light px-4 py-2 text-xs font-medium text-primary transition-colors hover:bg-primary hover:text-white md:text-sm">
+            View Timings
+        </button>
+    </div>
+</div>

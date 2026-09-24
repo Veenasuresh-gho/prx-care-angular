@@ -1,0 +1,40 @@
+<div class="border-none bg-transparent p-4 shadow-none">
+    <!-- Experience -->
+    <p class="font-semibold">
+        Experience
+    </p>
+    <div class="space-y-2 py-2">
+        @if (experience.length > 0) {
+        @for (exp of experience; track $index) {
+        <div class="mb-2">
+            <p class="whitespace-pre-line text-xs text-muted-foreground">
+                {{ exp?.docexp }}
+            </p>
+        </div>
+        }
+        } @else {
+        <p class="text-muted-foreground">
+            No experience provided
+        </p>
+        }
+    </div>
+    <!-- Education -->
+    <p class="font-semibold">
+        Education
+    </p>
+    <div class="space-y-2 py-2">
+        @if (education.length > 0) {
+        @for (edu of education; track $index) {
+        <div class="mb-2">
+            <p class="text-xs">
+                {{ edu?.edu }}
+            </p>
+        </div>
+        }
+        } @else {
+        <p class="text-muted-foreground">
+            No education provided
+        </p>
+        }
+    </div>
+</div>

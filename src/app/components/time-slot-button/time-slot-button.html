@@ -1,0 +1,17 @@
+<button
+    type="button"
+    [disabled]="variant === 'unavailable'"
+    class="w-20 rounded-md border-2 py-2 text-sm font-medium transition-colors"
+    [class.cursor-pointer]="variant !== 'unavailable'"
+    [class.cursor-not-allowed]="variant === 'unavailable'"
+    [class.border-primary]="
+        variant === 'available' || variant === 'selected'
+    "
+    [class.bg-primary]="variant === 'selected'"
+    [class.text-white]="variant === 'selected'"
+    [class.bg-muted]="variant === 'unavailable'"
+    [class.border-muted]="variant === 'unavailable'"
+    [class.text-gray-500]="variant === 'unavailable'"
+>
+    <ng-content></ng-content>
+</button>

@@ -1,0 +1,234 @@
+
+<footer>
+  <section class="mt-10 bg-primary text-white">
+    <div class="mx-auto max-w-7xl px-6 py-10 lg:px-8">
+      <!-- Footer Navigation -->
+      <nav
+        aria-label="Company"
+        class="grid grid-cols-1 gap-x-8 gap-y-8 py-4 sm:grid-cols-2 lg:grid-cols-4"
+      >
+        <section *ngFor="let section of footerSections">
+          <!-- Section Title -->
+          <h3 class="py-2 text-lg font-bold">
+            {{ section.title }}
+          </h3>
+          <!-- Section Links -->
+          <ul class="space-y-2 text-sm">
+            <li *ngFor="let item of section.links">
+              <a
+                [routerLink]="item.external ? undefined : item.link"
+                [href]="item.external ? item.link : undefined"
+                [target]="item.external ? '_blank' : undefined"
+                [rel]="item.external ? 'noopener noreferrer' : undefined"
+                class="inline-flex items-center gap-1 rounded-sm text-white/90 transition-colors hover:text-white hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+              >
+                <span>{{ item.label }}</span>
+
+                <mat-icon
+                  *ngIf="item.external"
+                  class="!h-4 !w-4 !text-[16px]"
+                >
+                  open_in_new
+                </mat-icon>
+              </a>
+            </li>
+          </ul>
+
+        </section>
+      </nav>
+
+      <!-- Logo + Social + Store Badges -->
+      <div
+        class="mt-10 flex flex-col items-center justify-between gap-8 lg:flex-row lg:items-start"
+      >
+
+        <!-- Logo + Social -->
+        <div class="text-center lg:text-left">
+
+          <!-- Logo -->
+          <a
+            routerLink="/"
+            aria-label="Homepage"
+            class="flex justify-center lg:justify-start"
+          >
+            <img
+              src="/assets/aabind-icon.png"
+              alt="Aabind Hospital Logo"
+              class="h-16 w-auto"
+              loading="eager"
+            />
+          </a>
+
+          <!-- Tagline -->
+          <p class="mt-4 max-w-md text-xl font-semibold italic">
+            {{ tagline }}
+          </p>
+
+          <!-- Follow Us -->
+          <div class="mt-4 text-sm">
+            Follow us on
+          </div>
+
+          <!-- Social Icons -->
+          <div
+            class="mt-2 flex justify-center gap-2 lg:justify-start"
+          >
+            <a
+              *ngFor="let social of socialLinks"
+              [href]="social.link"
+              [attr.aria-label]="social.label"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#37497a] transition-transform hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+            >
+              <mat-icon
+                class="!m-0 !h-6 !w-6 !text-[24px]"
+              >
+                {{ social.icon }}
+              </mat-icon>
+            </a>
+          </div>
+
+        </div>
+
+        <!-- Store Badges -->
+        <div class="grid w-full max-w-72 grid-cols-2 gap-4">
+
+          <div
+            *ngFor="let badge of storeBadges"
+            class="flex flex-col items-center space-y-2"
+          >
+
+            <!-- QR Code -->
+            <img
+              [src]="badge.qr"
+              [alt]="badge.label + ' QR code'"
+              width="50"
+              height="50"
+              class="mt-2 hidden w-full rounded-[var(--radius)] border-4 border-white sm:flex"
+              loading="lazy"
+            />
+
+            <!-- Store Button -->
+            <a
+              [href]="badge.link"
+              target="_blank"
+              rel="noopener noreferrer"
+              [attr.aria-label]="'Download from ' + badge.label"
+              class="rounded-[var(--radius)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+            >
+              <img
+                [src]="badge.button"
+                [alt]="'Download from ' + badge.label"
+                width="150"
+                height="100"
+                class="h-auto w-full rounded-[var(--radius)]"
+                loading="lazy"
+              />
+            </a>
+
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Language Dropdown -->
+      <div class="mt-8 flex justify-center md:justify-end">
+        <details class="group relative">
+
+          <!-- Language Button -->
+          <summary
+            class="flex cursor-pointer list-none items-center gap-2 rounded-md border border-white/40 px-3 py-1.5 text-sm text-white hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+          >
+            <mat-icon class="!h-4 !w-4 !text-[16px]">
+              translate
+            </mat-icon>
+
+            <span>English</span>
+
+            <mat-icon
+              class="!h-4 !w-4 !text-[16px] transition-transform duration-200 group-open:rotate-180"
+            >
+              expand_more
+            </mat-icon>
+          </summary>
+
+          <!-- Dropdown -->
+          <div
+            class="absolute bottom-full right-0 z-50 mb-2 min-w-[140px] overflow-hidden rounded-md bg-white py-1 text-sm text-gray-700 shadow-lg"
+          >
+            <button
+              type="button"
+              class="block w-full px-4 py-2 text-left hover:bg-gray-100"
+            >
+              English
+            </button>
+          </div>
+
+        </details>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Bottom -->
+  <div class="bg-[#4a5d8f] py-4 text-white">
+    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+
+      <!-- Contact / Copyright -->
+      <address
+        class="flex flex-col items-center justify-between gap-2 text-center not-italic sm:flex-row sm:text-left"
+      >
+
+        <!-- Copyright -->
+        <div class="text-sm">
+          © {{ currentYear }} PRX.care. All rights reserved.
+        </div>
+
+        <!-- Contact -->
+        <div class="text-sm">
+
+          <a
+            href="mailto:support@prx.care"
+            class="hover:underline"
+          >
+            support&#64;prx.care
+          </a>
+
+          <span class="mx-2 hidden sm:inline">|</span>
+
+          <span class="block sm:inline">
+
+            <a
+              href="tel:+914844524780"
+              class="hover:underline"
+            >
+              +91 484 452 4780
+            </a>
+
+            <span class="mx-1">·</span>
+
+            <a
+              href="tel:+919995441220"
+              class="hover:underline"
+            >
+              +91 99954 41220
+            </a>
+
+          </span>
+
+        </div>
+
+      </address>
+
+      <!-- Last Updated -->
+      <div
+        class="flex w-full justify-center py-4 text-xs lg:justify-end"
+      >
+        Last Updated: {{ lastUpdated }}
+      </div>
+
+    </div>
+  </div>
+</footer>
+```
