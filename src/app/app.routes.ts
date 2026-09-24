@@ -10,6 +10,7 @@ import { LabResults } from './pages/lab-results/lab-results';
 import { EmergencyContacts } from './pages/emergency-contacts/emergency-contcacts';
 import { ScheduleAppointment } from './pages/schedule-appointment/schedule-appointment';
 import { DoctorDetails } from './pages/doctor-details/doctor-details';
+import { ClinicalHistory } from './pages/clinical-history/clinical-history';
 
 export const routes: Routes = [
     {
@@ -49,10 +50,14 @@ export const routes: Routes = [
         path: 'lab-records',
         component: LabResults
     },
-    // {
-    //     path: 'emergency-contacts',
-    //     component: EmergencyContacts
-    // },
+    {
+        path: 'emergency-contacts',
+        component: EmergencyContacts
+    },
+      {
+        path: 'facilitator',
+        component: ClinicalHistory
+    },
     {
         path: '**',
         redirectTo: 'auth/sign-in'
