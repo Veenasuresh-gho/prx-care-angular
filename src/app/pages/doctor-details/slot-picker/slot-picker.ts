@@ -50,16 +50,12 @@ export class SlotPicker implements OnInit {
         if (res.Status === 1) {
           this.slots.set(res.Data[0] || []);
           this.doctorDetails = res.Data[1]?.[0] || null;
-
-          console.log(this.doctorDetails);
         } else {
           this.slots.set([]);
           this.doctorDetails = null;
         }
-
         this.isLoading.set(false);
       },
-
       error: (error) => {
         console.error('Error fetching slots:', error);
 

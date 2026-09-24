@@ -49,7 +49,10 @@ export const routes: Routes = [
         path: 'lab-records',
         component: LabResults
     },
-  
+    // {
+    //     path: 'emergency-contacts',
+    //     component: EmergencyContacts
+    // },
     {
         path: '**',
         redirectTo: 'auth/sign-in'

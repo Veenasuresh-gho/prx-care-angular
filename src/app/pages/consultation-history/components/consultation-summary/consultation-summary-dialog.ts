@@ -27,8 +27,6 @@ import { ViewReviews } from '../view-reviews/view-reviews';
         MatIconModule,
         MatButtonModule,
         MatProgressSpinnerModule,
-        AddDoctorReview,
-        ViewReviews
     ],
     templateUrl: './consultation-summary-dialog.html',
     styleUrl: './consultation-summary-dialog.css'
