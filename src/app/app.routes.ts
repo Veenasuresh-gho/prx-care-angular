@@ -6,6 +6,7 @@ import { MedicationsComponent } from './pages/medications/medications';
 import { SignUp } from './features/auth/sign-up/sign-up';
 import { VitalsComponent } from './pages/vitals/vitals';
 import { ScheduleAppointment } from './pages/schedule-appointment/schedule-appointment';
+import { DoctorDetails } from './pages/doctor-details/doctor-details';
 
 export const routes: Routes = [
     {
@@ -22,14 +23,18 @@ export const routes: Routes = [
         component: SignUp
     },
     {
-        path:'schedule-appointment',
-        component:ScheduleAppointment
+        path: 'schedule-appointment',
+        component: ScheduleAppointment
+    },
+    {
+        path: "schedule-appointment/:id",
+        component: DoctorDetails
     },
     {
         path: 'medications',
         component: MedicationsComponent
     },
-     {
+    {
         path: 'vitals',
         component: VitalsComponent
     },

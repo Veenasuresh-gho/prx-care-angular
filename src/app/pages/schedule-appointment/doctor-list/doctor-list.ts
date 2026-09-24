@@ -31,8 +31,6 @@ export class DoctorList implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['results']) {
       this.doctorList = this.results;
-
-      // Force DoctorList template update
       this.cdr.detectChanges();
     }
   }
@@ -49,7 +47,6 @@ export class DoctorList implements OnInit, OnChanges {
       next: (res) => {
         if (res.Status === 1) {
           this.doctorList = res.Data[0] || [];
-
           this.cdr.detectChanges();
         }
       },
