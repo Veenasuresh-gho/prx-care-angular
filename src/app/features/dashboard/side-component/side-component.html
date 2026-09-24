@@ -1,6 +1,37 @@
-<div class="p-4">
-  <app-upcoming-appointment-card
-    [appointment]="appointmentDetails"
-    [isLoading]="isLoading"
-  />
+<div class="w-full space-y-2 py-2">
+  <!-- Header -->
+  <div class="flex items-center justify-between">
+    <p class="text-sm font-semibold">
+      Your Upcoming Appointment
+    </p>
+    <app-button type="button" (click)="viewAppointments()" variant="ghost"
+      customClass="inline-flex items-center gap-1 text-xs mt-0">
+      <span>View Appointments</span>
+      <mat-icon class="!m-0 !h-4 !w-4 !text-base !leading-4">
+        chevron_right
+      </mat-icon>
+    </app-button>
+  </div>
+  <!-- Appointment -->
+  <div class="space-y-4">
+    @if (isLoading) {
+    <div class="flex items-center justify-center rounded-2xl bg-white p-8">
+      <span class="text-sm text-gray-500">
+        Loading appointment...
+      </span>
+    </div>
+    } @else if (appointmentDetails) {
+    <app-upcoming-appointment-card [appointment]="appointmentDetails" [isLoading]="isLoading" />
+    } @else {
+    <div class="flex flex-col items-center justify-center gap-3 rounded-2xl bg-white p-8 text-center">
+      <img src="assets/rx.svg" width="100" height="100" alt="No appointments" class="h-20 w-20" />
+      <h3 class="text-sm font-semibold">
+        No upcoming appointments
+      </h3>
+      <app-button type="button" (click)="bookAppointment()" customClass="text-xs mt-0">
+        Book Appointment
+      </app-button>
+    </div>
+    }
+  </div>
 </div>

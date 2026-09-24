@@ -1,8 +1,9 @@
 import { Component, inject, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { Navbar } from '../../features/navbar/navbar';
-import { RouterOutlet } from '@angular/router';
+import { RouterOutlet, Router } from '@angular/router';
 import { SideComponent } from '../../features/dashboard/side-component/side-component';
 import { GHOService } from '../../services/gho.service';
+import { WelcomeCard } from '../../features/dashboard/components/welcome-card/welcome-card';
 
 @Component({
   selector: 'app-dashboard-layout',
@@ -10,7 +11,8 @@ import { GHOService } from '../../services/gho.service';
   imports: [
     Navbar,
     RouterOutlet,
-    SideComponent
+    SideComponent,
+    WelcomeCard
   ],
   templateUrl: './dashboard-layout.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -19,6 +21,7 @@ export class DashboardLayout implements OnInit {
 
   private srv = inject(GHOService);
   private cdr = inject(ChangeDetectorRef);
+  constructor(private router: Router) { }
 
   appointmentDetails: any = null;
   patientDetails: any = null;
@@ -26,6 +29,10 @@ export class DashboardLayout implements OnInit {
 
   patientId: string | null = null;
   isLoading = true;
+
+  get isDashboard(): boolean {
+    return this.router.url === '/dashboard';
+  }
 
   ngOnInit(): void {
     this.patientId = sessionStorage.getItem('id');

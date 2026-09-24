@@ -1,7 +1,12 @@
 <div class="min-h-screen">
   <app-navbar />
-  <div class="flex min-h-[calc(100vh-5rem)]">
+  @if (isDashboard) {
+  <div>
+    <app-welcome-card [patientDetails]="patientDetails" />
+  </div>
+  }
 
+  <div class="flex min-h-[calc(100vh-5rem)] gap-4">
     <main class="min-w-0 flex-1">
       <router-outlet [routerOutletData]="{
     patientDetails: patientDetails,
@@ -10,9 +15,7 @@
     </main>
 
     <aside class="shrink-0">
-      @if (appointmentDetails) {
       <app-side-component [appointmentDetails]="appointmentDetails" [isLoading]="isLoading" />
-      }
     </aside>
   </div>
 </div>
