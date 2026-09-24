@@ -4,6 +4,7 @@ import { RouterOutlet, Router } from '@angular/router';
 import { SideComponent } from '../../features/dashboard/side-component/side-component';
 import { GHOService } from '../../services/gho.service';
 import { WelcomeCard } from '../../features/dashboard/components/welcome-card/welcome-card';
+import { Footer } from '../../features/footer/footer';
 
 @Component({
   selector: 'app-dashboard-layout',
@@ -12,7 +13,8 @@ import { WelcomeCard } from '../../features/dashboard/components/welcome-card/we
     Navbar,
     RouterOutlet,
     SideComponent,
-    WelcomeCard
+    WelcomeCard,
+    Footer
   ],
   templateUrl: './dashboard-layout.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

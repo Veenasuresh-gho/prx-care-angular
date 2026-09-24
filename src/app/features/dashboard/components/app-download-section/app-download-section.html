@@ -1,0 +1,39 @@
+<section class="w-full">
+    <div class="mx-auto w-full">
+        <div class="overflow-hidden rounded-2xl bg-blue-500 text-primary-foreground">
+            <div class="grid min-h-[360px] grid-cols-1 gap-2 overflow-hidden p-10 md:grid-cols-2 md:p-10">
+                <!-- Left Side - Text -->
+                <div class="flex flex-col justify-center space-y-6 text-white md:space-y-4">
+                    <h2 class="text-2xl font-bold tracking-tight md:text-2xl">
+                        Download the Aarogyam by Aabind Mobile App
+                    </h2>
+                    <p class="max-w-xl text-base leading-7 text-primary-foreground/90 md:text-sm">
+                        Aarogyam by Aabind is a complete health journey management system
+                        that proactively supports your wellbeing—from prevention to
+                        recovery and beyond—rather than reacting only when illness occurs.
+                    </p>
+                    <!-- App Store Buttons -->
+                    <div class="flex flex-wrap gap-4">
+                        <div class="flex justify-center space-x-4 md:justify-start">
+                            <!-- App Store -->
+                            <a [href]="appStoreUrl" target="_blank" rel="noopener noreferrer" class="hover:underline">
+                                <img src="assets/appstore.svg" alt="Download on the App Store"
+                                    class="h-auto w-[160px] transition-transform duration-200 hover:scale-110 md:w-[180px]" />
+                            </a>
+                            <!-- Google Play -->
+                            <a [href]="playStoreUrl" target="_blank" rel="noopener noreferrer" class="hover:underline">
+                                <img src="assets/playstore.svg" alt="Get it on Google Play"
+                                    class="h-auto w-[160px] transition-transform duration-200 hover:scale-110 md:w-[180px]" />
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Right Side - Image -->
+                <div class="relative flex h-full items-end justify-center overflow-hidden md:justify-end">
+                    <img src="assets/app-section.png" alt="Aarogyam by Aabind app screens"
+                        class="block w-auto max-w-full object-contain" />
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
