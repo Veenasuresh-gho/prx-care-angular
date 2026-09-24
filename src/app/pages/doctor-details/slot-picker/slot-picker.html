@@ -23,7 +23,8 @@
         @if (regularSlots().length > 0) {
         <div class="flex flex-wrap gap-3">
             @for (slot of regularSlots(); track slot.ID) {
-            <app-time-slot-button variant="available">
+            <app-time-slot-button [variant]="selectedSlot()?.ID === slot.ID ? 'selected' : 'available'"
+                (click)="onSlotSelect(slot)">
                 {{ slot.SlotTime }}
             </app-time-slot-button>
             }
@@ -43,7 +44,8 @@
         @if (onlineConsultationSlots().length > 0) {
         <div class="flex flex-wrap gap-3">
             @for (slot of onlineConsultationSlots(); track slot.ID) {
-            <app-time-slot-button variant="available">
+            <app-time-slot-button [variant]="selectedSlot()?.ID === slot.ID ? 'selected' : 'available'"
+                (click)="onSlotSelect(slot)">
                 {{ slot.SlotTime }}
             </app-time-slot-button>
             }
@@ -71,7 +73,9 @@
             </p>
         </div>
         <div>
-            <app-button>Continue</app-button>
+            <app-button [disabled]="!selectedSlot()" (click)="onContinue()">
+                Continue
+            </app-button>
         </div>
     </div>
 </div>

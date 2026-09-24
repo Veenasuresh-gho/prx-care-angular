@@ -1,4 +1,12 @@
-import { Component, inject, Input, signal, computed, OnInit } from '@angular/core';
+import {
+  Component,
+  inject,
+  Input,
+  signal,
+  computed,
+  OnInit,
+} from '@angular/core';
+
 import { WeekDayPicker } from '../../../components/week-day-picker/week-day-picker';
 import { TimeSlotButton } from '../../../components/time-slot-button/time-slot-button';
 import { GHOService } from '../../../services/gho.service';
@@ -15,18 +23,20 @@ export class SlotPicker implements OnInit {
   @Input() doctorId: string | null = null;
 
   slots = signal<any[]>([]);
+  selectedSlot = signal<any | null>(null);
+
   doctorDetails: any;
-  isLoading = signal<boolean>(false);
+  isLoading = signal(false);
+
+  private srv = inject(GHOService);
 
   regularSlots = computed(() =>
-    this.slots().filter((s) => s.IsTM === 0)
+    this.slots().filter((slot) => slot.IsTM === 0)
   );
 
   onlineConsultationSlots = computed(() =>
-    this.slots().filter((s) => s.IsTM === 1)
+    this.slots().filter((slot) => slot.IsTM === 1)
   );
-
-  private srv = inject(GHOService);
 
   ngOnInit(): void {
     this.onDateSelect(new Date());
@@ -34,11 +44,9 @@ export class SlotPicker implements OnInit {
 
   onDateSelect(date: Date): void {
     if (!this.doctorId) return;
-
+    this.selectedSlot.set(null);
     this.isLoading.set(true);
-
     const formattedDate = formatDateToMMDDYYYYFromDate(date);
-
     const tv = [
       { T: 'dk1', V: this.doctorId },
       { T: 'dk2', V: formattedDate },
@@ -50,23 +58,32 @@ export class SlotPicker implements OnInit {
         if (res.Status === 1) {
           this.slots.set(res.Data[0] || []);
           this.doctorDetails = res.Data[1]?.[0] || null;
-
-          console.log(this.doctorDetails);
         } else {
-          this.slots.set([]);
-          this.doctorDetails = null;
+          this.clearSlots();
         }
-
         this.isLoading.set(false);
       },
 
       error: (error) => {
         console.error('Error fetching slots:', error);
-
-        this.slots.set([]);
-        this.doctorDetails = null;
+        this.clearSlots();
         this.isLoading.set(false);
       },
     });
+  }
+
+  onSlotSelect(slot: any): void {
+    this.selectedSlot.set(slot);
+  }
+
+  onContinue(): void {
+    const slot = this.selectedSlot();
+    if (!slot) return;
+    console.log('Selected slot:', slot);
+  }
+
+  private clearSlots(): void {
+    this.slots.set([]);
+    this.doctorDetails = null;
   }
 }
