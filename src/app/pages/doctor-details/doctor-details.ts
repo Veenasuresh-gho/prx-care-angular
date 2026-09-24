@@ -2,10 +2,11 @@ import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { DoctorProfile } from './doctor-profile/doctor-profile';
 import { GHOService } from '../../services/gho.service';
 import { ActivatedRoute } from '@angular/router';
+import { SlotPicker } from './slot-picker/slot-picker';
 
 @Component({
   selector: 'app-doctor-details',
-  imports: [DoctorProfile],
+  imports: [DoctorProfile, SlotPicker],
   templateUrl: './doctor-details.html',
 })
 export class DoctorDetails implements OnInit {
@@ -20,14 +21,7 @@ export class DoctorDetails implements OnInit {
   private route = inject(ActivatedRoute);
 
   doctorId: string | null = null;
-
-  ngOnInit(): void {
-    this.doctorId = this.route.snapshot.paramMap.get('id');
-    if (this.doctorId) {
-      this.getDoctorList(this.doctorId);
-    }
-  }
-
+  
   getDoctorList(doctorId: string): void {
     const tv = [
       {
@@ -54,4 +48,12 @@ export class DoctorDetails implements OnInit {
       },
     });
   }
+  ngOnInit(): void {
+    this.doctorId = this.route.snapshot.paramMap.get('id');
+    if (this.doctorId) {
+      this.getDoctorList(this.doctorId);
+    }
+  }
+
+
 }

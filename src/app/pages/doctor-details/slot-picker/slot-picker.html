@@ -1,0 +1,77 @@
+<div class="mt-6 rounded-lg bg-white p-3">
+    <!-- Date Picker -->
+    <div>
+        <h2 class="py-6 text-lg font-bold text-black">
+            Select a convenient date to schedule your consultation
+        </h2>
+    </div>
+    <div>
+        <app-week-day-picker (dateSelect)="onDateSelect($event)"></app-week-day-picker>
+    </div>
+    <!-- Loading State Indicator -->
+    @if (isLoading()) {
+    <div class="py-6 text-center text-sm text-gray-500">
+        Loading available slots...
+    </div>
+    } @else {
+    <!-- Regular Consultation -->
+    <div class="mt-6">
+        <h3 class="mb-4 flex items-center gap-2 text-base font-bold text-gray-900">
+            <span class="h-5 w-1 rounded-full bg-indigo-900"></span>
+            Choose a time that works for you
+        </h3>
+        @if (regularSlots().length > 0) {
+        <div class="flex flex-wrap gap-3">
+            @for (slot of regularSlots(); track slot.ID) {
+            <app-time-slot-button variant="available">
+                {{ slot.SlotTime }}
+            </app-time-slot-button>
+            }
+        </div>
+        } @else {
+        <div class="rounded-xl bg-gray-50 px-4 py-4 text-sm text-gray-500">
+            No available in-person slots for this day.
+        </div>
+        }
+    </div>
+    <!-- Online Consultation -->
+    <div class="mt-8">
+        <h3 class="mb-4 flex items-center gap-2 text-base font-bold text-gray-900">
+            <span class="h-5 w-1 rounded-full bg-indigo-900"></span>
+            Choose a time for online consultation
+        </h3>
+        @if (onlineConsultationSlots().length > 0) {
+        <div class="flex flex-wrap gap-3">
+            @for (slot of onlineConsultationSlots(); track slot.ID) {
+            <app-time-slot-button variant="available">
+                {{ slot.SlotTime }}
+            </app-time-slot-button>
+            }
+        </div>
+        } @else {
+        <div class="rounded-xl bg-gray-50 px-4 py-4 text-sm text-gray-500">
+            No available telemedicine slots for this day.
+        </div>
+        }
+    </div>
+    }
+    <div class="flex justify-between items-center 
+          py-4 px-5
+          w-full
+          bg-primary/5
+          border border-primary/10
+          my-6
+          rounded-xl">
+        <div>
+            <p class="text-sm text-black">
+                Consultation fee
+            </p>
+            <p class="font-bold text-[16px] text-slate-900">
+                {{ doctorDetails?.fee ? '₹ ' + doctorDetails.fee : '-' }}
+            </p>
+        </div>
+        <div>
+            <app-button>Continue</app-button>
+        </div>
+    </div>
+</div>
