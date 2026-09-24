@@ -1,0 +1,19 @@
+@if (doctorList.length > 0) {
+
+<div class="grid grid-cols-1 gap-2 md:gap-4 lg:grid-cols-2">
+
+  @for (doctor of doctorList; track doctor.id) {
+
+  <app-doctor-card [doctor]="doctor" />
+
+  }
+
+</div>
+
+} @else {
+
+<p class="text-center text-muted-foreground">
+  No doctors found
+</p>
+
+}

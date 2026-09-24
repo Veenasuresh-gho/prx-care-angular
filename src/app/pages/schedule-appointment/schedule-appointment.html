@@ -1,0 +1,13 @@
+<div class="space-y-2">
+  <div>
+    <app-search
+      (searchChange)="onSearchChange($event)"
+    ></app-search>
+  </div>
+
+  <div>
+    <app-doctor-list
+      [results]="searchResults"
+    ></app-doctor-list>
+  </div>
+</div>

@@ -5,6 +5,7 @@ import { Dashboard } from './features/dashboard/dashboard';
 import { MedicationsComponent } from './pages/medications/medications';
 import { SignUp } from './features/auth/sign-up/sign-up';
 import { VitalsComponent } from './pages/vitals/vitals';
+import { ScheduleAppointment } from './pages/schedule-appointment/schedule-appointment';
 
 export const routes: Routes = [
     {
@@ -19,6 +20,10 @@ export const routes: Routes = [
     {
         path: 'auth/sign-up',
         component: SignUp
+    },
+    {
+        path:'schedule-appointment',
+        component:ScheduleAppointment
     },
     {
         path: 'medications',
