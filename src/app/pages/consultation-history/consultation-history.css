@@ -1,0 +1,317 @@
+.consultation-history {
+    width: 100%;
+}
+
+.search-field {
+    flex: 1;
+    margin-bottom: -1.25em;
+}
+
+.sort-button {
+    height: 56px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    white-space: nowrap;
+}
+
+.sort-button mat-icon {
+    width: 18px;
+    height: 18px;
+    font-size: 18px;
+}
+
+.consultation-card {
+    width: 100%;
+    overflow: hidden;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    transition:
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
+}
+
+.consultation-card:hover {
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+
+.doctor-section {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 20px;
+}
+
+.doctor-info {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    min-width: 0;
+}
+
+.doctor-avatar {
+    width: 60px;
+    height: 60px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 50%;
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+}
+
+.doctor-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.doctor-avatar mat-icon {
+    width: 28px;
+    height: 28px;
+    font-size: 28px;
+    color: #64748b;
+}
+
+.doctor-details {
+    min-width: 0;
+}
+
+.doctor-name-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.doctor-name {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.3;
+    color: #1e293b;
+}
+
+.speciality {
+    margin: 5px 0 0;
+    font-size: 14px;
+    color: #64748b;
+}
+
+.hospital {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 7px;
+    font-size: 12px;
+    color: #64748b;
+}
+
+.hospital mat-icon {
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
+    color: #64748b;
+}
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 9px;
+    border-radius: 999px;
+    background: #dcfce7;
+    color: #166534;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1;
+}
+
+.appointment-id {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    flex-shrink: 0;
+    padding: 6px 11px;
+    border-radius: 999px;
+    background: #dce6ff;
+    color: #475569;
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.appointment-id mat-icon {
+    width: 15px;
+    height: 15px;
+    font-size: 15px;
+}
+
+.date-time {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: fit-content;
+    margin: 0 20px 20px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    background: #f8fafc;
+}
+
+.date-time>mat-icon {
+    width: 20px;
+    height: 20px;
+    font-size: 20px;
+    color: #64748b;
+}
+
+.date-label {
+    margin: 0;
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #94a3b8;
+}
+
+.date-value {
+    margin: 3px 0 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: #334155;
+}
+
+.card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 15px 20px;
+    border-top: 1px solid #e5e7eb;
+}
+
+.footer-hospital {
+    min-width: 0;
+    overflow: hidden;
+    font-size: 13px;
+    color: #64748b;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-shrink: 0;
+}
+
+.actions button {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: #2d4680;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.actions button:hover {
+    color: #1e3263;
+    text-decoration: underline;
+}
+
+@media (max-width: 640px) {
+    .doctor-section {
+        flex-direction: column;
+    }
+
+    .appointment-id {
+        align-self: flex-start;
+    }
+
+    .doctor-avatar {
+        width: 54px;
+        height: 54px;
+    }
+
+    .doctor-name {
+        font-size: 15px;
+    }
+
+    .speciality {
+        font-size: 13px;
+    }
+
+    .date-time {
+        width: calc(100% - 40px);
+        box-sizing: border-box;
+    }
+
+    .date-value {
+        font-size: 13px;
+    }
+
+    .card-footer {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .footer-hospital {
+        width: 100%;
+    }
+
+    .actions {
+        width: 100%;
+        justify-content: flex-end;
+        gap: 16px;
+    }
+
+}
+
+
+@media (max-width: 400px) {
+
+    .doctor-section {
+        padding: 16px;
+    }
+
+    .doctor-info {
+        gap: 10px;
+    }
+
+    .doctor-avatar {
+        width: 48px;
+        height: 48px;
+    }
+
+    .doctor-name-row {
+        gap: 5px;
+    }
+
+    .status-badge {
+        padding: 3px 7px;
+
+        font-size: 10px;
+    }
+
+    .appointment-id {
+        font-size: 11px;
+    }
+
+    .date-time {
+        margin-right: 16px;
+        margin-left: 16px;
+    }
+
+    .card-footer {
+        padding: 14px 16px;
+    }
+
+}

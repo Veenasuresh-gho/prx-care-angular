@@ -1,0 +1,100 @@
+<div class="lab-results mb-5">
+    <div class="lab-header">
+        <h2>Test Results</h2>
+        <p>
+            View and track your laboratory test reports and health insights.
+        </p>
+    </div>
+    <mat-tab-group [(selectedIndex)]="selectedTab" class="lab-tabs">
+        <mat-tab label="Tests">
+            @if (isLoading) {
+            <div class="loading">
+                <mat-spinner diameter="35"></mat-spinner>
+                <p>Loading lab results...</p>
+            </div>
+            } @else if (groupedResults.length > 0) {
+            <div class="results-list">
+                @for (item of groupedResults; track item.labOrderId) {
+                <div class="lab-card px-8 py-4">
+                    <div class="lab-card-header">
+                        <div>
+                            <h3>
+                                {{ item.doctor || '—' }}
+                            </h3>
+                            <p>
+                                {{ item.category || 'Laboratory Test' }}
+                            </p>
+                        </div>
+                        <span>
+                            {{ item.date || '—' }}
+                        </span>
+                    </div>
+                    <div class="tests-list">
+                        @if (item.tests.length > 0) {
+                        <div class="test-item">
+                            <span>
+                                {{ item.tests[0].name }}
+                            </span>
+                            <div class="test-count-wrapper">
+                                <span class="test-count">
+                                    {{ item.tests.length }} Tests
+                                </span>
+                                @if (item.tests.length > 1) {
+                                <button type="button" class="expand-btn"
+                                    (click)="toggleTests(item); $event.stopPropagation()">
+                                    <mat-icon>
+                                        {{ item.expanded ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}
+                                    </mat-icon>
+                                </button>
+                                }
+                            </div>
+                        </div>
+                        @if (item.expanded) {
+                        <div class="expanded-tests">
+                            @for (test of item.tests.slice(1); track $index) {
+                            <div class="test-item">
+                                <span>
+                                    {{ test.name }}
+                                </span>
+                                <span class="test-status" [class.completed]="test.status === 'Completed'">
+                                    {{ test.status || 'Pending' }}
+                                </span>
+                            </div>
+                            }
+                        </div>
+                        }
+                        }
+                    </div>
+                    <div class="card-actions">
+                        <button mat-stroked-button type="button" (click)="handleViewSummary(item)">
+                            View Summary
+                        </button>
+                    </div>
+                </div>
+                }
+            </div>
+            } @else {
+            <div class="empty-state">
+                <mat-icon>science</mat-icon>
+                <p>No lab results found.</p>
+            </div>
+            }
+        </mat-tab>
+        <mat-tab label="Summary">
+            @if (selectedLabResult) {
+            <div class="summary-container">
+                <app-lab-result-summary [labOrderId]="selectedLabResult.labOrderId" [doctor]="selectedLabResult.doctor"
+                    [date]="selectedLabResult.date" [testStatus]="selectedLabResult.tests[0]?.status">
+                </app-lab-result-summary>
+            </div>
+            } @else {
+            <div class="empty-state">
+                <mat-icon>description</mat-icon>
+                <p>
+                    Select a lab result from Tests to view its summary.
+                </p>
+            </div>
+            }
+        </mat-tab>
+    </mat-tab-group>
+</div>

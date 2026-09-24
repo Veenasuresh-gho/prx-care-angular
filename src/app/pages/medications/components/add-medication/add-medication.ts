@@ -37,18 +37,13 @@ import { ToastrService } from 'ngx-toastr';
 export class AddMedication {
 
     private fb = inject(FormBuilder);
-
     srv = inject(GHOService);
     utl = inject(GHOUtitity);
     private toastr = inject(ToastrService);
     @Output() saved = new EventEmitter<void>();
-
     isLoading = false;
-
     tv: tags[] = [];
-
     res: ghoresult = new ghoresult();
-
 
     medicationForm = this.fb.group({
 
@@ -84,7 +79,6 @@ export class AddMedication {
 
 
     toggleFrequency(option: string): void {
-
         const current =
             this.medicationForm.controls.frequency.value ?? [];
 
@@ -134,19 +128,14 @@ export class AddMedication {
 
 
     submit(): void {
-
         if (this.medicationForm.invalid) {
-
             this.medicationForm.markAllAsTouched();
-
             return;
         }
 
 
         const userId =
             sessionStorage.getItem('id');
-
-
         if (!userId) {
 
             console.error(
@@ -249,12 +238,8 @@ export class AddMedication {
                     this.toastr.error(
                         errorMessage
                     );
-
                 },
-
-
                 error: (err) => {
-
                     console.error(
                         'Medication API Error:',
                         err

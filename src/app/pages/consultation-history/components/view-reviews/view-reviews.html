@@ -1,0 +1,60 @@
+<h2 mat-dialog-title class="dialog-header">Reviews</h2>
+<mat-dialog-content>
+    @if (isLoading) {
+    <div class="loading-container">
+        <mat-spinner diameter="35"></mat-spinner>
+        <p>Loading reviews...</p>
+    </div>
+    } @else if (reviews.length > 0) {
+    <div class="reviews-list">
+        @for (review of reviews; track review?.DoctorRatingID || $index) {
+        <div class="review-item">
+            <div class="review-avatar">
+                @if (review?._url) {
+                <img [src]="review._url" [alt]="review?.Patient || 'Patient'" />
+                } @else {
+                <mat-icon>person</mat-icon>
+                }
+            </div>
+
+            <div class="review-content">
+                <div class="review-header">
+                    <div>
+                        <h3>{{ review?.Patient || 'Patient' }}</h3>
+
+                        <div class="rating">
+                            @for (star of [1, 2, 3, 4, 5]; track star) {
+                            <mat-icon>
+                                {{ (review?.RatingCount || 0) >= star ? 'star' : 'star_border' }}
+                            </mat-icon>
+                            }
+                        </div>
+                    </div>
+
+                    <span class="review-date">
+                        {{ review?.CreatedAt || '' }}
+                    </span>
+                </div>
+
+                @if (review?.Feedback) {
+                <p class="feedback">
+                    {{ review.Feedback }}
+                </p>
+                }
+            </div>
+        </div>
+        }
+    </div>
+    } @else {
+    <div class="empty-reviews">
+        <mat-icon>rate_review</mat-icon>
+        <p>No reviews yet</p>
+    </div>
+    }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-stroked-button type="button" (click)="close()">
+        Close
+    </button>
+</mat-dialog-actions>
