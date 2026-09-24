@@ -1,0 +1,129 @@
+<form [formGroup]="emergencyContactForm" (ngSubmit)="submit()" class="flex flex-col h-full min-h-0">
+    <div class="space-y-2 overflow-y-auto px-1">
+        <mat-form-field appearance="outline" class="w-full">
+            <mat-label>First Name</mat-label>
+            <input matInput formControlName="firstName" placeholder="Enter first name" />
+            @if (emergencyContactForm.get('firstName')?.hasError('required') && emergencyContactForm.get('firstName')?.touched) {
+            <mat-error>First name is required</mat-error>
+            }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Last Name</mat-label>
+            <input matInput formControlName="lastName" placeholder="Enter last name" />
+            @if (emergencyContactForm.get('lastName')?.hasError('required') && emergencyContactForm.get('lastName')?.touched) {
+            <mat-error>Last name is required</mat-error>
+            }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Relationship</mat-label>
+            <mat-select formControlName="relationship">
+                <mat-option value="">-- Select --</mat-option>
+                @for (relation of relationOptions; track relation.value) {
+                <mat-option [value]="relation.value">
+                    {{ relation.label }}
+                </mat-option>
+                }
+            </mat-select>
+            @if (emergencyContactForm.get('relationship')?.hasError('required') && emergencyContactForm.get('relationship')?.touched) {
+            <mat-error>Relationship is required</mat-error>
+            }
+        </mat-form-field>
+
+        <div>
+            <div class="flex gap-2">
+                <mat-form-field appearance="outline" class="w-38">
+                    <mat-label>Country Code</mat-label>
+                    <mat-select formControlName="countryId" (selectionChange)="onCountryChange($event.value)">
+                        @if (loadingCountries) {
+                        <mat-option disabled>Loading...</mat-option>
+                        } @else {
+                        @for (country of countries; track country.CountryID) {
+                        <mat-option [value]="country.CountryID">
+                            +{{ country.CountryCode }}
+                            {{ country.CountryName }}
+                        </mat-option>
+                        }
+                        }
+                    </mat-select>
+                    @if (emergencyContactForm.get('countryId')?.hasError('required') && emergencyContactForm.get('countryId')?.touched) {
+                    <mat-error>Required</mat-error>
+                    }
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="flex-1">
+                    <mat-label>Phone Number</mat-label>
+                    <input matInput type="tel" formControlName="phoneNumber" placeholder="Enter phone number"
+                        [attr.minlength]="selectedCountry?.MinLength"
+                        [attr.maxlength]="selectedCountry?.MaxLength" />
+
+                    @if (emergencyContactForm.get('phoneNumber')?.hasError('required') && emergencyContactForm.get('phoneNumber')?.touched) {
+                    <mat-error>Phone number is required</mat-error>
+                    }
+
+                    @if (emergencyContactForm.get('phoneNumber')?.hasError('pattern')) {
+                    <mat-error>Enter a valid phone number</mat-error>
+                    }
+
+                    @if (emergencyContactForm.get('phoneNumber')?.hasError('minlength')) {
+                    <mat-error>
+                        Phone number must be {{ selectedCountry?.MinLength }} digits
+                    </mat-error>
+                    }
+
+                    @if (emergencyContactForm.get('phoneNumber')?.hasError('maxlength')) {
+                    <mat-error>
+                        Phone number must be {{ selectedCountry?.MaxLength }} digits
+                    </mat-error>
+                    }
+                </mat-form-field>
+            </div>
+        </div>
+
+        <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Email</mat-label>
+            <input matInput type="email" formControlName="email" placeholder="Enter email" />
+            @if (emergencyContactForm.get('email')?.hasError('email')) {
+            <mat-error>Enter a valid email address</mat-error>
+            }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Address 1</mat-label>
+            <input matInput formControlName="address1" placeholder="Enter address" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Address 2</mat-label>
+            <input matInput formControlName="address2" placeholder="Enter address" />
+        </mat-form-field>
+
+        <div class="grid grid-cols-2 gap-2">
+            <mat-form-field appearance="outline" class="w-full">
+                <mat-label>State</mat-label>
+                <input matInput formControlName="state" placeholder="State" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="w-full">
+                <mat-label>City</mat-label>
+                <input matInput formControlName="city" placeholder="City" />
+            </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Pincode</mat-label>
+            <input matInput type="text" formControlName="pincode" placeholder="Enter pincode" />
+        </mat-form-field>
+    </div>
+
+    <div class="border-t border-gray-200 pt-4 mt-6">
+        <button mat-flat-button type="submit" class="w-full" [disabled]="submitting">
+            @if (submitting) {
+            <mat-spinner diameter="20"></mat-spinner>
+            } @else {
+            Update Contact
+            }
+        </button>
+    </div>
+</form>

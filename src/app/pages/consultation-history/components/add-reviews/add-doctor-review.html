@@ -1,0 +1,88 @@
+<h3 mat-dialog-title class="dialog-header">Add Review</h3>
+
+<mat-dialog-content>
+    <div class="doctor-info">
+        <div class="doctor-avatar">
+            @if (data?.doctorImage) {
+            <img [src]="data.doctorImage" [alt]="data?.doctorName || 'Doctor'" />
+            } @else {
+            <mat-icon>person</mat-icon>
+            }
+        </div>
+
+        <div>
+            <h3>{{ data?.doctorName || 'Doctor' }}</h3>
+            <p>{{ data?.specialty || '' }}</p>
+        </div>
+    </div>
+
+    <div class="rating-section">
+        <p class="field-label">Your Rating</p>
+
+        <div class="stars">
+            @for (star of [1, 2, 3, 4, 5]; track star) {
+            <button type="button" class="star-button" (click)="setRating(star)"
+                [attr.aria-label]="'Rate ' + star + ' stars'">
+                <mat-icon>
+                    {{ selectedRating >= star ? 'star' : 'star_border' }}
+                </mat-icon>
+            </button>
+            }
+        </div>
+
+        @if (!selectedRating) {
+        <span class="rating-hint">Select a rating</span>
+        }
+    </div>
+
+    <div class="recommend-section">
+        <p class="field-label">
+            Would you recommend {{ data?.doctorName || 'this doctor' }} to others?
+        </p>
+
+        <div class="recommend-options">
+            <label class="radio-option">
+                <input type="radio" name="recommend" [checked]="recommend" (change)="setRecommendation(true)" />
+
+                <span class="radio-circle">
+                    @if (recommend) {
+                    <span class="radio-dot"></span>
+                    }
+                </span>
+
+                <span>Yes</span>
+            </label>
+
+            <label class="radio-option">
+                <input type="radio" name="recommend" [checked]="!recommend" (change)="setRecommendation(false)" />
+
+                <span class="radio-circle">
+                    @if (!recommend) {
+                    <span class="radio-dot"></span>
+                    }
+                </span>
+
+                <span>No</span>
+            </label>
+        </div>
+    </div>
+
+    <form [formGroup]="reviewForm">
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Your Review</mat-label>
+
+            <textarea matInput formControlName="feedback" rows="5"
+                placeholder="Share your experience with the doctor"></textarea>
+        </mat-form-field>
+    </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-stroked-button type="button" (click)="close()">
+        Cancel
+    </button>
+
+    <button mat-flat-button type="button" [disabled]="!selectedRating || isLoading" (click)="submit()">
+        {{ isLoading ? 'Submitting...' : 'Submit Review' }}
+    </button>
+</mat-dialog-actions>

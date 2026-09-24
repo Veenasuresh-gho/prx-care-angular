@@ -1,0 +1,245 @@
+@if (open) {
+<div class="dialog-backdrop">
+    <div class="consultation-dialog">
+        <div class="doctor-header">
+            <div class="doctor-info-wrapper">
+                <div class="doctor-avatar">
+                    @if (doctorImage) {
+                    <img [src]="doctorImage" [alt]="doctorName" />
+                    } @else {
+                    <mat-icon>person</mat-icon>
+                    }
+                </div>
+
+                <div class="doctor-info">
+                    <h2>
+                        {{ appointment?.Title }} {{ doctorName }}
+                    </h2>
+                    <p>
+                        {{ specialty }}
+                    </p>
+                    <p>
+                        {{ appointment?.AppointmentTime }}
+                    </p>
+                </div>
+            </div>
+
+            <div class="review-actions">
+                <button type="button" (click)="addReview(appointment)">
+                    Add Review
+                </button>
+                <button type="button" (click)="viewReviews(appointment)">
+                    View Reviews
+                </button>
+            </div>
+        </div>
+
+
+        <div class="dialog-body">
+            @if (loading) {
+            <div class="loading-container">
+                <mat-spinner diameter="40"></mat-spinner>
+                <p>Loading consultation details...</p>
+            </div>
+            } @else {
+            <div class="summary-content">
+                <section class="summary-section">
+                    <h3>Patient Information</h3>
+                    <div class="patient-grid">
+                        <div class="info-item">
+                            <span>Patient Name</span>
+                            <strong>
+                                {{ patientName }}
+                            </strong>
+                        </div>
+                        <div class="info-item">
+                            <span>Gender / Age</span>
+                            <strong>
+                                {{ appointmentDetails?.Gender || '—' }}
+                                /
+                                {{ appointmentDetails?.Age || '—' }}
+                            </strong>
+                        </div>
+                        <div class="info-item">
+                            <span>Phone</span>
+                            <strong>
+                                {{ appointmentDetails?.PPhone || '—' }}
+                            </strong>
+                        </div>
+
+                    </div>
+                </section>
+
+                @if (presentComplaints?.PresentComplaints) {
+                <section class="summary-section">
+                    <h3>Present Complaints</h3>
+                    <div class="content-box">
+                        <p>
+                            {{ presentComplaints.PresentComplaints }}
+                        </p>
+                        @if (presentComplaints?._url) {
+                        <img class="summary-image" [src]="presentComplaints._url" alt="Present complaints" />
+                        }
+                    </div>
+                </section>
+                }
+
+                @if (physicalExamination?.PhysicalExaminations) {
+                <section class="summary-section">
+                    <h3>Physical Examination</h3>
+                    <div class="content-box">
+                        <p>
+                            {{ physicalExamination.PhysicalExaminations }}
+                        </p>
+                        @if (physicalExamination?._url) {
+                        <img class="summary-image" [src]="physicalExamination._url" alt="Physical examination" />
+                        }
+                    </div>
+                </section>
+                }
+
+                @if (diagnosis?.Diagnosis) {
+                <section class="summary-section">
+                    <h3>Diagnosis</h3>
+                    <div class="content-box">
+                        <p>
+                            {{ diagnosis.Diagnosis }}
+                        </p>
+                        @if (diagnosis?._url) {
+                        <img class="summary-image" [src]="diagnosis._url" alt="Diagnosis" />
+                        }
+                    </div>
+                </section>
+                }
+
+                @if (aiDiagnosis?.AIDiagnosis) {
+                <section class="summary-section">
+                    <h3>AI Diagnosis</h3>
+                    <div class="content-box">
+                        <p>
+                            {{ aiDiagnosis.AIDiagnosis }}
+                        </p>
+                        @if (aiDiagnosis?._url) {
+                        <img class="summary-image" [src]="aiDiagnosis._url" alt="AI diagnosis" />
+                        }
+                    </div>
+                </section>
+                }
+
+                @if (treatmentSummary?.TreatmentSummary) {
+                <section class="summary-section">
+                    <h3>Clinical Notes</h3>
+                    <div class="content-box">
+                        <p>
+                            {{ treatmentSummary.TreatmentSummary }}
+                        </p>
+                        @if (treatmentSummary?._url) {
+                        <img class="summary-image" [src]="treatmentSummary._url" alt="Treatment summary" />
+                        }
+                    </div>
+                </section>
+                }
+
+                @if (treatmentPlan?.TreatmentPlan) {
+                <section class="summary-section">
+                    <h3>Treatment Plan</h3>
+                    <div class="content-box">
+                        <p>
+                            {{ treatmentPlan.TreatmentPlan }}
+                        </p>
+                        @if (treatmentPlan?._url) {
+                        <img class="summary-image" [src]="treatmentPlan._url" alt="Treatment plan" />
+                        }
+                    </div>
+                </section>
+                }
+                @if (followUpInfo?.FollowUpInfo) {
+                <section class="summary-section">
+                    <h3>Follow Up</h3>
+                    <div class="content-box">
+                        <p>
+                            {{ followUpInfo.FollowUpInfo }}
+                        </p>
+                        @if (followUpInfo?._url) {
+                        <img class="summary-image" [src]="followUpInfo._url" alt="Follow up" />
+                        }
+                    </div>
+                </section>
+                }
+
+                @if (prescriptionMedicines.length > 0) {
+                <section class="summary-section">
+                    <h3>Prescriptions</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Medicine Name</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (
+                                medicine of prescriptionMedicines;
+                                track $index
+                                ) {
+                                <tr>
+                                    <td>
+                                        {{ $index + 1 }}
+                                    </td>
+
+                                    <td class="medicine-name">
+                                        {{ medicine?.n || '—' }}
+                                    </td>
+                                </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+                }
+                @if (labTests.length > 0) {
+                <section class="summary-section">
+                    <h3>Lab Orders</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Test Name</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (
+                                labTest of labTests;
+                                track $index
+                                ) {
+                                <tr>
+                                    <td>
+                                        {{ $index + 1 }}
+                                    </td>
+
+                                    <td class="medicine-name">
+                                        {{ labTest?.testName || '—' }}
+                                    </td>
+                                </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+                }
+
+            </div>
+            }
+        </div>
+
+        <div class="dialog-footer">
+            <button mat-stroked-button type="button" (click)="close()">
+                Close
+            </button>
+        </div>
+
+    </div>
+</div>
+}

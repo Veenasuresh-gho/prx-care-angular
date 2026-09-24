@@ -1,7 +1,10 @@
-<!-- Header -->
+<h2 class="font-bold text-lg">
+    Emergency Contacts
+</h2>
+<app-banner></app-banner>
 <div class="flex justify-between items-center py-6">
     <h2 class="font-bold text-lg">
-        Medications
+        Your Trusted Emergency Contacts
     </h2>
     <button type="button" class="flex items-center justify-center
                w-9 h-9 rounded-md
@@ -17,84 +20,64 @@
 <div class="flex justify-center py-10">
     <mat-spinner diameter="32"></mat-spinner>
 </div>
-
 }
 
-
-@else if (medications.length === 0) {
-    <app-empty-message
-        message="No medications found."
-        [showButton]="true"
-        buttonText="Add Medication"
-        buttonIcon="add"
-        (buttonClick)="openAddSheet()"
-    />
+@else if (emergencyContacts.length === 0) {
+<app-empty-message message="No emergency contacts found." [showButton]="true" buttonText="Add Emergency Contact"
+    buttonIcon="add" (buttonClick)="openAddSheet()" />
 
 }
 
 @else {
-
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
-    @for (medication of medications; track medication.medicationId) {
+    @for (contact of emergencyContacts; track contact.ID) {
     <div class="rounded-xl border border-gray-200
-                       bg-white p-4 shadow-sm">
+                bg-white p-4 shadow-sm">
 
         <div class="flex items-start justify-between">
             <div>
-
                 <h3 class="font-semibold text-gray-900">
-                    {{ medication.MedicationName }}
+                    {{ contact.FirstName }} {{ contact.LastName }} <span class="text-sm text-gray-500 mt-1">({{
+                        contact.Relationship }})</span>
                 </h3>
-
                 <p class="text-sm text-gray-500 mt-1">
-                    {{ medication.StartDate }}
-                </p>
-                <p class="text-sm text-gray-500 mt-1">
-                    {{ medication.Timing }}
+                    {{ contact.Phone }}
                 </p>
 
             </div>
-
             <div class="flex gap-1">
                 <button type="button" class="w-8 h-8 rounded-md cursor-pointer
-                                   hover:bg-gray-100" (click)="openEditSheet(medication)">
+                           hover:bg-gray-100" (click)="openEditSheet(contact)">
                     <mat-icon class="text-gray-600">
                         edit
                     </mat-icon>
                 </button>
                 <button type="button" class="w-8 h-8 rounded-md cursor-pointer
-                                   hover:bg-red-50" (click)="deleteMedication(medication)">
+                           hover:bg-red-50" (click)="deleteEmergencyContact(contact)">
                     <mat-icon class="text-red-500">
                         delete
                     </mat-icon>
                 </button>
-
             </div>
-
         </div>
-
     </div>
-
     }
-
 </div>
 
 }
 
-
 <app-sheet [(open)]="isSheetOpen" side="right" width="500px" [title]="isEditMode
-        ? 'Edit Medication'
-        : 'Add Medication'" [description]="isEditMode
-        ? 'Update medication details.'
-        : 'Add a new medication.'">
+        ? 'Edit Emergency Contact'
+        : 'Add Emergency Contact'" [description]="isEditMode
+        ? 'Update emergency contact details.'
+        : 'Add a new emergency contact.'">
 
     @if (isEditMode) {
-    <app-edit-medication [medication]="selectedMedication" (saved)="medicationSaved()" />
-
+    <edit-emergency-contact [selectedContact]="selectedContact" (saved)="contactSaved()">
+    </edit-emergency-contact>
     }
     @else {
-    <app-add-medication (saved)="medicationSaved()"></app-add-medication>
-
+    <add-emergency-contact (saved)="contactSaved()"></add-emergency-contact>
     }
 
 </app-sheet>

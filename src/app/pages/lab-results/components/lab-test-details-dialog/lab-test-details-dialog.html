@@ -1,0 +1,120 @@
+<div class="test-details">
+
+    <div class="dialog-header">
+        <h2>Test Details</h2>
+
+        <button mat-icon-button type="button" class="close-btn" (click)="close()">
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+
+    <mat-dialog-content>
+
+        <div class="doctor-card">
+
+            <div class="doctor-avatar">
+                <mat-icon>person</mat-icon>
+            </div>
+
+            <div class="doctor-info">
+                <h3>
+                    {{ data?.Doctor || data?.doctor || 'Dr. RMO' }}
+                </h3>
+                <p>{{ data?.Date || data?.CreatedAt || '—' }}</p>
+            </div>
+            <span class="status-badge">
+                {{ data?.TestStatus || data?.Status || 'Completed' }}
+            </span>
+
+        </div>
+
+        <div class="result-card">
+
+            <h2>
+                {{ data?.TestName || data?.Test || 'Lab Test' }}
+            </h2>
+
+            <div class="result-value">
+                <span>
+                    {{ data?.Result || '—' }}
+                </span>
+
+                @if (data?.Unit) {
+                <small>
+                    {{ data.Unit }}
+                </small>
+                }
+            </div>
+
+            @if (data?.NormalValues) {
+
+            <p class="reference-range">
+                <span>Reference Range:</span>
+                {{ data.NormalValues }}
+            </p>
+
+            @if (rangeValues) {
+
+            <div class="range-container">
+
+                <div class="range-value" [style.left.%]="resultPosition">
+                    {{ data?.Result }}
+                </div>
+
+                <div class="range-bar">
+                    <div class="range-marker" [style.left.%]="resultPosition"></div>
+                </div>
+
+                <div class="range-labels">
+                    <span>{{ rangeValues.low }}</span>
+                    <span>{{ rangeValues.high }}</span>
+                </div>
+
+            </div>
+
+            }
+
+            }
+
+        </div>
+
+        <div class="details-card">
+
+            <h3>Result Details</h3>
+
+            <div class="details-table">
+
+                <div class="table-header">
+                    <span>Parameter</span>
+                    <span>Result</span>
+                    <span>Unit</span>
+                    <span>Reference Range</span>
+                </div>
+
+                <div class="table-row">
+
+                    <span>
+                        {{ data?.TestName || data?.Test || '—' }}
+                    </span>
+
+                    <strong>
+                        {{ data?.Result || '—' }}
+                    </strong>
+
+                    <span>
+                        {{ data?.Unit || '—' }}
+                    </span>
+
+                    <span>
+                        {{ data?.NormalValues || '—' }}
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </mat-dialog-content>
+
+</div>
