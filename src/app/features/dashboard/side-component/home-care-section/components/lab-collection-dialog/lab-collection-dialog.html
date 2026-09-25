@@ -1,0 +1,331 @@
+<app-dialog
+  [open]="open"
+  (openChange)="openChange.emit($event)"
+>
+  <!-- Header -->
+  <div>
+    <h1 class="text-2xl font-bold">
+      {{
+        isViewMode
+          ? 'Lab Sample Collection Booking Details'
+          : 'Schedule Lab Sample Collection'
+      }}
+    </h1>
+
+    <p class="mt-2 text-sm font-semibold">
+      Book a phlebotomist to collect your samples at home.
+    </p>
+  </div>
+
+  <div class="my-4 w-full border border-gray-200"></div>
+
+  @if (view === 'location') {
+
+    <!-- Location View -->
+    <div class="py-2">
+      <!-- Replace this with your existing SelectLocation component -->
+      <div class="flex items-center justify-between">
+        <h2 class="text-lg font-semibold">
+          Select Location
+        </h2>
+
+        <button
+          type="button"
+          class="text-sm font-medium text-[#465E97]"
+          (click)="handleLocationBack()"
+        >
+          Back
+        </button>
+      </div>
+
+      <!--
+      <app-select-location
+        [initialAddress]="address"
+        (selectLocation)="handleLocationSelect($event)"
+        (back)="handleLocationBack()"
+      ></app-select-location>
+      -->
+    </div>
+
+  } @else {
+
+    <div class="space-y-4">
+
+      <!-- Existing File / Upload -->
+      @if (booking) {
+
+        @if (booking.fileUrl) {
+
+          @if (
+            booking.fileUrl.toLowerCase().endsWith('.pdf')
+          ) {
+
+            <div
+              class="flex w-3/4 cursor-pointer items-center gap-4 rounded-xl bg-white p-4 shadow-xl"
+              (click)="openExistingFile()"
+            >
+              <div
+                class="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-red-50"
+              >
+                <span class="text-xs font-bold text-red-600">
+                  PDF
+                </span>
+              </div>
+
+              <div class="flex min-w-0 flex-col overflow-hidden">
+                <p
+                  class="truncate text-xs text-gray-500"
+                >
+                  {{ booking.fileName }}
+                </p>
+              </div>
+            </div>
+
+          } @else {
+
+            <div
+              class="relative overflow-hidden rounded-md"
+            >
+              <img
+                [src]="booking.fileUrl"
+                alt="Lab Collection"
+                class="h-auto max-h-80 w-auto max-w-full rounded-md object-cover"
+              />
+            </div>
+
+          }
+
+        }
+
+      } @else {
+
+        <!-- File Upload -->
+        <div>
+          <label
+            class="mb-2 block text-sm font-medium text-black"
+          >
+            Upload Lab Prescription / File
+          </label>
+
+          <input
+            type="file"
+            accept=".pdf,.jpg,.jpeg,.png"
+            [disabled]="isSubmitting"
+            (change)="
+              onFileChange(
+                $any($event.target).files?.[0] || null
+              )
+            "
+            class="block w-full cursor-pointer rounded-lg border border-gray-300 bg-white text-sm file:mr-4 file:border-0 file:bg-gray-100 file:px-4 file:py-2.5 file:text-sm"
+          />
+
+          @if (file) {
+            <p class="mt-1 text-xs text-gray-500">
+              {{ file.name }}
+            </p>
+          }
+        </div>
+
+      }
+
+      <!-- Tests -->
+      <div>
+        <label
+          class="mb-1 block text-sm font-medium text-black"
+        >
+          Tests
+          <span class="text-red">*</span>
+        </label>
+
+        <select
+          [(ngModel)]="test"
+          [disabled]="isViewMode"
+          class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm outline-none focus:border-[#465E97]"
+        >
+          <option value="">
+            Select Test
+          </option>
+
+          <option value="Blood Test">
+            Blood Test
+          </option>
+
+          <option value="Urine Test">
+            Urine Test
+          </option>
+
+          <option value="Blood Sugar">
+            Blood Sugar
+          </option>
+
+          <option value="Complete Blood Count">
+            Complete Blood Count
+          </option>
+
+          <option value="Lipid Profile">
+            Lipid Profile
+          </option>
+
+          <option value="Thyroid Test">
+            Thyroid Test
+          </option>
+        </select>
+      </div>
+
+      <!-- Date + Time -->
+      <div
+        class="grid grid-cols-1 gap-3 sm:grid-cols-2"
+      >
+
+        <!-- Date -->
+        <div>
+          <label
+            class="mb-1 block text-sm font-medium text-black"
+          >
+            Collection Date
+            <span class="text-red">*</span>
+          </label>
+
+          <input
+            type="date"
+            [(ngModel)]="date"
+            [disabled]="isViewMode"
+            class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm outline-none focus:border-[#465E97]"
+          />
+        </div>
+
+        <!-- Time -->
+        <div>
+          <label
+            class="mb-1 block text-sm font-medium text-black"
+          >
+            Collection Time
+            <span class="text-red">*</span>
+          </label>
+
+          <input
+            type="time"
+            [(ngModel)]="time"
+            [disabled]="isViewMode"
+            class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm outline-none focus:border-[#465E97]"
+          />
+        </div>
+
+      </div>
+
+      <!-- Name -->
+      <app-input
+        label="Name"
+        [required]="true"
+        [(ngModel)]="name"
+        [disabled]="isViewMode"
+      ></app-input>
+
+      <!-- Contact Number -->
+      <div>
+        <label
+          class="mb-1 block text-sm font-medium text-black"
+        >
+          Contact Number
+          <span class="text-red">*</span>
+        </label>
+
+        <div class="flex w-full gap-2">
+
+          @if (!isViewMode) {
+
+            <div class="w-28 shrink-0">
+              <input
+                type="text"
+                [(ngModel)]="countryId"
+                placeholder="+91"
+                class="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm outline-none focus:border-[#465E97]"
+              />
+            </div>
+
+          }
+
+          <div
+            [class.w-full]="isViewMode"
+            class="flex-1"
+          >
+            <input
+              type="tel"
+              [(ngModel)]="phone"
+              [disabled]="isViewMode"
+              placeholder="Phone number"
+              class="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm outline-none focus:border-[#465E97]"
+            />
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Address -->
+      <div
+        [class.cursor-pointer]="!isViewMode"
+        (click)="openLocation()"
+      >
+        <label
+          class="mb-1 block text-sm font-medium text-black"
+        >
+          Address
+          <span class="text-red">*</span>
+        </label>
+
+        <textarea
+          [(ngModel)]="address"
+          [disabled]="isViewMode"
+          [readOnly]="isViewMode"
+          rows="3"
+          placeholder="Select collection address"
+          class="w-full resize-none rounded-lg border border-gray-300 px-3 py-2.5 text-sm outline-none focus:border-[#465E97]"
+        ></textarea>
+      </div>
+
+      <!-- Footer -->
+      <div
+        class="mt-4 flex justify-end gap-3 border-t border-gray-200 pt-4"
+      >
+
+        @if (isViewMode) {
+
+          <app-button
+            type="button"
+            variant="destructive"
+            [disabled]="isCancelling"
+            (click)="cancelBooking()"
+          >
+            {{
+              isCancelling
+                ? 'Cancelling...'
+                : 'Cancel Booking'
+            }}
+          </app-button>
+
+        } @else {
+
+          <app-button
+            type="button"
+            [disabled]="
+              isSubmitting ||
+              isFileUploading
+            "
+            (click)="confirmBooking()"
+          >
+            {{
+              isSubmitting || isFileUploading
+                ? 'Submitting...'
+                : 'Confirm Booking'
+            }}
+          </app-button>
+
+        }
+
+      </div>
+
+    </div>
+
+  }
+
+</app-dialog>

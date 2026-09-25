@@ -1,13 +1,23 @@
 import { Component } from '@angular/core';
 import { Button } from '../../../../components/button/button';
 import { NgClass } from '@angular/common';
+import { GeneralPhysicianDialog } from './components/general-physician-dialog/general-physician-dialog';
+import { PharmacyDeliveryDialog } from './components/pharmacy-delivery/pharmacy-delivery';
+import { NursingServicesDialog } from './components/nursing-services/nursing-services';
+import { LabCollectionDialog } from './components/lab-collection-dialog/lab-collection-dialog';
 
 @Component({
   selector: 'app-home-care-section',
-  imports: [Button, NgClass],
+  imports: [Button, NgClass, GeneralPhysicianDialog, PharmacyDeliveryDialog, NursingServicesDialog, LabCollectionDialog],
   templateUrl: './home-care-section.html',
 })
 export class HomeCareSection {
+
+  showGeneralDialog = false;
+  showPharmacyDialog = false;
+  showNursingDialog = false;
+  showLabDialog = false;
+
   homeCare = [
     {
       heading: 'General Physician',
@@ -44,19 +54,20 @@ export class HomeCareSection {
   ];
 
   openGeneralDialog(): void {
-    // open general physician dialog
+    this.showGeneralDialog = true;
   }
 
   openPharmacyDialog(): void {
-    // open pharmacy dialog
+    this.showPharmacyDialog = true;
+
   }
 
   openNurseDialog(): void {
-    // open nursing dialog
+    this.showNursingDialog = true;
   }
 
   openLabDialog(): void {
-    // open lab collection dialog
+    this.showLabDialog = true;
   }
 
   handleShowBookings(): void {

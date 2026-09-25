@@ -2,14 +2,14 @@
     <!-- Header -->
     <div class="mb-3 flex items-center justify-between bg-background">
         <div>
-            <h1 class=" font-bold">
+            <h1 class="font-bold">
                 Home Care
             </h1>
             <p class="text-xs text-muted-foreground">
                 Book trusted services at your doorstep
             </p>
         </div>
-        <app-button variant="ghost" customClass="text-xs ">
+        <app-button variant="ghost" customClass="text-xs" (click)="handleShowBookings()">
             Show Bookings
         </app-button>
     </div>
@@ -25,7 +25,7 @@
         " [ngClass]="[item.bg, item.border]" (click)="item.onClick()">
             <!-- Card Content -->
             <div class="p-4">
-                <h2 class=" font-bold text-gray-700">
+                <h2 class="font-bold text-gray-700">
                     {{ item.heading }}
                 </h2>
                 <p class="text-xs text-gray-600">
@@ -40,3 +40,9 @@
         }
     </div>
 </div>
+<!-- General Physician Dialog -->
+<app-general-physician-dialog [open]="showGeneralDialog"
+    (openChange)="showGeneralDialog = $event"></app-general-physician-dialog>
+<app-pharmacy-delivery [open]="showPharmacyDialog" (openChange)="showPharmacyDialog = $event"></app-pharmacy-delivery>
+<app-nursing-services [open]="showNursingDialog" (openChange)="showNursingDialog = $event"></app-nursing-services>
+<app-lab-collection-dialog [open]="showLabDialog" (openChange)="showLabDialog = $event"></app-lab-collection-dialog>
