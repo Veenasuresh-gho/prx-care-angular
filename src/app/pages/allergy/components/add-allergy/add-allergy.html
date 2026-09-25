@@ -1,0 +1,126 @@
+<form [formGroup]="allergyForm" (ngSubmit)="submit()" class="flex flex-col h-full min-h-0">
+
+    <div class="space-y-2 overflow-y-auto px-1">
+
+        <mat-form-field appearance="outline" class="w-full">
+            <mat-label>
+                Allergic To
+            </mat-label>
+
+            <input
+                matInput
+                formControlName="allergyDesc"
+                placeholder="Enter allergy"
+            />
+
+            @if (
+                allergyForm.get('allergyDesc')?.hasError('required')
+                &&
+                allergyForm.get('allergyDesc')?.touched
+            ) {
+                <mat-error>
+                    Allergic to is required
+                </mat-error>
+            }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-full">
+            <mat-label>
+                Allergy Type
+            </mat-label>
+
+            <input
+                matInput
+                formControlName="allergyType"
+                placeholder="Enter allergy type"
+            />
+
+            @if (
+                allergyForm.get('allergyType')?.hasError('required')
+                &&
+                allergyForm.get('allergyType')?.touched
+            ) {
+                <mat-error>
+                    Allergy type is required
+                </mat-error>
+            }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-full">
+            <mat-label>
+                Reported Institution
+            </mat-label>
+
+            <input
+                matInput
+                formControlName="reportedInstitution"
+                placeholder="Enter institution name"
+            />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-full">
+            <mat-label>
+                Initial Occurrence
+            </mat-label>
+
+            <input
+                matInput
+                [matDatepicker]="initialOccurrencePicker"
+                formControlName="initialOccurrence"
+                placeholder="Select date"
+            />
+
+            <mat-datepicker-toggle
+                matIconSuffix
+                [for]="initialOccurrencePicker">
+            </mat-datepicker-toggle>
+
+            <mat-datepicker #initialOccurrencePicker>
+            </mat-datepicker>
+
+            @if (
+                allergyForm.get('initialOccurrence')?.hasError('required')
+                &&
+                allergyForm.get('initialOccurrence')?.touched
+            ) {
+                <mat-error>
+                    Initial occurrence date is required
+                </mat-error>
+            }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-full">
+            <mat-label>
+                Reactions
+            </mat-label>
+
+            <textarea
+                matInput
+                formControlName="allergicReaction"
+                placeholder="Enter allergic reaction"
+                rows="4">
+            </textarea>
+        </mat-form-field>
+
+    </div>
+
+    <div class="border-t border-gray-200 pt-4 mt-4">
+
+        <button
+            mat-flat-button
+            type="submit"
+            class="w-full"
+            [disabled]="submitting">
+
+            @if (submitting) {
+                <mat-spinner diameter="20"></mat-spinner>
+            }
+            @else {
+                Add Allergy
+            }
+
+        </button>
+
+    </div>
+
+</form>

@@ -1,0 +1,242 @@
+<form [formGroup]="facilitatorForm" (ngSubmit)="submit()" class="flex flex-col h-full min-h-0">
+    <div class="space-y-2 overflow-y-auto px-1">
+        <mat-form-field appearance="outline" class="w-full">
+            <mat-label>
+                Facility Name
+            </mat-label>
+
+            <input matInput formControlName="facilityName" placeholder="Enter facility name" />
+            @if (
+            facilitatorForm
+            .get('facilityName')
+            ?.hasError('required')
+            &&
+            facilitatorForm
+            .get('facilityName')
+            ?.touched
+            ) {
+
+            <mat-error>
+                Facility name is required
+            </mat-error>
+            }
+
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="w-full">
+            <mat-label>
+                Facility Type
+            </mat-label>
+            <mat-select formControlName="facilityType">
+                <mat-option value="">
+                    -- Select --
+                </mat-option>
+                @for (
+                type of facilityTypeOptions;
+                track type.value
+                ) {
+
+                <mat-option [value]="type.value">
+                    {{ type.label }}
+                </mat-option>
+
+                }
+            </mat-select>
+
+            @if (
+            facilitatorForm
+            .get('facilityType')
+            ?.hasError('required')
+            &&
+            facilitatorForm
+            .get('facilityType')
+            ?.touched
+            ) {
+
+            <mat-error>
+                Facility type is required
+            </mat-error>
+
+            }
+
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="w-full">
+            <mat-label>
+                Visit Summary
+            </mat-label>
+            <textarea matInput formControlName="visitSummary" placeholder="Enter visit summary" rows="4"></textarea>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="w-full">
+            <mat-label>
+                Last Visit
+            </mat-label>
+
+            <input matInput [matDatepicker]="lastVisitPicker" formControlName="lastVisit"
+                placeholder="Select last visit date" />
+            <mat-datepicker-toggle matIconSuffix [for]="lastVisitPicker">
+            </mat-datepicker-toggle>
+            <mat-datepicker #lastVisitPicker>
+            </mat-datepicker>
+            @if (
+            facilitatorForm
+            .get('lastVisit')
+            ?.hasError('required')
+            &&
+            facilitatorForm
+            .get('lastVisit')
+            ?.touched
+            ) {
+
+            <mat-error>
+                Last visit date is required
+            </mat-error>
+
+            }
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="w-full">
+            <mat-label>
+                Facility Patient ID
+            </mat-label>
+            <input matInput formControlName="facilityPatientId" placeholder="Enter facility patient ID" />
+        </mat-form-field>
+        <div class="flex gap-2">
+            <mat-form-field appearance="outline" class="w-38">
+                <mat-label>
+                    Country Code
+                </mat-label>
+                <mat-select formControlName="countryId" (selectionChange)="onCountryChange($event.value)">
+                    @if (loadingCountries) {
+                    <mat-option disabled>
+                        Loading...
+                    </mat-option>
+
+                    }
+                    @else {
+
+                    @for (
+                    country of countries;
+                    track country.CountryID
+                    ) {
+
+                    <mat-option [value]="country.CountryID">
+                        +{{ country.CountryCode }}
+                        {{ country.CountryName }}
+                    </mat-option>
+
+                    }
+
+                    }
+
+                </mat-select>
+
+
+                @if (
+                facilitatorForm
+                .get('countryId')
+                ?.hasError('required')
+                &&
+                facilitatorForm
+                .get('countryId')
+                ?.touched
+                ) {
+
+                <mat-error>
+                    Required
+                </mat-error>
+
+                }
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="flex-1">
+                <mat-label>
+                    Phone Number
+                </mat-label>
+                <input matInput type="tel" formControlName="phoneNumber" placeholder="Enter phone number"
+                    [attr.minlength]="selectedCountry?.MinLength" [attr.maxlength]="selectedCountry?.MaxLength" />
+                @if (
+                facilitatorForm
+                .get('phoneNumber')
+                ?.hasError('required')
+                &&
+                facilitatorForm
+                .get('phoneNumber')
+                ?.touched
+                ) {
+                <mat-error>
+                    Phone number is required
+                </mat-error>
+                }
+                @if (
+                facilitatorForm
+                .get('phoneNumber')
+                ?.hasError('pattern')
+                ) {
+                <mat-error>
+                    Enter a valid phone number
+                </mat-error>
+                }
+                @if (
+                facilitatorForm
+                .get('phoneNumber')
+                ?.hasError('minlength')
+                ) {
+                <mat-error>
+                    Phone number is too short
+                </mat-error>
+                }
+                @if (
+                facilitatorForm
+                .get('phoneNumber')
+                ?.hasError('maxlength')
+                ) {
+                <mat-error>
+                    Phone number is too long
+                </mat-error>
+                }
+            </mat-form-field>
+        </div>
+        <mat-form-field appearance="outline" class="w-full">
+            <mat-label>
+                Web URL
+            </mat-label>
+            <input matInput type="url" formControlName="webUrl" placeholder="https://example.com" />
+            @if (
+            facilitatorForm
+            .get('webUrl')
+            ?.hasError('pattern')
+            ) {
+            <mat-error>
+                Enter a valid web URL
+            </mat-error>
+            }
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="w-full">
+
+            <mat-label>
+                Credential URL
+            </mat-label>
+            <input matInput type="url" formControlName="credentialUrl" placeholder="https://example.com/credentials" />
+            @if (
+            facilitatorForm
+            .get('credentialUrl')
+            ?.hasError('pattern')
+            ) {
+            <mat-error>
+                Enter a valid credential URL
+            </mat-error>
+            }
+        </mat-form-field>
+    </div>
+    <div class="border-t
+               border-gray-200
+               pt-4
+               mt-4">
+        <button mat-flat-button type="submit" class="w-full" [disabled]="submitting">
+            @if (submitting) {
+            <mat-spinner diameter="20">
+            </mat-spinner>
+            }
+            @else {
+            Add Facility
+            }
+        </button>
+    </div>
+</form>

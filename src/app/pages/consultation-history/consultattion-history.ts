@@ -20,6 +20,7 @@ import { GHOUtitity } from '../../services/utilities';
 import { ghoresult, tags } from '../../models/gho-model';
 import { EmptyMessageComponent } from '../../components/empty-message/empty-message';
 import { ConsultationSummaryDialog } from './components/consultation-summary/consultation-summary-dialog';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -52,7 +53,7 @@ export class ConsultationHistoryComponent implements OnInit {
     sortBy: 'newest' | 'oldest' = 'newest';
     selectedConsultation: any = null;
     summaryDialogOpen = false;
-
+    private router = inject(Router);
     constructor(private cdr: ChangeDetectorRef) { }
 
     ngOnInit(): void {
@@ -171,6 +172,12 @@ export class ConsultationHistoryComponent implements OnInit {
     viewDetails(item: any): void {
         this.selectedConsultation = item;
         this.summaryDialogOpen = true;
+    }
+
+    bookAppointment(item: any): void {
+        if (item?.DoctorID) {
+            this.router.navigate(['/schedule-appointment', item.DoctorID]);
+        }
     }
 
 }

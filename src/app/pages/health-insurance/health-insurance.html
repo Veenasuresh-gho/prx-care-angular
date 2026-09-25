@@ -1,0 +1,152 @@
+<app-banner></app-banner>
+<div class="flex justify-between items-center py-5">
+    <div>
+        <h2 class="font-semibold text-base text-gray-800">
+            Your Health Insurance Plans
+        </h2>
+        <p>
+            View and manage your health insurance plans uploaded by you.
+            Keep your policies handy <br>for easy access
+            whenever needed.
+        </p>
+    </div>
+
+    <button type="button"
+        class="flex items-center gap-1.5 cursor-pointer px-3 py-2 rounded-md border border-gray-200 text-sm text-gray-700 hover:bg-gray-50 transition"
+        (click)="openAddSheet()">
+        <mat-icon class="text-[19px]">add</mat-icon>
+    </button>
+</div>
+
+@if (loading) {
+<div class="flex justify-center py-10">
+    <mat-spinner diameter="30"></mat-spinner>
+</div>
+}
+@else if (healthInsurance.length === 0) {
+<app-empty-message message="No Health Insurance Found." [showButton]="true" buttonText="Add Health Insurance"
+    buttonIcon="add" (buttonClick)="openAddSheet()" />
+}
+@else {
+
+<div class="flex flex-col gap-3">
+
+    @for (insurance of healthInsurance; track insurance.ID) {
+
+    <div class="border border-gray-200 rounded-xl bg-white px-5 py-4 hover:border-gray-300 transition">
+
+        <div class="flex items-center justify-between gap-4">
+
+            <div class="flex items-center gap-4 min-w-0">
+
+                <div class="w-11 h-11 rounded-lg bg-blue-50 flex items-center justify-center shrink-0">
+
+                    <mat-icon class="text-blue-600">
+                        health_and_safety
+                    </mat-icon>
+
+                </div>
+
+                <div class="min-w-0">
+
+                    <div class="flex items-center gap-2">
+
+                        <p class="font-semibold text-gray-800 truncate">
+                            {{ insurance.InsuranceName || '-' }}
+                        </p>
+
+                        @if (insurance.IsActive) {
+                        <span class="text-[11px] font-medium px-2 py-0.5 rounded-full bg-green-50 text-green-600">
+                            Active
+                        </span>
+                        }
+                        @else {
+                        <span class="text-[11px] font-medium px-2 py-0.5 rounded-full bg-gray-100 text-gray-500">
+                            Inactive
+                        </span>
+                        }
+
+                    </div>
+
+                    <p class="text-xs text-gray-500 mt-1">
+                        Policy ID:
+                        <span class="text-gray-700 font-medium">
+                            {{ insurance.InsurancePolicyID || '-' }}
+                        </span>
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="flex items-center gap-8 shrink-0">
+
+                <div>
+                    <p class="text-[11px] text-gray-400 uppercase tracking-wide">
+                        Start Date
+                    </p>
+
+                    <p class="text-sm text-gray-700 mt-1">
+                        {{ insurance.StartDate || '-' }}
+                    </p>
+                </div>
+
+                <div>
+                    <p class="text-[11px] text-gray-400 uppercase tracking-wide">
+                        End Date
+                    </p>
+
+                    <p class="text-sm text-gray-700 mt-1">
+                        {{ insurance.EndDate || 'Ongoing' }}
+                    </p>
+                </div>
+
+                <div class="flex items-center gap-1 border-l border-gray-100 pl-4">
+                    <button type="button"
+                        class="w-9 h-9 flex items-center justify-center cursor-pointer rounded-md text-gray-500 hover:bg-blue-50 hover:text-blue-600 transition"
+                        (click)="openEditSheet(insurance)" matTooltip="Edit">
+
+                        <mat-icon class="text-[19px]">
+                            edit
+                        </mat-icon>
+
+                    </button>
+
+                    <button type="button"
+                        class="w-9 h-9 flex items-center justify-center cursor-pointer rounded-md text-gray-500 hover:bg-red-50 hover:text-red-600 transition"
+                        (click)="deleteInsurance(insurance)" matTooltip="Delete">
+
+                        <mat-icon class="text-[19px]">
+                            delete_outline
+                        </mat-icon>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    }
+
+</div>
+
+}
+
+<app-sheet [(open)]="isSheetOpen" side="right" width="500px" [title]="isEditMode
+        ? 'Edit Health Insurance'
+        : 'Add Health Insurance'" [description]="isEditMode
+        ? 'Update Health Insurance details.'
+        : 'Add new Health Insurance.'">
+
+    @if (isEditMode) {
+    <edit-health-insurance [insurance]="selectedInsurance" (saved)="insuranceSaved()"></edit-health-insurance>
+    }
+    @else {
+    <add-health-insurance (saved)="insuranceSaved()"></add-health-insurance>
+    }
+
+</app-sheet>
