@@ -1,0 +1,140 @@
+<form
+    [formGroup]="insuranceForm"
+    (ngSubmit)="submit()"
+    class="flex flex-col h-full min-h-0">
+
+    <div class="space-y-2 overflow-y-auto px-1">
+
+        <mat-form-field
+            appearance="outline"
+            class="w-full">
+
+            <mat-label>
+                Insurance Name
+            </mat-label>
+
+            <input
+                matInput
+                formControlName="insuranceName"
+                placeholder="Enter insurance name"
+            />
+
+            @if (
+                insuranceForm.get('insuranceName')?.hasError('required')
+                &&
+                insuranceForm.get('insuranceName')?.touched
+            ) {
+                <mat-error>
+                    Insurance name is required
+                </mat-error>
+            }
+
+        </mat-form-field>
+
+
+        <mat-form-field
+            appearance="outline"
+            class="w-full">
+
+            <mat-label>
+                Policy Number
+            </mat-label>
+
+            <input
+                matInput
+                formControlName="policyNumber"
+                placeholder="Enter policy number"
+            />
+
+            @if (
+                insuranceForm.get('policyNumber')?.hasError('required')
+                &&
+                insuranceForm.get('policyNumber')?.touched
+            ) {
+                <mat-error>
+                    Policy number is required
+                </mat-error>
+            }
+
+        </mat-form-field>
+
+
+        <mat-form-field
+            appearance="outline"
+            class="w-full">
+
+            <mat-label>
+                Start Date
+            </mat-label>
+
+            <input
+                matInput
+                [matDatepicker]="startDatePicker"
+                formControlName="startDate"
+                placeholder="Select start date"
+            />
+
+            <mat-datepicker-toggle
+                matIconSuffix
+                [for]="startDatePicker">
+            </mat-datepicker-toggle>
+
+            <mat-datepicker
+                #startDatePicker>
+            </mat-datepicker>
+
+            @if (
+                insuranceForm.get('startDate')?.hasError('required')
+                &&
+                insuranceForm.get('startDate')?.touched
+            ) {
+                <mat-error>
+                    Start date is required
+                </mat-error>
+            }
+
+        </mat-form-field>
+
+
+        <mat-form-field
+            appearance="outline"
+            class="w-full">
+            <mat-label>
+                End Date
+            </mat-label>
+            <input
+                matInput
+                [matDatepicker]="endDatePicker"
+                formControlName="endDate"
+                placeholder="Select end date"
+            />
+            <mat-datepicker-toggle
+                matIconSuffix
+                [for]="endDatePicker">
+            </mat-datepicker-toggle>
+            <mat-datepicker
+                #endDatePicker>
+            </mat-datepicker>
+        </mat-form-field>
+    </div>
+
+
+    <div
+        class="border-t border-gray-200 pt-4 mt-4">
+        <button
+            mat-flat-button
+            type="submit"
+            class="w-full"
+            [disabled]="submitting">
+            @if (submitting) {
+
+                <mat-spinner
+                    diameter="20">
+                </mat-spinner>
+            }
+            @else {
+                Update Health Insurance
+            }
+        </button>
+    </div>
+</form>

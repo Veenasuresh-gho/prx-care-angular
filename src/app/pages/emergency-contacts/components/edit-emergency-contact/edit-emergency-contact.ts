@@ -1,4 +1,5 @@
 import {
+    ChangeDetectorRef,
     Component,
     EventEmitter,
     Input,
@@ -62,6 +63,7 @@ export class EditEmergencyContact implements OnInit,OnChanges  {
     loadingCountries = false;
     submitting = false;
     selectedCountry: Country | null = null;
+    constructor(private cdr: ChangeDetectorRef) { }
 
     relationOptions = [
         {
@@ -365,12 +367,11 @@ export class EditEmergencyContact implements OnInit,OnChanges  {
                     this.toastr.success(
                         successMessage
                     );
-
                     this.saved.emit();
-
                     return;
                 }
-
+               this.submitting = false;
+               this.cdr.detectChanges();
                 const errorMessage =
                     r.Info ||
                     'Failed to update emergency contact';
@@ -386,7 +387,7 @@ export class EditEmergencyContact implements OnInit,OnChanges  {
                 );
 
                 this.submitting = false;
-
+                this.cdr.detectChanges();
                 this.toastr.error(
                     err?.Message ||
                     err?.error?.Info ||

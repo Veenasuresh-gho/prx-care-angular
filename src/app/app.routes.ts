@@ -11,6 +11,8 @@ import { EmergencyContacts } from './pages/emergency-contacts/emergency-contcact
 import { ScheduleAppointment } from './pages/schedule-appointment/schedule-appointment';
 import { DoctorDetails } from './pages/doctor-details/doctor-details';
 import { ClinicalHistory } from './pages/clinical-history/clinical-history';
+import { Allergy } from './pages/allergy/allergy';
+import { HealthInsurance } from './pages/health-insurance/health-insurance';
 
 export const routes: Routes = [
     {
@@ -58,6 +60,7 @@ export const routes: Routes = [
         path: 'facilitator',
         component: ClinicalHistory
     },
+
     {
         path: '**',
         redirectTo: 'auth/sign-in'

@@ -13,34 +13,34 @@ import { GHOService } from '../../services/gho.service';
 import { GHOUtitity } from '../../services/utilities';
 import { ghoresult, tags } from '../../models/gho-model';
 import { BannerComponent } from './components/banner/banner';
-import { AddFacilitator } from './components/add-facilitator/add-facilitator';
-import { EditFacilitator } from './components/edit-facilitator/edit-facilitator';
+import { AddAllergy } from './components/add-allergy/add-allergy';
+import { EditAllergy } from './components/edit-allergy/edit-allergy';
 
 @Component({
-    selector: 'clinical-history',
+    selector: 'allergy',
     standalone: true,
     imports: [
         SheetComponent,
         MatIconModule,
         MatProgressSpinnerModule,
         BannerComponent,
-        AddFacilitator,
-        EditFacilitator,
+        AddAllergy,
+        EditAllergy,
         EmptyMessageComponent
     ],
-    templateUrl: './Clinical-History.html',
-    styleUrl: './clinical-history.css'
+    templateUrl: './allergy.html',
+    styleUrl: './allergy.css'
 })
-export class ClinicalHistory implements OnInit {
+export class Allergy implements OnInit {
 
     srv = inject(GHOService);
     utl = inject(GHOUtitity);
     res: ghoresult = new ghoresult();
     loading = false;
-    clinicalHistory: any[] = [];
+    patientAllergy: any[] = [];
     isSheetOpen = false;
     isEditMode = false;
-    selectedFacilitator: any = null;
+    selectedAllergy: any = null;
     expandedVisitSummaries = new Set<number>();
     private toastr = inject(ToastrService);
 
@@ -49,11 +49,11 @@ export class ClinicalHistory implements OnInit {
     ) { }
 
     ngOnInit(): void {
-        this.getClinicalHistory();
+        this.getPatientAllergys();
     }
 
 
-    getClinicalHistory(): void {
+    getPatientAllergys(): void {
         const userId = sessionStorage.getItem('id');
         if (!userId) {
             console.error('User ID not found');
@@ -71,15 +71,15 @@ export class ClinicalHistory implements OnInit {
             },
             {
                 T: 'c10',
-                V: '4'
+                V: '3'
             }
         ];
         this.srv.getdata(
-            'medicalfacilities',
+            'patientallergy',
             tv
         ).subscribe({
             next: (r) => {
-                this.clinicalHistory = r.Data?.[0] ?? [];
+                this.patientAllergy = r.Data?.[0] ?? [];
                 this.loading = false;
                 this.cdr.detectChanges();
             },
@@ -88,7 +88,7 @@ export class ClinicalHistory implements OnInit {
                     'Emergency Contact API Error:',
                     err
                 );
-                this.clinicalHistory = [];
+                this.patientAllergy = [];
                 this.loading = false;
                 this.cdr.detectChanges();
             }
@@ -96,16 +96,14 @@ export class ClinicalHistory implements OnInit {
 
     }
 
-
     openAddSheet(): void {
         this.isEditMode = false;
-        this.selectedFacilitator = null;
+        this.selectedAllergy = null;
         this.isSheetOpen = true;
     }
 
-
     openEditSheet(contact: any): void {
-        this.selectedFacilitator = contact;
+        this.selectedAllergy = contact;
         this.isEditMode = true;
         this.isSheetOpen = true;
 
@@ -114,16 +112,15 @@ export class ClinicalHistory implements OnInit {
 
     closeSheet(): void {
         this.isSheetOpen = false;
-        this.selectedFacilitator = null;
+        this.selectedAllergy = null;
         this.isEditMode = false;
     }
 
-
-    facilitatorSaved(): void {
+    allergySaved(): void {
         this.closeSheet();
         this.isEditMode = false;
-        this.selectedFacilitator = null;
-        this.getClinicalHistory();
+        this.selectedAllergy = null;
+        this.getPatientAllergys();
     }
 
     toggleVisitSummary(id: number): void {
@@ -139,11 +136,10 @@ export class ClinicalHistory implements OnInit {
     }
 
 
-    deleteFacilitator(history: any): void {
-        const userId =
-            sessionStorage.getItem('id');
+    deleteAllergy(allergy: any): void {
+        const userId = sessionStorage.getItem('id');
         if (!userId) {
-            console.error(
+            this.toastr.error(
                 'User ID not found'
             );
             return;
@@ -152,23 +148,26 @@ export class ClinicalHistory implements OnInit {
         const tv: tags[] = [
             {
                 T: 'dk1',
-                V: history?.ID
+                V: allergy?.ID
+            },
+            {
+                T: 'dk2',
+                V: userId
             },
             {
                 T: 'c10',
-                V: '3'
+                V: '4'
             }
-
         ];
         this.srv.getdata(
-            'medicalfacilities',
+            'patientallergy',
             tv
         ).subscribe({
             next: (r) => {
-                this.getClinicalHistory();
+                this.getPatientAllergys();
                 this.cdr.detectChanges();
                 this.toastr.success(
-                    'Facilitator deleted successfully'
+                    'Allergy deleted successfully'
                 );
             },
             error: (err) => {
@@ -179,7 +178,7 @@ export class ClinicalHistory implements OnInit {
                 this.loading = false;
                 this.cdr.detectChanges();
                 this.toastr.error(
-                    'Failed to delete facilitator'
+                    'Failed to delete allergy'
                 );
             }
         });
