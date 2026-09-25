@@ -12,11 +12,13 @@ import { TimeSlotButton } from '../../../components/time-slot-button/time-slot-b
 import { GHOService } from '../../../services/gho.service';
 import { formatDateToMMDDYYYYFromDate } from '../../../utils/date';
 import { Button } from '../../../components/button/button';
+import { SheetComponent } from '../../../components/sheet/sheet-component';
+import { AppointmentPreviewSheet } from '../appointment-preview-sheet/appointment-preview-sheet';
 
 @Component({
   selector: 'app-slot-picker',
   standalone: true,
-  imports: [WeekDayPicker, TimeSlotButton, Button],
+  imports: [WeekDayPicker, TimeSlotButton, Button, SheetComponent, AppointmentPreviewSheet],
   templateUrl: './slot-picker.html',
 })
 export class SlotPicker implements OnInit {
@@ -27,6 +29,8 @@ export class SlotPicker implements OnInit {
 
   doctorDetails: any;
   isLoading = signal(false);
+
+  isSheetOpen = false;
 
   private srv = inject(GHOService);
 
@@ -78,8 +82,17 @@ export class SlotPicker implements OnInit {
 
   onContinue(): void {
     const slot = this.selectedSlot();
+
     if (!slot) return;
-    console.log('Selected slot:', slot);
+    this.openSheet();
+  }
+
+  openSheet(): void {
+    this.isSheetOpen = true;
+  }
+
+  closeSheet(): void {
+    this.isSheetOpen = false;
   }
 
   private clearSlots(): void {
