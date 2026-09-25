@@ -1,13 +1,17 @@
 <div class="w-full space-y-2 py-2">
   <!-- Header -->
-  <div class="flex items-center justify-between">
-    <p class="text-sm font-semibold">
-      Your Upcoming Appointment
+  <div class="flex  items-center justify-between gap-2">
+    <p class="text-xs font-semibold leading-snug">
+      Upcoming Appointment
     </p>
-    <app-button type="button" (click)="viewAppointments()" variant="ghost"
-      customClass="inline-flex items-center gap-1 text-xs mt-0">
+    <app-button
+      type="button"
+      (click)="viewAppointments()"
+      variant="ghost"
+      customClass="flex items-center gap-0.5 text-xs mt-0 shrink-0 whitespace-nowrap"
+    >
       <span>View Appointments</span>
-      <mat-icon class="!m-0 !h-4 !w-4 !text-base !leading-4">
+      <mat-icon class="!m-0 !h-4 !w-4 !text-sm">
         chevron_right
       </mat-icon>
     </app-button>
