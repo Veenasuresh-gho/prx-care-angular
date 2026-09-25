@@ -5,6 +5,8 @@ import {
   signal,
   computed,
   OnInit,
+  Output,
+  EventEmitter,
 } from '@angular/core';
 
 import { WeekDayPicker } from '../../../components/week-day-picker/week-day-picker';
@@ -15,6 +17,9 @@ import { Button } from '../../../components/button/button';
 import { SheetComponent } from '../../../components/sheet/sheet-component';
 import { AppointmentPreviewSheet } from '../appointment-preview-sheet/appointment-preview-sheet';
 import { JsonPipe } from '@angular/common';
+import { MatDialog } from '@angular/material/dialog';
+import { ToastrService } from 'ngx-toastr';
+
 @Component({
   selector: 'app-slot-picker',
   standalone: true,
@@ -31,7 +36,13 @@ import { JsonPipe } from '@angular/common';
 export class SlotPicker implements OnInit {
   @Input() doctorId: string | null = null;
   @Input() doctor: any = null;
+  patientId: string | null = null;
 
+  appointmentData = {
+    reason: '',
+    notes: '',
+    appointmentType: 'N',
+  };
 
   slots = signal<any[]>([]);
   selectedSlot = signal<any | null>(null);
@@ -43,6 +54,7 @@ export class SlotPicker implements OnInit {
   isSheetOpen = false;
 
   private srv = inject(GHOService);
+  toastr = inject(ToastrService);
 
   regularSlots = computed(() =>
     this.slots().filter((slot) => slot.IsTM === 0)
@@ -53,6 +65,7 @@ export class SlotPicker implements OnInit {
   );
 
   ngOnInit(): void {
+    this.patientId = sessionStorage.getItem('id');
     this.onDateSelect(new Date());
   }
 
@@ -74,7 +87,6 @@ export class SlotPicker implements OnInit {
     this.srv.getdata('care', tv).subscribe({
       next: (res) => {
         if (res.Status === 1) {
-          console.log(res)
           this.slots.set(res.Data[0] || []);
           this.doctorDetails.set(res.Data[1]?.[0] || null);
           this.patientDetails.set(res.Data[2]?.[0] || null);
@@ -91,6 +103,38 @@ export class SlotPicker implements OnInit {
         this.doctorDetails.set(null);
         this.patientDetails.set(null);
         this.isLoading.set(false);
+      },
+    });
+  }
+
+  confirmAppointment(): void {
+    const slot = this.selectedSlot();
+    const doctor = this.doctorDetails();
+
+    const tv = [
+      { T: 'dk1', V: this.patientId },
+      { T: 'dk2', V: doctor.drid },
+      { T: 'c1', V: slot.IsTM },
+      { T: 'c2', V: slot.ID },
+      { T: 'c3', V: this.appointmentData.reason || '' },
+      { T: 'c4', V: this.appointmentData.notes || '' },
+      { T: 'c5', V: this.appointmentData.appointmentType || '' },
+      { T: 'c10', V: '5' },
+    ];
+
+    this.srv.getdata('care', tv).subscribe({
+      next: (res) => {
+        console.log('Add appointment response:', res);
+
+        if (res.Status === 1) {
+          this.closeSheet();
+          this.toastr.success(res?.Data[0]?.[0]?.msg);
+        } else {
+          this.toastr.error(res?.Info)
+        }
+      },
+      error: (error) => {
+        console.error('Error adding appointment:', error);
       },
     });
   }

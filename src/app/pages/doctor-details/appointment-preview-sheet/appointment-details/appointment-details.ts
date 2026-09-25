@@ -1,7 +1,11 @@
-import { Component, Input } from '@angular/core';
-import { DatePipe, NgClass } from '@angular/common';
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+} from '@angular/core';
+import { DatePipe, NgClass, JsonPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { JsonPipe } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 
 @Component({
@@ -22,5 +26,22 @@ export class AppointmentDetails {
   @Input() selectedSlot: any = null;
   @Input() selectedDate: Date | null = null;
 
+  @Output() appointmentDataChange = new EventEmitter<{
+    reason: string;
+    notes: string;
+    appointmentType: string;
+  }>();
+
   appointmentType = 'N';
+
+  reason = '';
+  notes = '';
+
+  emitAppointmentData(): void {
+    this.appointmentDataChange.emit({
+      reason: this.reason,
+      notes: this.notes,
+      appointmentType: this.appointmentType,
+    });
+  }
 }

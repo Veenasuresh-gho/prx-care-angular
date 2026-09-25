@@ -140,7 +140,8 @@
 
                 </span>
 
-                <input type="radio" name="appointmentType" value="N" [(ngModel)]="appointmentType" class="sr-only" />
+                <input type="radio" name="appointmentType" value="N" [(ngModel)]="appointmentType"
+                    (ngModelChange)="emitAppointmentData()" class="sr-only" />
 
             </label>
             <!-- Follow-up -->
@@ -176,7 +177,8 @@
                     <span class="h-2.5 w-2.5 rounded-full bg-primary"></span>
                     }
                 </span>
-                <input type="radio" name="appointmentType" value="F" [(ngModel)]="appointmentType" class="sr-only" />
+                <input type="radio" name="appointmentType" value="F" [(ngModel)]="appointmentType"
+                    (ngModelChange)="emitAppointmentData()" class="sr-only" />
             </label>
         </div>
     </div>
@@ -185,42 +187,41 @@
         <p class="font-semibold">
             Reason for Appointment
         </p>
-        <!-- Replace with your Angular reason component -->
         <div>
-            <textarea class="
-          w-full
-          rounded-xl
-          border
-          border-input
-          bg-background
-          px-3
-          py-2
-          text-sm
-          min-h-[100px]
-          outline-none
-          focus:ring-2
-          focus:ring-primary/20
-        " placeholder="Enter reason for appointment"></textarea>
+            <textarea [(ngModel)]="reason" name="reason" (ngModelChange)="emitAppointmentData()" class="
+    w-full
+    rounded-xl
+    border
+    border-input
+    bg-background
+    px-3
+    py-2
+    text-sm
+    min-h-[100px]
+    outline-none
+    focus:ring-2
+    focus:ring-primary/20
+  " placeholder="Enter reason for appointment"></textarea>
         </div>
         @if (!selectedSlot?.isTelemedicine) {
         <p class="font-semibold">
             Assistance or Equipment Needed
         </p>
         <div>
-            <textarea class="
-            w-full
-            rounded-xl
-            border
-            border-input
-            bg-background
-            px-3
-            py-2
-            text-sm
-            min-h-[100px]
-            outline-none
-            focus:ring-2
-            focus:ring-primary/20
-          " placeholder="Enter assistance or equipment needed"></textarea>
+            <textarea [(ngModel)]="notes" name="notes" (ngModelChange)="emitAppointmentData()" class="
+    w-full
+    rounded-xl
+    border
+    border-input
+    bg-background
+    px-3
+    py-2
+    text-sm
+    min-h-[100px]
+    outline-none
+    focus:ring-2
+    focus:ring-primary/20
+  " placeholder="Enter assistance or equipment needed"></textarea>
         </div>
         }
     </div>
