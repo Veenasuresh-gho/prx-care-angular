@@ -75,7 +75,7 @@
                 Consultation fee
             </p>
             <p class="text-[16px] font-bold text-slate-900">
-                {{ doctorDetails?.fee ? '₹ ' + doctorDetails.fee : '-' }}
+                {{ doctorDetails()?.fee ? '₹ ' + doctorDetails()?.fee : '-' }}
             </p>
         </div>
         <div>
@@ -92,7 +92,9 @@
     title="Appointment Details" description="Review your appointment details before continuing">
     <!-- Sheet Content -->
     <div class="space-y-6">
-        <app-appointment-preview-sheet></app-appointment-preview-sheet>
+        <app-appointment-preview-sheet [doctor]="doctorDetails()" [selectedDate]="selectedDate()"
+            [selectedSlot]="selectedSlot()" [patient]="patientDetails()">
+        </app-appointment-preview-sheet>
     </div>
     <!-- Sheet Footer -->
     <div sheet-footer class="flex items-center justify-end gap-3 py-4">

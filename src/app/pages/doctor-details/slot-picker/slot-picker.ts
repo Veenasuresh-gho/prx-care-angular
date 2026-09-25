@@ -14,22 +14,32 @@ import { formatDateToMMDDYYYYFromDate } from '../../../utils/date';
 import { Button } from '../../../components/button/button';
 import { SheetComponent } from '../../../components/sheet/sheet-component';
 import { AppointmentPreviewSheet } from '../appointment-preview-sheet/appointment-preview-sheet';
-
+import { JsonPipe } from '@angular/common';
 @Component({
   selector: 'app-slot-picker',
   standalone: true,
-  imports: [WeekDayPicker, TimeSlotButton, Button, SheetComponent, AppointmentPreviewSheet],
+  imports: [
+    WeekDayPicker,
+    TimeSlotButton,
+    Button,
+    SheetComponent,
+    AppointmentPreviewSheet,
+    JsonPipe
+  ],
   templateUrl: './slot-picker.html',
 })
 export class SlotPicker implements OnInit {
   @Input() doctorId: string | null = null;
+  @Input() doctor: any = null;
+
 
   slots = signal<any[]>([]);
   selectedSlot = signal<any | null>(null);
+  selectedDate = signal<Date>(new Date());
+  doctorDetails = signal<any>(null);
+  patientDetails = signal<any>(null);
 
-  doctorDetails: any;
   isLoading = signal(false);
-
   isSheetOpen = false;
 
   private srv = inject(GHOService);
@@ -48,9 +58,13 @@ export class SlotPicker implements OnInit {
 
   onDateSelect(date: Date): void {
     if (!this.doctorId) return;
+
+    this.selectedDate.set(date);
     this.selectedSlot.set(null);
     this.isLoading.set(true);
+
     const formattedDate = formatDateToMMDDYYYYFromDate(date);
+
     const tv = [
       { T: 'dk1', V: this.doctorId },
       { T: 'dk2', V: formattedDate },
@@ -60,17 +74,22 @@ export class SlotPicker implements OnInit {
     this.srv.getdata('care', tv).subscribe({
       next: (res) => {
         if (res.Status === 1) {
+          console.log(res)
           this.slots.set(res.Data[0] || []);
-          this.doctorDetails = res.Data[1]?.[0] || null;
+          this.doctorDetails.set(res.Data[1]?.[0] || null);
+          this.patientDetails.set(res.Data[2]?.[0] || null);
         } else {
           this.clearSlots();
         }
+
         this.isLoading.set(false);
       },
 
       error: (error) => {
         console.error('Error fetching slots:', error);
         this.clearSlots();
+        this.doctorDetails.set(null);
+        this.patientDetails.set(null);
         this.isLoading.set(false);
       },
     });
@@ -81,13 +100,8 @@ export class SlotPicker implements OnInit {
   }
 
   onContinue(): void {
-    const slot = this.selectedSlot();
+    if (!this.selectedSlot()) return;
 
-    if (!slot) return;
-    this.openSheet();
-  }
-
-  openSheet(): void {
     this.isSheetOpen = true;
   }
 
@@ -97,6 +111,5 @@ export class SlotPicker implements OnInit {
 
   private clearSlots(): void {
     this.slots.set([]);
-    this.doctorDetails = null;
   }
 }
