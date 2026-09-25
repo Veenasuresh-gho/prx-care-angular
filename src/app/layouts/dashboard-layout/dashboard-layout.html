@@ -1,24 +1,40 @@
 <div class="min-h-screen">
   <app-navbar />
+
+  <!-- Welcome Card -->
   @if (isDashboard) {
-  <div class="mx-auto  max-w-7xl px-6">
-    <app-welcome-card [patientDetails]="patientDetails" />
-  </div>
+    <div class="mx-auto w-full max-w-7xl px-4 sm:px-6">
+      <app-welcome-card [patientDetails]="patientDetails" />
+    </div>
   }
 
-  <div class="flex min-h-[calc(100vh-5rem)] gap-4 mx-auto  max-w-7xl px-6">
-    <main class="min-w-0 flex-1">
-      <router-outlet [routerOutletData]="{
-    patientDetails: patientDetails,
-    advertisements: advertisements
-  }" />
-    </main>
+  <!-- Main Layout -->
+  <div
+    class="mx-auto flex w-full max-w-7xl flex-col gap-4 px-4 sm:px-6 lg:flex-row"
+  >
+    <!-- Side Component -->
+    @if (isDashboard) {
+      <aside
+        class="order-1 w-full shrink-0 lg:order-2 lg:w-[320px] xl:w-[360px]"
+      >
+        <app-side-component
+          [appointmentDetails]="appointmentDetails"
+          [isLoading]="isLoading"
+        />
+      </aside>
+    }
 
-    <aside class="shrink-0">
-      <app-side-component [appointmentDetails]="appointmentDetails" [isLoading]="isLoading" />
-    </aside>
+    <!-- Main Content -->
+    <main class="order-2 min-w-0 flex-1 lg:order-1">
+      <router-outlet
+        [routerOutletData]="{
+          patientDetails: patientDetails,
+          advertisements: advertisements
+        }"
+      />
+    </main>
   </div>
-  <div>
-    <app-footer></app-footer>
-  </div>
+
+  <!-- Footer -->
+  <app-footer />
 </div>

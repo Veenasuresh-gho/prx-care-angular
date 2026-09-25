@@ -1,0 +1,11 @@
+<div>
+  <div>
+    <app-appointment-details
+      [doctor]="doctor"
+      [selectedSlot]="selectedSlot"
+      [selectedDate]="selectedDate"
+      [patient]="patient"
+      (appointmentDataChange)="onAppointmentDataChange($event)">
+    </app-appointment-details>
+  </div>
+</div>

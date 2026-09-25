@@ -37,7 +37,7 @@ export class Footer {
   readonly currentYear = new Date().getFullYear();
   readonly lastUpdated = this.getBuildTimestamp();
 
-  readonly logo = 'assets/logo.png';
+  readonly logo = 'assets/logo.svg';
   readonly tagline = 'Empowering your healthcare journey with innovative solutions.';
 
   readonly socialLinks: SocialLink[] = [

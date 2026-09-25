@@ -1,0 +1,144 @@
+<app-dialog [open]="open" (openChange)="openChange.emit($event)">
+    <!-- Header -->
+    <div>
+        <h1 class="text-xl font-bold text-gray-900">
+            {{
+            isViewMode
+            ? 'Pharmacy Delivery Booking Details'
+            : 'Request Pharmacy Delivery'
+            }}
+        </h1>
+
+        <p class="mt-1 text-xs font-semibold text-gray-700">
+            Request prescription medicines delivered directly to your location.
+        </p>
+    </div>
+    <div class="my-5 border-t border-gray-200"></div>
+
+    <!-- Prescription -->
+    @if (booking?.fileUrl) {
+    <div class="mb-5">
+        @if (booking.fileUrl.toLowerCase().endsWith('.pdf')) {
+        <div class="flex w-3/4 cursor-pointer items-center gap-3
+                 rounded-md bg-white p-3 shadow" (click)="openFile()">
+            <div class="flex h-10 w-10 items-center justify-center
+                   rounded bg-red-50 text-sm font-bold text-red-600">
+                PDF
+            </div>
+            <span class="truncate text-sm text-gray-700">
+                {{ booking.fileName || 'Prescription.pdf' }}
+            </span>
+        </div>
+        } @else {
+        <img [src]="booking.fileUrl" alt="Prescription" class="max-h-64 rounded-md object-cover" />
+        }
+    </div>
+    }
+    <!-- Upload -->
+    @if (!isViewMode) {
+    <div class="mb-5">
+        <label class="mb-2 block text-sm font-medium text-gray-700">
+            Prescription
+        </label>
+        <input type="file" accept="image/*,.pdf" class="block w-full rounded-lg border border-gray-300
+               bg-white p-2 text-sm" (change)="onFileSelected($event)" />
+    </div>
+    }
+    <!-- Notes -->
+    <div class="mb-5">
+        <label class="mb-2 block text-sm font-medium text-gray-700">
+            Notes
+        </label>
+        <textarea [(ngModel)]="notes" name="notes" rows="3" placeholder="Enter any additional notes"
+            [disabled]="isViewMode" class="w-full resize-none rounded-lg
+             border border-gray-300
+             bg-white px-3 py-2.5
+             text-sm text-gray-900
+             outline-none
+             placeholder:text-gray-400
+             focus:border-primary
+             focus:ring-2 focus:ring-primary/10
+             disabled:bg-gray-100
+             disabled:text-gray-500"></textarea>
+    </div>
+    <!-- Name -->
+    <div class="mb-5">
+        <app-input label="Name" type="text" name="name" id="pharmacy-name" placeholder="Enter your name"
+            [(ngModel)]="name" [disabled]="isViewMode" [required]="true" />
+    </div>
+    <!-- Contact -->
+    <div class="mb-5">
+        <label class="mb-2 block text-sm font-medium text-gray-700">
+            Contact Number
+            <span class="text-red-500">*</span>
+        </label>
+        <div class="flex gap-2">
+            @if (!isViewMode) {
+            <select [(ngModel)]="countryId" name="countryId" class="h-11 w-24 shrink-0 rounded-lg
+                 border border-border
+                 bg-white px-3
+                 text-sm text-primary-dark
+                 outline-none
+                 focus:border-primary
+                 focus:ring-4
+                 focus:ring-primary/10">
+                <option value="+91">+91</option>
+            </select>
+            }
+            <div class="flex-1">
+                <app-input type="tel" name="phone" id="pharmacy-phone" placeholder="Enter contact number"
+                    [(ngModel)]="phone" [disabled]="isViewMode" [required]="true" />
+            </div>
+        </div>
+    </div>
+    <!-- Address -->
+    <div>
+        <label class="mb-2 block text-sm font-medium text-gray-700">
+            Address
+            <span class="text-red-500">*</span>
+        </label>
+        <div class="relative" [class.cursor-pointer]="!isViewMode" (click)="openLocation()">
+            <textarea [(ngModel)]="address" name="address" rows="3" placeholder="Select your service address"
+                [disabled]="isViewMode" [readonly]="!isViewMode" class="w-full resize-none rounded-lg
+               border border-gray-300
+               bg-white px-3 py-2.5 pr-11
+               text-sm text-gray-900
+               outline-none
+               placeholder:text-gray-400
+               focus:border-primary
+               focus:ring-2 focus:ring-primary/10
+               disabled:bg-gray-100
+               disabled:text-gray-500"></textarea>
+            @if (!isViewMode) {
+            <span class="pointer-events-none absolute
+                 right-3 top-3 text-gray-400">
+                <span class="text-lg">⌖</span>
+            </span>
+            }
+        </div>
+    </div>
+    <!-- Footer -->
+    <div class="mt-6 flex flex-col-reverse gap-3
+           border-t border-gray-200 pt-5
+           sm:flex-row sm:justify-end">
+        @if (booking?.status?.toLowerCase() === 'booked') {
+        <button type="button" class="rounded-lg bg-red-600
+               px-4 py-2.5 text-sm font-medium text-white
+               transition hover:bg-red-700" (click)="cancelBooking()">
+            Cancel Booking Request
+        </button>
+        } @else if (booking) {
+        <button type="button" class="rounded-lg bg-green-700
+               px-5 py-2.5 text-sm font-medium text-white
+               transition hover:bg-green-600" (click)="close()">
+            Track Booking
+        </button>
+        } @else {
+        <button type="button" class="rounded-lg bg-primary
+               px-5 py-2.5 text-sm font-medium text-white
+               transition hover:opacity-90" (click)="confirmBooking()">
+            Confirm Booking Request
+        </button>
+        }
+    </div>
+</app-dialog>

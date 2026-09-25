@@ -8,7 +8,7 @@
     <div>
         <app-week-day-picker (dateSelect)="onDateSelect($event)"></app-week-day-picker>
     </div>
-    <!-- Loading State Indicator -->
+    <!-- Loading State -->
     @if (isLoading()) {
     <div class="py-6 text-center text-sm text-gray-500">
         Loading available slots...
@@ -23,7 +23,11 @@
         @if (regularSlots().length > 0) {
         <div class="flex flex-wrap gap-3">
             @for (slot of regularSlots(); track slot.ID) {
-            <app-time-slot-button variant="available">
+            <app-time-slot-button [variant]="
+                selectedSlot()?.ID === slot.ID
+                  ? 'selected'
+                  : 'available'
+              " (click)="onSlotSelect(slot)">
                 {{ slot.SlotTime }}
             </app-time-slot-button>
             }
@@ -42,8 +46,15 @@
         </h3>
         @if (onlineConsultationSlots().length > 0) {
         <div class="flex flex-wrap gap-3">
-            @for (slot of onlineConsultationSlots(); track slot.ID) {
-            <app-time-slot-button variant="available">
+            @for (
+            slot of onlineConsultationSlots();
+            track slot.ID
+            ) {
+            <app-time-slot-button [variant]="
+                selectedSlot()?.ID === slot.ID
+                  ? 'selected'
+                  : 'available'
+              " (click)="onSlotSelect(slot)">
                 {{ slot.SlotTime }}
             </app-time-slot-button>
             }
@@ -55,23 +66,46 @@
         }
     </div>
     }
-    <div class="flex justify-between items-center 
-          py-4 px-5
-          w-full
-          bg-primary/5
-          border border-primary/10
-          my-6
-          rounded-xl">
+    <!-- Consultation Fee / Continue -->
+    <div class="my-6 flex w-full items-center justify-between
+           rounded-xl border border-primary/10
+           bg-primary/5 px-5 py-4">
         <div>
             <p class="text-sm text-black">
                 Consultation fee
             </p>
-            <p class="font-bold text-[16px] text-slate-900">
-                {{ doctorDetails?.fee ? '₹ ' + doctorDetails.fee : '-' }}
+            <p class="text-[16px] font-bold text-slate-900">
+                {{ doctorDetails()?.fee ? '₹ ' + doctorDetails()?.fee : '-' }}
             </p>
         </div>
         <div>
-            <app-button>Continue</app-button>
+            <app-button [disabled]="!selectedSlot()" (click)="onContinue()">
+                Continue
+            </app-button>
         </div>
     </div>
 </div>
+<!-- ========================================= -->
+<!-- Appointment Sheet -->
+<!-- ========================================= -->
+<app-sheet [open]="isSheetOpen" (openChange)="isSheetOpen = $event" side="right" width="500px"
+    title="Appointment Details" description="Review your appointment details before continuing">
+    <!-- Sheet Content -->
+    <div class="space-y-6">
+        <app-appointment-preview-sheet [doctor]="doctorDetails()" [selectedDate]="selectedDate()"
+            [selectedSlot]="selectedSlot()" [patient]="patientDetails()">
+        </app-appointment-preview-sheet>
+    </div>
+    <!-- Sheet Footer -->
+    <div sheet-footer class="flex items-center justify-end gap-3 py-4">
+        <button type="button" class="rounded-lg border border-gray-300
+             px-4 py-2 text-sm font-medium
+             text-gray-700
+             hover:bg-gray-50" (click)="closeSheet()">
+            Cancel
+        </button>
+        <app-button (click)="confirmAppointment()">
+            Confirm Appointment
+        </app-button>
+    </div>
+</app-sheet>
