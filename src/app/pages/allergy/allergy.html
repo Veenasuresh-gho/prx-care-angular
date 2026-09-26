@@ -1,0 +1,109 @@
+<h2 class="font-bold text-lg pt-3">
+    Allergy
+</h2>
+
+<app-banner></app-banner>
+
+<div class="flex justify-between items-center py-5">
+    <h2 class="font-semibold text-base text-gray-800">
+        My Allergies
+    </h2>
+
+    <button
+        type="button"
+        class="flex items-center gap-1.5 cursor-pointer px-3 py-2 rounded-md border border-gray-200 text-sm text-gray-700 hover:bg-gray-50 transition"
+        (click)="openAddSheet()">
+        <mat-icon class="text-[19px]">add</mat-icon>
+    </button>
+</div>
+
+@if (loading) {
+<div class="flex justify-center py-10">
+    <mat-spinner diameter="30"></mat-spinner>
+</div>
+}
+@else if (patientAllergy.length === 0) {
+<app-empty-message
+    message="No allergies found."
+    [showButton]="true"
+    buttonText="Add Allergy"
+    buttonIcon="add"
+    (buttonClick)="openAddSheet()" />
+}
+@else {
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+    @for (allergy of patientAllergy; track allergy.ID) {
+    <div class="border border-gray-200 rounded-lg bg-white p-4">
+        <div class="flex items-start justify-between gap-3">
+
+            <div class="flex items-start gap-3 min-w-0">
+                <mat-icon class="text-red-500 mt-0.5">
+                    warning
+                </mat-icon>
+
+                <div class="min-w-0">
+                    <p class="font-medium text-gray-800">
+                        {{ allergy.AllergyDesc || '-' }}
+                    </p>
+                    <p class="text-xs text-gray-500 mt-1">
+                        Type: {{ allergy.AllergyType || '-' }}
+                    </p>
+                </div>
+            </div>
+            <div class="flex items-center gap-1 shrink-0">
+                <button
+                    type="button"
+                    class="w-8 h-8 flex items-center justify-center cursor-pointer rounded-md text-gray-500 hover:bg-gray-50 hover:text-blue-600 transition"
+                    (click)="openEditSheet(allergy)">
+                    <mat-icon class="text-[19px]">
+                        edit
+                    </mat-icon>
+                </button>
+                <button
+                    type="button"
+                    class="w-8 h-8 flex items-center justify-center cursor-pointer rounded-md text-gray-500 hover:bg-red-50 hover:text-red-600 transition"
+                    (click)="deleteAllergy(allergy)">
+                    <mat-icon class="text-[19px]">
+                        delete_outline
+                    </mat-icon>
+                </button>
+            </div>
+        </div>
+        <div class="grid grid-cols-2 gap-4 mt-4 pt-3 border-t border-gray-100">
+            <div>
+                <p class="text-xs text-gray-500">
+                    Start Date
+                </p>
+                <p class="text-sm text-gray-700 mt-1">
+                    {{ allergy.StartDate || '-' }}
+                </p>
+            </div>
+            <div>
+                <p class="text-xs text-gray-500">
+                    Reaction
+                </p>
+                <p class="text-sm text-gray-700 mt-1">
+                    {{ allergy.AllergicReaction || '-' }}
+                </p>
+            </div>
+        </div>
+    </div>
+    }
+</div>
+}
+
+<app-sheet [(open)]="isSheetOpen" side="right" width="500px" [title]="isEditMode
+        ? 'Edit Allergy'
+        : 'Add Allergy'" [description]="isEditMode
+        ? 'Update allergy details.'
+        : 'Add a new allergy.'">
+
+    @if (isEditMode) {
+     <edit-allergy [allergy]="selectedAllergy" (saved)="allergySaved()"></edit-allergy>
+    }
+    @else {
+    <add-allergy (saved)="allergySaved()"></add-allergy>
+    }
+
+</app-sheet>

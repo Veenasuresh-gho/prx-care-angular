@@ -19,8 +19,6 @@ import { BannerComponent } from './components/banner/banner';
 import { AddEmergencyContact } from './components/add-emergency-contact/add-emergency-contact';
 import { EditEmergencyContact } from './components/edit-emergency-contact/edit-emergency-contact';
 
-
-
 @Component({
     selector: 'emergency-contacts',
     standalone: true,

@@ -1,4 +1,5 @@
 import {
+    ChangeDetectorRef,
     Component,
     EventEmitter,
     OnInit,
@@ -67,6 +68,7 @@ export class AddEmergencyContact implements OnInit {
     loadingCountries = false;
     submitting = false;
     selectedCountry: any = null;
+    constructor(private cdr: ChangeDetectorRef) { }
 
     onCountryChange(countryId: number): void {
         this.selectedCountry = this.countries.find(
@@ -279,6 +281,8 @@ export class AddEmergencyContact implements OnInit {
                     this.saved.emit();
                     return;
                 }
+                this.submitting = false;
+                this.cdr.detectChanges();
                 const errorMessage =
                     r.Info ||
                     'Failed to add emergency contact';
@@ -290,6 +294,7 @@ export class AddEmergencyContact implements OnInit {
                     err
                 );
                 this.submitting = false;
+                this.cdr.detectChanges();
                 this.toastr.error(
                     err?.Message ||
                     err?.error?.Info ||

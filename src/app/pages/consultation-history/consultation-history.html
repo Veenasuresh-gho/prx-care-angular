@@ -136,7 +136,7 @@
                     {{ item.TenantName }}
                 </span>
                 <div class="actions">
-                    <button type="button">
+                    <button (click)="bookAppointment(item)" type="button">
                         Book again
                     </button>
                     <button (click)="viewDetails(item)" type="button">

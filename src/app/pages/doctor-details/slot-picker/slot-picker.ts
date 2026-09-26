@@ -93,10 +93,8 @@ export class SlotPicker implements OnInit {
         } else {
           this.clearSlots();
         }
-
         this.isLoading.set(false);
       },
-
       error: (error) => {
         console.error('Error fetching slots:', error);
         this.clearSlots();
