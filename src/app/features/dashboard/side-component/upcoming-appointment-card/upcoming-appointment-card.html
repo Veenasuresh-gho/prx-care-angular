@@ -155,7 +155,7 @@
         }
     </div>
 </div>
-<app-cancel-appointment [open]="showCancelDialog()" [appointmentId]="appointment.ID" [patientId]="patientId"
+<app-cancel-appointment [open]="showCancelDialog()" [appointmentId]="appointment.ID"
     (openChange)="showCancelDialog.set($event)" (refetch)="refetchAppointments()" />
 
 }

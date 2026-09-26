@@ -9,7 +9,19 @@
   <!-- Main Layout -->
   <div class="mx-auto flex w-full max-w-7xl flex-col gap-4 px-4 sm:px-6 lg:flex-row">
     <!-- Main Content -->
-    <main class="order-1 min-w-0 flex-1 lg:order-1">
+    <main class="order-1 min-w-0 flex-1">
+      <!-- Back Button - Inner Pages Only -->
+      @if (!isDashboard) {
+      <div class="mt-2">
+        <app-button variant="ghost" (click)="goBack()">
+          <mat-icon class="text-[20px]">
+            arrow_back
+          </mat-icon>
+          <span>Back</span>
+        </app-button>
+      </div>
+      }
+      <!-- Page Content -->
       <router-outlet [routerOutletData]="{
           patientDetails: patientDetails,
           advertisements: advertisements

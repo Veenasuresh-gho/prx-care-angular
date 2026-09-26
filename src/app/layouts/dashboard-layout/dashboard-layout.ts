@@ -1,10 +1,19 @@
-import { Component, inject, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import {
+  Component,
+  inject,
+  OnInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+} from '@angular/core';
+import { Location } from '@angular/common';
 import { Navbar } from '../../features/navbar/navbar';
 import { RouterOutlet, Router } from '@angular/router';
 import { SideComponent } from '../../features/dashboard/side-component/side-component';
 import { GHOService } from '../../services/gho.service';
 import { WelcomeCard } from '../../features/dashboard/components/welcome-card/welcome-card';
 import { Footer } from '../../features/footer/footer';
+import { MatIconModule } from '@angular/material/icon';
+import { Button } from '../../components/button/button';
 
 @Component({
   selector: 'app-dashboard-layout',
@@ -14,17 +23,19 @@ import { Footer } from '../../features/footer/footer';
     RouterOutlet,
     SideComponent,
     WelcomeCard,
-    Footer
+    Footer,
+    MatIconModule,
+    Button
   ],
   templateUrl: './dashboard-layout.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DashboardLayout implements OnInit {
 
+export class DashboardLayout implements OnInit {
   private srv = inject(GHOService);
   private cdr = inject(ChangeDetectorRef);
-  constructor(private router: Router) { }
-
+  private location = inject(Location);
+  constructor(private router: Router) {}
   appointmentDetails: any = null;
   patientDetails: any = null;
   advertisements: any[] = [];
@@ -38,35 +49,40 @@ export class DashboardLayout implements OnInit {
 
   ngOnInit(): void {
     this.patientId = sessionStorage.getItem('id');
+
     this.getDashboardData();
-    this.getPatientDetails()
+    this.getPatientDetails();
+  }
+
+  goBack(): void {
+    this.location.back();
   }
 
   getPatientDetails(): void {
     const tv = [
       {
         T: 'dk1',
-        V: this.patientId ?? ''
+        V: this.patientId ?? '',
       },
       {
         T: 'c10',
-        V: '3'
-      }
+        V: '3',
+      },
     ];
 
     this.srv.getdata('patient', tv).subscribe({
       next: (res) => {
         if (res.Status === 1) {
-          this.patientDetails=res.Data[0][0];
-          console.log(this.patientDetails)
-        } else {
+          this.patientDetails = res.Data[0][0];
 
+          console.log(this.patientDetails);
+
+          this.cdr.markForCheck();
         }
-
       },
       error: (error) => {
-
-      }
+        console.error('Failed to get patient details:', error);
+      },
     });
   }
 
@@ -74,35 +90,44 @@ export class DashboardLayout implements OnInit {
     const tv = [
       {
         T: 'c1',
-        V: this.patientId ?? ''
+        V: this.patientId ?? '',
       },
       {
         T: 'c2',
-        V: 'dash'
+        V: 'dash',
       },
       {
         T: 'c10',
-        V: '10'
-      }
+        V: '10',
+      },
     ];
 
     this.srv.getdata('care', tv).subscribe({
       next: (res) => {
         if (res.Status === 1) {
-          this.appointmentDetails = res.Data?.[1]?.[0] ? { ...res.Data[1][0] } : null;
+          this.appointmentDetails = res.Data?.[1]?.[0]
+            ? { ...res.Data[1][0] }
+            : null;
+
           this.advertisements = res.Data?.[3] ?? [];
         } else {
           this.appointmentDetails = null;
           this.advertisements = [];
         }
+
         this.isLoading = false;
         this.cdr.markForCheck();
       },
       error: (error) => {
+        console.error('Failed to get dashboard data:', error);
+
         this.appointmentDetails = null;
+        this.advertisements = [];
         this.isLoading = false;
+
         this.cdr.markForCheck();
-      }
+      },
     });
   }
 }
+
