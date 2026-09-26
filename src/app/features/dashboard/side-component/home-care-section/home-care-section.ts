@@ -1,17 +1,21 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Button } from '../../../../components/button/button';
 import { NgClass } from '@angular/common';
 import { GeneralPhysicianDialog } from './components/general-physician-dialog/general-physician-dialog';
 import { PharmacyDeliveryDialog } from './components/pharmacy-delivery/pharmacy-delivery';
 import { NursingServicesDialog } from './components/nursing-services/nursing-services';
 import { LabCollectionDialog } from './components/lab-collection-dialog/lab-collection-dialog';
+import { GHOService } from '../../../../services/gho.service';
 
 @Component({
   selector: 'app-home-care-section',
   imports: [Button, NgClass, GeneralPhysicianDialog, PharmacyDeliveryDialog, NursingServicesDialog, LabCollectionDialog],
   templateUrl: './home-care-section.html',
 })
-export class HomeCareSection {
+export class HomeCareSection implements OnInit {
+  countryList: any[] = [];
+
+  srv = inject(GHOService);
 
   showGeneralDialog = false;
   showPharmacyDialog = false;
@@ -52,6 +56,24 @@ export class HomeCareSection {
       onClick: () => this.openLabDialog(),
     },
   ];
+
+  ngOnInit(): void {
+    this.getCountryList();
+  }
+
+  getCountryList() {
+    const tv = [
+      { T: 'c10', V: '99' }
+    ];
+    this.srv.getdata('lists', tv).subscribe({
+      next: (res) => {
+        if (res.Status === 1) {
+          this.countryList = res.Data;
+          console.log(this.countryList)
+        }
+      },
+    });
+  }
 
   openGeneralDialog(): void {
     this.showGeneralDialog = true;

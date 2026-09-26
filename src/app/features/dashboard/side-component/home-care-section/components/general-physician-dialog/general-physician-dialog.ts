@@ -24,6 +24,8 @@ import { Button } from '../../../../../../components/button/button';
 export class GeneralPhysicianDialog {
   @Input() open = false;
   @Input() booking: any = null;
+  @Input() countryList: any[] = [];
+
 
   @Output() openChange = new EventEmitter<boolean>();
 

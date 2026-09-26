@@ -42,7 +42,7 @@
 </div>
 <!-- General Physician Dialog -->
 <app-general-physician-dialog [open]="showGeneralDialog"
-    (openChange)="showGeneralDialog = $event"></app-general-physician-dialog>
+    (openChange)="showGeneralDialog = $event" [countryList]="countryList"></app-general-physician-dialog>
 <app-pharmacy-delivery [open]="showPharmacyDialog" (openChange)="showPharmacyDialog = $event"></app-pharmacy-delivery>
 <app-nursing-services [open]="showNursingDialog" (openChange)="showNursingDialog = $event"></app-nursing-services>
 <app-lab-collection-dialog [open]="showLabDialog" (openChange)="showLabDialog = $event"></app-lab-collection-dialog>
