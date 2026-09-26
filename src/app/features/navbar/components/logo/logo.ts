@@ -8,6 +8,6 @@ import { RouterLink } from '@angular/router';
   templateUrl: './logo.html'
 })
 export class Logo {
-  href = input<string>('/');
+  href = input<string>('/dashboard');
   alt = input<string>('Logo');
 }
