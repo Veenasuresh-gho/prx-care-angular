@@ -60,6 +60,15 @@ export const routes: Routes = [
         path: 'facilitator',
         component: ClinicalHistory
     },
+       {
+        path: 'health-insurance',
+        component: HealthInsurance
+    },
+      {
+        path: 'allergy',
+        component: Allergy
+    },
+
 
     {
         path: '**',
