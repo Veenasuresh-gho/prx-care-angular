@@ -4,13 +4,17 @@
     class="flex cursor-pointer items-center rounded-full transition-all duration-150 hover:ring-2 hover:ring-primary/30 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2"
     aria-label="Open profile menu" (click)="togglePopover()">
     @if (patient()?._url) {
-    <img [src]="patient()?._url" [alt]="patient()?.FirstName" class="h-10 w-10 rounded-full object-cover" />
+    <img [src]="patient()?._url" [alt]="patient()?.firstName || 'Patient'"
+      class="h-10 w-10 rounded-full object-cover" />
     } @else {
     <div class="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
-      <mat-icon class="text-[24px] text-primary">person</mat-icon>
+      <mat-icon class="text-[24px] text-primary">
+        person
+      </mat-icon>
     </div>
     }
   </button>
+  <!-- Profile Popover -->
   @if (isOpen()) {
   <!-- Overlay -->
   <div class="fixed inset-0 z-40" (click)="closePopover()"></div>
@@ -22,18 +26,21 @@
       <div class="flex items-center gap-3">
         <!-- Avatar -->
         @if (patient()?._url) {
-        <img [src]="patient()?._url" [alt]="patient()?.FirstName"
-          class="h-14 w-14 shrink-0 rounded-full object-cover ring-2 ring-white shadow-sm" />
+        <img [src]="patient()?._url" [alt]="patient()?.firstName || 'Patient'"
+          class="h-14 w-14 shrink-0 rounded-full object-cover shadow-sm ring-2 ring-white" />
         } @else {
         <div
-          class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-primary/10 ring-2 ring-white shadow-sm">
-          <mat-icon class="text-[34px] text-primary">person</mat-icon>
+          class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-primary/10 shadow-sm ring-2 ring-white">
+          <mat-icon class="text-[34px] text-primary">
+            person
+          </mat-icon>
         </div>
         }
-        <!-- Name -->
+        <!-- Patient Information -->
         <div class="min-w-0">
           <p class="truncate text-base font-semibold leading-5 text-black">
-            {{ patient()?.FirstName }} {{patient()?.LastName}}
+            {{ patient()?.FirstName }}
+            {{ patient()?.LastName }}
           </p>
           @if (patient()?.patientId) {
           <p class="mt-1 truncate text-xs text-grey">
@@ -51,25 +58,38 @@
         (click)="viewProfile()">
         <span class="flex items-center gap-3">
           <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
-            <mat-icon class="text-[18px] text-primary">person_outline</mat-icon>
+            <mat-icon class="text-[18px] text-primary">
+              person_outline
+            </mat-icon>
           </span>
-          <span class="font-medium text-black">View profile</span>
+          <span class="font-medium text-black">
+            View profile
+          </span>
         </span>
-
-        <mat-icon class="text-[19px] text-grey">chevron_right</mat-icon>
+        <mat-icon class="text-[19px] text-grey">
+          chevron_right
+        </mat-icon>
       </button>
       <!-- Divider -->
       <div class="mx-2 my-1 h-px bg-border"></div>
       <!-- Logout -->
       <button type="button"
         class="flex h-11 w-full items-center gap-3 rounded-lg px-3 text-sm text-red transition-colors hover:bg-red/5"
-        (click)="logout()">
+        (click)="openLogoutDialog()">
         <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-red/10">
-          <mat-icon class="text-[18px] text-red">logout</mat-icon>
+          <mat-icon class="text-[18px] text-red">
+            logout
+          </mat-icon>
         </span>
-        <span class="font-medium">Logout</span>
+        <span class="font-medium">
+          Logout
+        </span>
       </button>
     </div>
   </div>
   }
+  <!-- Logout Confirmation Dialog -->
+  <app-confirmation-dialog [open]="showLogoutDialog()" title="Logout"
+    message="Are you sure you want to log out of your account?" confirmText="Logout" cancelText="Cancel" icon="logout"
+    [danger]="true" (confirmed)="logout()" (cancelled)="closeLogoutDialog()" />
 </div>

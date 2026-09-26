@@ -1,18 +1,22 @@
 import {
   Component,
-  computed,
   inject,
   input,
   signal,
 } from '@angular/core';
+import { JsonPipe } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
-import { JsonPipe } from '@angular/common';
+import { ConfirmationDialog } from '../../../../components/confirmation-dialog/confirmation-dialog';
 
 @Component({
   selector: 'app-profile-popover',
   standalone: true,
-  imports: [MatIconModule, JsonPipe],
+  imports: [
+    MatIconModule,
+    JsonPipe,
+    ConfirmationDialog,
+  ],
   templateUrl: './profile-popover.html',
 })
 export class ProfilePopover {
@@ -21,6 +25,8 @@ export class ProfilePopover {
   patientDetails = input<any>(null);
 
   isOpen = signal(false);
+
+  showLogoutDialog = signal(false);
 
   patient = this.patientDetails;
 
@@ -34,17 +40,21 @@ export class ProfilePopover {
 
   viewProfile(): void {
     this.closePopover();
+
     this.router.navigate(['/profile']);
   }
 
+  openLogoutDialog(): void {
+    this.showLogoutDialog.set(true);
+  }
+
+  closeLogoutDialog(): void {
+    this.showLogoutDialog.set(false);
+  }
+
   logout(): void {
-    const confirmed = window.confirm('Are you sure you want to log out?');
-
-    if (!confirmed) {
-      return;
-    }
-
-    this.closePopover();
+    this.showLogoutDialog.set(false);
+    this.isOpen.set(false);
 
     sessionStorage.removeItem('tkn');
     sessionStorage.removeItem('id');

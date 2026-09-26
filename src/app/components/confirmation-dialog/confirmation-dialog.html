@@ -1,0 +1,60 @@
+<app-dialog
+  [open]="open"
+  (openChange)="openChange.emit($event)"
+>
+  <div class="flex flex-col items-center text-center">
+
+    <!-- Icon -->
+    <div
+      class="flex h-14 w-14 items-center justify-center rounded-full"
+      [class.bg-red-50]="danger"
+      [class.bg-primary-light]="!danger"
+    >
+      <mat-icon
+        class="text-[28px]"
+        [class.text-red]="danger"
+        [class.text-primary]="!danger"
+      >
+        {{ icon }}
+      </mat-icon>
+    </div>
+
+    <!-- Title -->
+    <h2 class="mt-4 text-lg font-semibold text-black">
+      {{ title }}
+    </h2>
+
+    <!-- Message -->
+    <p class="mt-2 max-w-md text-sm leading-6 text-grey">
+      {{ message }}
+    </p>
+
+    <!-- Actions -->
+    <div class="mt-6 flex w-full gap-3">
+
+      <!-- Cancel -->
+      <button
+        type="button"
+        class="flex-1 rounded-lg border border-border px-4 py-2.5 text-sm font-medium text-black transition-colors hover:bg-light-grey"
+        (click)="close()"
+      >
+        {{ cancelText }}
+      </button>
+
+      <!-- Confirm -->
+      <button
+        type="button"
+        class="flex-1 rounded-lg px-4 py-2.5 text-sm font-medium text-white transition-colors"
+        [class.bg-red]="danger"
+        [class.hover:bg-red-700]="danger"
+        [class.bg-primary]="!danger"
+        [class.hover:bg-primary-dark]="!danger"
+        (click)="confirm()"
+      >
+        {{ confirmText }}
+      </button>
+
+    </div>
+
+  </div>
+</app-dialog>
