@@ -1,54 +1,54 @@
-import { Component, input, signal } from '@angular/core';
-
-export interface Patient {
-  id?: string;
-  patientId?: string;
-  firstName?: string;
-  lastName?: string;
-  imageUrl?: string;
-}
+import {
+  Component,
+  computed,
+  inject,
+  input,
+  signal,
+} from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
+import { Router } from '@angular/router';
+import { JsonPipe } from '@angular/common';
 
 @Component({
   selector: 'app-profile-popover',
   standalone: true,
-  templateUrl: './profile-popover.html'
+  imports: [MatIconModule, JsonPipe],
+  templateUrl: './profile-popover.html',
 })
 export class ProfilePopover {
+  private router = inject(Router);
 
-  patient = input<Patient | null>(null);
+  patientDetails = input<any>(null);
 
   isOpen = signal(false);
 
-  get fullName(): string {
-    return [
-      this.patient()?.firstName,
-      this.patient()?.lastName
-    ]
-      .filter(Boolean)
-      .join(' ');
-  }
+  patient = this.patientDetails;
 
-  togglePopover() {
+  togglePopover(): void {
     this.isOpen.update(value => !value);
   }
 
-  closePopover() {
+  closePopover(): void {
     this.isOpen.set(false);
   }
 
-  viewProfile() {
+  viewProfile(): void {
     this.closePopover();
+    this.router.navigate(['/profile']);
   }
 
-  logout() {
-    const confirmed = window.confirm(
-      'Are you sure you want to log out?'
-    );
+  logout(): void {
+    const confirmed = window.confirm('Are you sure you want to log out?');
 
     if (!confirmed) {
       return;
     }
 
     this.closePopover();
+
+    sessionStorage.removeItem('tkn');
+    sessionStorage.removeItem('id');
+
+    this.router.navigate(['/auth/sign-in']);
   }
 }

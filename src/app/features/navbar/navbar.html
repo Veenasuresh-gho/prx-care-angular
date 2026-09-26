@@ -19,7 +19,7 @@
 
       @if (isAuthenticated()) {
 
-      <app-profile-popover />
+      <app-profile-popover [patientDetails]="patientDetails" />
 
       } @else {
 

@@ -38,12 +38,39 @@ export class DashboardLayout implements OnInit {
 
   ngOnInit(): void {
     this.patientId = sessionStorage.getItem('id');
-
     this.getDashboardData();
+    this.getPatientDetails()
+  }
+
+  getPatientDetails(): void {
+    const tv = [
+      {
+        T: 'dk1',
+        V: this.patientId ?? ''
+      },
+      {
+        T: 'c10',
+        V: '3'
+      }
+    ];
+
+    this.srv.getdata('patient', tv).subscribe({
+      next: (res) => {
+        if (res.Status === 1) {
+          this.patientDetails=res.Data[0][0];
+          console.log(this.patientDetails)
+        } else {
+
+        }
+
+      },
+      error: (error) => {
+
+      }
+    });
   }
 
   getDashboardData(): void {
-
     const tv = [
       {
         T: 'c1',
@@ -63,11 +90,9 @@ export class DashboardLayout implements OnInit {
       next: (res) => {
         if (res.Status === 1) {
           this.appointmentDetails = res.Data?.[1]?.[0] ? { ...res.Data[1][0] } : null;
-          this.patientDetails = res.Data?.[0]?.[0] ? { ...res.Data[0][0] } : null;
           this.advertisements = res.Data?.[3] ?? [];
         } else {
           this.appointmentDetails = null;
-          this.patientDetails = null;
           this.advertisements = [];
         }
         this.isLoading = false;
@@ -75,7 +100,6 @@ export class DashboardLayout implements OnInit {
       },
       error: (error) => {
         this.appointmentDetails = null;
-        this.patientDetails = null;
         this.isLoading = false;
         this.cdr.markForCheck();
       }
