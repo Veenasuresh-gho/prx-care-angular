@@ -4,7 +4,7 @@ import {
   Output,
   EventEmitter,
 } from '@angular/core';
-import { DatePipe, NgClass, JsonPipe } from '@angular/common';
+import { DatePipe, NgClass } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 
@@ -15,7 +15,6 @@ import { MatIconModule } from '@angular/material/icon';
     DatePipe,
     NgClass,
     FormsModule,
-    JsonPipe,
     MatIconModule
   ],
   templateUrl: './appointment-details.html',

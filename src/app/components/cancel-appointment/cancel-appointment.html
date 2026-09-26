@@ -1,0 +1,107 @@
+<app-dialog [open]="open" (openChange)="openChange.emit($event)">
+    <div class="flex flex-col">
+        <!-- Header -->
+        <div class="flex items-start gap-3">
+            <!-- Warning Icon -->
+            <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-red/10 text-red">
+                <mat-icon>
+                    warning
+                </mat-icon>
+            </div>
+            <!-- Title -->
+            <div class="min-w-0">
+                <h2 class="text-base font-semibold text-black">
+                    Cancel Appointment
+                </h2>
+                <p class=" text-xs text-grey">
+                    Select a reason below — this can't be undone.
+                </p>
+            </div>
+        </div>
+        <!-- Divider -->
+        <div class="my-3 h-px bg-border"></div>
+        <!-- Body -->
+        <div class="max-h-[60vh] space-y-5 overflow-y-auto pr-1">
+            <!-- Cancellation Reason -->
+            <div>
+                <label class="text-xs font-semibold uppercase text-grey">
+                    Reason for cancellation
+                </label>
+                <!-- Reasons -->
+                <div class="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2">
+                    @for (reason of cancelReasons; track reason) {
+                    <button type="button"
+                        class="flex w-full cursor-pointer items-center gap-2.5 rounded-lg border px-3 py-2.5 text-left text-xs transition-all duration-150"
+                        [class.border-primary]="selectedReason() === reason"
+                        [class.bg-primary-light]="selectedReason() === reason"
+                        [class.ring-1]="selectedReason() === reason" [class.ring-primary]="selectedReason() === reason"
+                        [class.border-border]="selectedReason() !== reason"
+                        [class.hover:border-primary]="selectedReason() !== reason"
+                        [class.hover:bg-light-grey]="selectedReason() !== reason" (click)="selectReason(reason)">
+                        <!-- Radio -->
+                        <span class="flex h-4 w-4 shrink-0 items-center justify-center rounded-full border"
+                            [class.border-primary]="selectedReason() === reason"
+                            [class.border-grey]="selectedReason() !== reason">
+                            @if (selectedReason() === reason) {
+                            <span class="h-2 w-2 rounded-full bg-primary"></span>
+                            }
+                        </span>
+                        <!-- Reason -->
+                        <span class="leading-snug" [class.font-medium]="selectedReason() === reason"
+                            [class.text-primary]="selectedReason() === reason"
+                            [class.text-black]="selectedReason() !== reason">
+                            {{ reason }}
+                        </span>
+                    </button>
+                    }
+                </div>
+            </div>
+            <!-- Other Reason -->
+            @if (selectedReason() === 'Other') {
+            <div>
+                <label class="text-xs font-semibold uppercase tracking-wide text-grey">
+                    Please specify
+                </label>
+                <textarea rows="2" placeholder="Tell us the reason..."
+                    class="mt-1.5 w-full resize-none rounded-lg border border-border px-3 py-2.5 text-sm text-black outline-none transition-colors placeholder:text-grey/70 focus:border-primary focus:ring-1 focus:ring-primary"
+                    [value]="customReason()" (input)="onCustomReasonChange($event)"></textarea>
+            </div>
+            }
+            <!-- Additional Notes -->
+            <div>
+                <label class="text-xs font-semibold uppercase tracking-wide text-grey">
+                    Additional notes
+                    <span class="normal-case font-normal text-grey/70">
+                        (optional)
+                    </span>
+                </label>
+                <textarea rows="2" placeholder="Anything else we should know..."
+                    class="mt-1.5 w-full resize-none rounded-lg border border-border px-3 py-2.5 text-sm text-black outline-none transition-colors placeholder:text-grey/70 focus:border-primary focus:ring-1 focus:ring-primary"
+                    [value]="notes()" (input)="onNotesChange($event)"></textarea>
+            </div>
+        </div>
+        <!-- Divider -->
+        <div class="my-5 h-px bg-border"></div>
+        <!-- Footer -->
+        <div class="flex justify-end gap-2">
+            <!-- Close -->
+            <app-button variant="outline" (click)="close()">
+                <mat-icon class="text-[18px]">
+                    close
+                </mat-icon>
+                Close
+            </app-button>
+            <!-- Confirm -->
+            <app-button variant="destructive" [disabled]="isConfirmDisabled" (click)="handleConfirm()">
+                @if (isLoading()) {
+                <mat-icon class="mr-2 animate-spin text-[18px]">
+                    refresh
+                </mat-icon>
+                Cancelling...
+                } @else {
+                Confirm Cancellation
+                }
+            </app-button>
+        </div>
+    </div>
+</app-dialog>

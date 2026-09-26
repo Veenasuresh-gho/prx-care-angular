@@ -5,8 +5,6 @@ import {
   signal,
   computed,
   OnInit,
-  Output,
-  EventEmitter,
 } from '@angular/core';
 
 import { WeekDayPicker } from '../../../components/week-day-picker/week-day-picker';
@@ -16,8 +14,6 @@ import { formatDateToMMDDYYYYFromDate } from '../../../utils/date';
 import { Button } from '../../../components/button/button';
 import { SheetComponent } from '../../../components/sheet/sheet-component';
 import { AppointmentPreviewSheet } from '../appointment-preview-sheet/appointment-preview-sheet';
-import { JsonPipe } from '@angular/common';
-import { MatDialog } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -29,7 +25,6 @@ import { ToastrService } from 'ngx-toastr';
     Button,
     SheetComponent,
     AppointmentPreviewSheet,
-    JsonPipe
   ],
   templateUrl: './slot-picker.html',
 })
@@ -122,8 +117,6 @@ export class SlotPicker implements OnInit {
 
     this.srv.getdata('care', tv).subscribe({
       next: (res) => {
-        console.log('Add appointment response:', res);
-
         if (res.Status === 1) {
           this.closeSheet();
           this.toastr.success(res?.Data[0]?.[0]?.msg);

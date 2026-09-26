@@ -4,7 +4,6 @@ import {
   input,
   signal,
 } from '@angular/core';
-import { JsonPipe } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
 import { ConfirmationDialog } from '../../../../components/confirmation-dialog/confirmation-dialog';
@@ -14,7 +13,6 @@ import { ConfirmationDialog } from '../../../../components/confirmation-dialog/c
   standalone: true,
   imports: [
     MatIconModule,
-    JsonPipe,
     ConfirmationDialog,
   ],
   templateUrl: './profile-popover.html',

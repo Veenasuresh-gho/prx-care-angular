@@ -5,12 +5,11 @@ import {
   EventEmitter,
 } from '@angular/core';
 import { AppointmentDetails } from './appointment-details/appointment-details';
-import { JsonPipe } from '@angular/common';
 
 @Component({
   selector: 'app-appointment-preview-sheet',
   standalone: true,
-  imports: [AppointmentDetails, JsonPipe],
+  imports: [AppointmentDetails],
   templateUrl: './appointment-preview-sheet.html',
 })
 export class AppointmentPreviewSheet {
