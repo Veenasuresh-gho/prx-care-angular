@@ -3,6 +3,7 @@ import { Logo } from './components/logo/logo';
 import { NotificationPopover } from './components/notification-popover/notification-popover';
 import { ProfilePopover } from './components/profile-popover/profile-popover';
 import { AuthService } from '../../services/auth-service';
+import { ServicesDropdown } from './components/services-dropdown/services-dropdown';
 
 @Component({
   selector: 'app-navbar',
@@ -10,7 +11,8 @@ import { AuthService } from '../../services/auth-service';
   imports: [
     Logo,
     NotificationPopover,
-    ProfilePopover
+    ProfilePopover,
+    ServicesDropdown
   ],
   templateUrl: './navbar.html'
 })
