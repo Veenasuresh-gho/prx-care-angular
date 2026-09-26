@@ -1,4 +1,6 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
+import { GHOService } from '../../../../services/gho.service';
+import { MatIconModule } from '@angular/material/icon';
 
 interface Notification {
   id: number;
@@ -11,13 +13,16 @@ interface Notification {
 @Component({
   selector: 'app-notification-popover',
   standalone: true,
-  templateUrl: './notification-popover.html'
+  imports: [MatIconModule],
+  templateUrl: './notification-popover.html',
 })
-export class NotificationPopover {
+export class NotificationPopover implements OnInit {
+  private srv = inject(GHOService);
 
   isOpen = signal(false);
-
   loading = signal(false);
+
+  patientId: string | null = null;
 
   notifications = signal<Notification[]>([]);
 
@@ -27,11 +32,61 @@ export class NotificationPopover {
     );
   }
 
-  togglePopover() {
+  ngOnInit(): void {
+    this.patientId = sessionStorage.getItem('id');
+
+    this.getNotifications();
+  }
+
+  getNotifications(): void {
+    this.loading.set(true);
+
+    const tv = [
+      {
+        T: 'dk1',
+        V: this.patientId ?? '',
+      },
+      {
+        T: 'c10',
+        V: '2',
+      },
+    ];
+
+    this.srv.getdata('notification', tv).subscribe({
+      next: (res) => {
+        if (res.Status === 1 && Array.isArray(res.Data?.[0])) {
+          const notificationList: Notification[] = res.Data[0].map(
+            (item: any) => ({
+              id: item.ID,
+              title: item.Title,
+              message: item.Message,
+              date: item.CreatedAt,
+              isRead: false,
+            })
+          );
+
+          this.notifications.set(notificationList);
+        } else {
+          this.notifications.set([]);
+        }
+
+        this.loading.set(false);
+      },
+
+      error: (error) => {
+        console.error('Failed to load notifications:', error);
+
+        this.notifications.set([]);
+        this.loading.set(false);
+      },
+    });
+  }
+
+  togglePopover(): void {
     this.isOpen.update(value => !value);
   }
 
-  closePopover() {
+  closePopover(): void {
     this.isOpen.set(false);
   }
 
