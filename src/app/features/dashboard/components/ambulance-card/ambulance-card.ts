@@ -12,6 +12,6 @@ export class AmbulanceCard {
   private router = inject(Router);
 
   handleBookAmbulance(): void {
-    this.router.navigateByUrl('/en/emergency-services');
+    this.router.navigateByUrl('/emergency-services');
   }
 }

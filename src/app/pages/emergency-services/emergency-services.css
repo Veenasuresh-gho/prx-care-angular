@@ -1,0 +1,22 @@
+.ambulance-booking {
+    width: 100%;
+}
+
+.ambulance-header {
+    margin-bottom: 16px;
+}
+
+.ambulance-header p {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.ambulance-tabs {
+    width: 100%;
+}
+
+.ambulance-tab-content {
+    padding-top: 16px;
+}

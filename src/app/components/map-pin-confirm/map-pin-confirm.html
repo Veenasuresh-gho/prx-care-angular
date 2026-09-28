@@ -1,0 +1,81 @@
+<div class="map-confirm">
+    <div #mapContainer class="map"></div>
+    <div class="top-controls">
+        <button mat-icon-button type="button" class="control-button" (click)="handleBack()" aria-label="Go back">
+            <mat-icon>
+                arrow_back
+            </mat-icon>
+        </button>
+        <button mat-icon-button type="button" class="control-button" (click)="useCurrentLocation()"
+            [disabled]="locating" aria-label="Use current location">
+            @if (locating) {
+            <mat-spinner diameter="20"></mat-spinner>
+            } @else {
+            <mat-icon>
+                my_location
+            </mat-icon>
+            }
+        </button>
+    </div>
+
+    <div class="center-pin">
+        <div class="pin-tooltip">
+            <div class="pin-title">
+                Select your exact location
+            </div>
+            <div class="pin-subtitle">
+                Move the map to place the pin
+            </div>
+        </div>
+        <div class="pin">
+            <div class="pin-dot"></div>
+        </div>
+    </div>
+
+    <div class="bottom-sheet">
+        @if (resolving && !addressInfo) {
+        <div class="loading-address">
+            <mat-spinner diameter="22"></mat-spinner>
+
+            <span>
+                Locating address...
+            </span>
+        </div>
+
+        } @else {
+
+        <div class="address-title">
+            {{
+            addressInfo?.formattedAddress
+            || 'Select a location'
+            }}
+        </div>
+
+        @if (addressInfo?.latitude != null) {
+        <div class="coordinates">
+            {{ addressInfo?.latitude | number:'1.6-6' }},
+            {{ addressInfo?.longitude | number:'1.6-6' }}
+        </div>
+        }
+        }
+        <button mat-flat-button type="button" class="confirm-button" [disabled]="
+                !addressInfo ||
+                resolving ||
+                addressInfo?.latitude == null ||
+                addressInfo?.longitude == null
+            " (click)="handleConfirm()">
+            @if (resolving) {
+            <mat-spinner diameter="18"></mat-spinner>
+            <span>Locating...</span>
+            } @else {
+            <mat-icon>
+                check
+            </mat-icon>
+
+            <span>
+                Confirm & Continue
+            </span>
+            }
+        </button>
+    </div>
+</div>
