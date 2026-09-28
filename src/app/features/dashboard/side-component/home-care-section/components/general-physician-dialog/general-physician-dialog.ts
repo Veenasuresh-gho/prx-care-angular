@@ -72,7 +72,7 @@ export class GeneralPhysicianDialog implements OnInit {
 
   onCountryChange(country: any): void {
     this.form.patchValue({
-      countryCode: country.CountryCode,
+      countryCode: country.CountryID,
     });
   }
 
@@ -111,11 +111,11 @@ export class GeneralPhysicianDialog implements OnInit {
       {
         T: 'c1',
         V: JSON.stringify({
-          time: data.time ?? '',
-          name: data.name ?? '',
-          countryCode: data.countryCode ?? '',
-          phone: data.phone ?? '',
-          address: data.address ?? '',
+          PreferredTime: data.time ?? '',
+          PatientName: data.name ?? '',
+          CountryId: data.countryCode ?? '',
+          ContactNumber: data.phone ?? '',
+          HomeAddress: data.address ?? '',
         }),
       },
       {

@@ -5,41 +5,74 @@ import {
   Output,
   OnChanges,
   SimpleChanges,
+  inject,
+  OnInit,
 } from '@angular/core';
 
-import { FormsModule } from '@angular/forms';
+import {
+  ReactiveFormsModule,
+  FormBuilder,
+  Validators,
+} from '@angular/forms';
+
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 import { Dialog } from '../../../../../../components/dialog/dialog';
-import { CustomInput } from '../../../../../../components/input/input';
+import {
+  CountrySelectField,
+} from '../../../../../../components/country-select-field/country-select-field';
+import { Button } from '../../../../../../components/button/button';
+import { formatDateToDDMMYYYY } from '../../../../../../utils/date';
+import { GHOService } from '../../../../../../services/gho.service';
+import { ToastrService } from 'ngx-toastr';
+import { FileUploadService } from '../../../../../../services/file-upload-service';
 
 @Component({
   selector: 'app-pharmacy-delivery',
   standalone: true,
   imports: [
-    FormsModule,
+    ReactiveFormsModule,
     Dialog,
-    CustomInput,
+    MatFormFieldModule,
+    MatInputModule,
+    CountrySelectField,
+    Button,
   ],
   templateUrl: './pharmacy-delivery.html',
 })
-export class PharmacyDeliveryDialog implements OnChanges {
+export class PharmacyDeliveryDialog implements OnChanges, OnInit {
+
+  private fb = inject(FormBuilder);
+  private srv = inject(GHOService);
+  private toastr = inject(ToastrService);
+  private fileUploadService = inject(FileUploadService);
+
   @Input() open = false;
   @Input() booking: any = null;
 
   @Output() openChange = new EventEmitter<boolean>();
 
+  patientId: string | null = null;
   file: File | null = null;
 
-  date = '';
-  time = '';
-  name = '';
-  phone = '';
-  address = '';
-  notes = '';
-  countryId = '+91';
+  form = this.fb.group({
+    name: ['', Validators.required],
+    countryId: ['91', Validators.required],
+    phone: ['', Validators.required],
+    address: ['', Validators.required],
+    notes: [''],
+  });
+
+  isSubmitting = false;
+  isCancelling = false;
 
   get isViewMode(): boolean {
     return !!this.booking;
+  }
+
+  ngOnInit(): void {
+    this.patientId = sessionStorage.getItem('id');
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -54,10 +87,13 @@ export class PharmacyDeliveryDialog implements OnChanges {
     }
 
     if (this.booking) {
-      this.name = this.booking?.name || '';
-      this.phone = this.booking?.contact || '';
-      this.address = this.booking?.address || '';
-      this.notes = this.booking?.notes || '';
+      this.form.patchValue({
+        name: this.booking?.name || '',
+        countryId: this.booking?.countryCode || '91',
+        phone: this.booking?.contact || '',
+        address: this.booking?.address || '',
+        notes: this.booking?.notes || '',
+      });
     } else {
       this.resetForm();
     }
@@ -68,28 +104,123 @@ export class PharmacyDeliveryDialog implements OnChanges {
   }
 
   confirmBooking(): void {
-    console.log({
-      date: this.date,
-      time: this.time,
-      name: this.name,
-      phone: this.phone,
-      address: this.address,
-      notes: this.notes,
-      file: this.file,
+    if (this.isSubmitting) {
+      return;
+    }
+
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
+
+    this.isSubmitting = true;
+
+    const data = this.form.getRawValue();
+
+    const tags = [
+      {
+        T: 'dk1',
+        V: this.patientId ?? '',
+      },
+      {
+        T: 'c1',
+        V: JSON.stringify({
+          AdditionalNotes: data.notes ?? '',
+          PatientName: data.name ?? '',
+          CountryId: data.countryId ?? '',
+          ContactNumber: data.phone ?? '',
+          DeliveryAddress: data.address ?? '',
+        }),
+      },
+      {
+        T: 'c8',
+        V: '2',
+      },
+      {
+        T: 'c10',
+        V: '1',
+      },
+    ];
+
+    this.srv.getdata('hcare_', tags).subscribe({
+      next: async (res) => {
+        if (res.Status !== 1) {
+          this.isSubmitting = false;
+
+          this.toastr.error(
+            res?.Info || 'Unable to create pharmacy delivery request'
+          );
+
+          return;
+        }
+
+        const bookingId = res?.Data?.[0]?.[0]?.id;
+
+        if (!bookingId) {
+          this.isSubmitting = false;
+
+          this.toastr.error(
+            'Booking created, but booking ID was not returned'
+          );
+
+          return;
+        }
+
+        if (this.file) {
+          const uploadSuccess =
+            await this.fileUploadService.handleFileUpload(
+              String(bookingId),
+              this.patientId ?? '',
+              this.file,
+              '32'
+            );
+
+          if (!uploadSuccess) {
+            this.isSubmitting = false;
+            return;
+          }
+        }
+
+        this.toastr.success(
+          res?.Data?.[0]?.[0]?.msg ||
+          'Pharmacy delivery request submitted successfully'
+        );
+
+        this.isSubmitting = false;
+        this.close();
+      },
+
+      error: (error) => {
+        console.error('Pharmacy booking error:', error);
+
+        this.isSubmitting = false;
+
+        this.toastr.error(
+          'Unable to submit pharmacy delivery request'
+        );
+      },
     });
   }
 
   cancelBooking(): void {
-    console.log('Cancel booking');
+    if (this.isCancelling) {
+      return;
+    }
+
+    this.isCancelling = true;
+    this.isCancelling = false;
+  }
+
+  trackBooking(): void {
+    console.log('Track booking', this.booking);
   }
 
   openLocation(): void {
     if (this.isViewMode) {
       return;
     }
-
-    console.log('Open location picker');
   }
+
   openFile(): void {
     if (this.booking?.fileUrl) {
       window.open(this.booking.fileUrl, '_blank');
@@ -101,18 +232,23 @@ export class PharmacyDeliveryDialog implements OnChanges {
 
     this.file = input.files?.[0] || null;
   }
+
   onFileChange(file: File | null): void {
     this.file = file;
   }
 
   private resetForm(): void {
-    this.date = '';
-    this.time = '';
-    this.name = '';
-    this.phone = '';
-    this.address = '';
-    this.notes = '';
-    this.countryId = '+91';
+    this.form.reset({
+      name: '',
+      countryId: '91',
+      phone: '',
+      address: '',
+      notes: '',
+    });
+
     this.file = null;
+
+    this.isSubmitting = false;
+    this.isCancelling = false;
   }
 }
