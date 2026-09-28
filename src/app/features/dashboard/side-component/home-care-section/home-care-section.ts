@@ -12,11 +12,8 @@ import { GHOService } from '../../../../services/gho.service';
   imports: [Button, NgClass, GeneralPhysicianDialog, PharmacyDeliveryDialog, NursingServicesDialog, LabCollectionDialog],
   templateUrl: './home-care-section.html',
 })
-export class HomeCareSection implements OnInit {
-  countryList: any[] = [];
-
+export class HomeCareSection  {
   srv = inject(GHOService);
-
   showGeneralDialog = false;
   showPharmacyDialog = false;
   showNursingDialog = false;
@@ -56,24 +53,6 @@ export class HomeCareSection implements OnInit {
       onClick: () => this.openLabDialog(),
     },
   ];
-
-  ngOnInit(): void {
-    this.getCountryList();
-  }
-
-  getCountryList() {
-    const tv = [
-      { T: 'c10', V: '99' }
-    ];
-    this.srv.getdata('lists', tv).subscribe({
-      next: (res) => {
-        if (res.Status === 1) {
-          this.countryList = res.Data;
-          console.log(this.countryList)
-        }
-      },
-    });
-  }
 
   openGeneralDialog(): void {
     this.showGeneralDialog = true;
