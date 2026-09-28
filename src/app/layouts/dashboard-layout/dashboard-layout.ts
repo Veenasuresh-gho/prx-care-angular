@@ -74,9 +74,6 @@ export class DashboardLayout implements OnInit {
       next: (res) => {
         if (res.Status === 1) {
           this.patientDetails = res.Data[0][0];
-
-          console.log(this.patientDetails);
-
           this.cdr.markForCheck();
         }
       },
