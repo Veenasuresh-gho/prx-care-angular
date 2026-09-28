@@ -1,0 +1,165 @@
+<form [formGroup]="ambulanceForm" (ngSubmit)="submit()" class="w-full space-y-5 pt-8">
+    <mat-form-field appearance="outline" class="w-full">
+        <mat-label>
+            Patient Name
+        </mat-label>
+        <input matInput formControlName="patientName" placeholder="Enter patient name" />
+        @if (
+        ambulanceForm.get('patientName')?.hasError('required') &&
+        ambulanceForm.get('patientName')?.touched
+        ) {
+        <mat-error>
+            Patient name is required
+        </mat-error>
+        }
+    </mat-form-field>
+    <div class="w-full">
+        <div class="flex w-full gap-2">
+            <mat-form-field appearance="outline" class="w-50">
+                <mat-label>
+                    Country
+                </mat-label>
+                <mat-select formControlName="countryId" (selectionChange)="onCountryChange($event.value)">
+                    @if (loadingCountries) {
+                    <mat-option disabled>
+                        Loading...
+                    </mat-option>
+                    }
+                    @else {
+
+                    @for (
+                    country of countries;
+                    track country.CountryID
+                    ) {
+
+                    <mat-option [value]="country.CountryID">
+
+                        +{{ country.CountryCode }}
+                        {{ country.CountryName }}
+
+                    </mat-option>
+
+                    }
+
+                    }
+
+                </mat-select>
+
+                @if (
+                ambulanceForm.get('countryId')?.hasError('required') &&
+                ambulanceForm.get('countryId')?.touched
+                ) {
+
+                <mat-error>
+                    Country is required
+                </mat-error>
+
+                }
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="flex-1">
+                <mat-label>
+                    Phone
+                </mat-label>
+                <input matInput formControlName="phone" type="tel" placeholder="Enter contact number"
+                    [attr.minlength]="selectedCountry?.MinLength" [attr.maxlength]="selectedCountry?.MaxLength" />
+
+                @if (
+                ambulanceForm.get('phone')?.hasError('required') &&
+                ambulanceForm.get('phone')?.touched
+                ) {
+
+                <mat-error>
+                    Contact number is required
+                </mat-error>
+
+                }
+
+                @if (
+                ambulanceForm.get('phone')?.hasError('pattern') &&
+                ambulanceForm.get('phone')?.touched
+                ) {
+
+                <mat-error>
+                    Enter a valid phone number
+                </mat-error>
+
+                }
+
+                @if (
+                ambulanceForm.get('phone')?.hasError('minlength') &&
+                ambulanceForm.get('phone')?.touched
+                ) {
+
+                <mat-error>
+                    Phone number must be at least
+                    {{ selectedCountry?.MinLength }}
+                    digits
+                </mat-error>
+
+                }
+
+                @if (
+                ambulanceForm.get('phone')?.hasError('maxlength') &&
+                ambulanceForm.get('phone')?.touched
+                ) {
+
+                <mat-error>
+                    Phone number cannot exceed
+                    {{ selectedCountry?.MaxLength }}
+                    digits
+                </mat-error>
+
+                }
+            </mat-form-field>
+        </div>
+    </div>
+    <mat-form-field appearance="outline" class="w-full">
+        <mat-label>
+            Pickup Address
+        </mat-label>
+        <input matInput formControlName="pickupAddress" placeholder="Select pickup location" readonly
+            (click)="selectPickupLocation()" />
+        <mat-icon matSuffix class="cursor-pointer" (click)="selectPickupLocation()">
+            location_on
+        </mat-icon>
+        @if (
+        ambulanceForm.get('pickupAddress')?.hasError('required') &&
+        ambulanceForm.get('pickupAddress')?.touched
+        ) {
+        <mat-error>
+            Pickup address is required
+        </mat-error>
+        }
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="w-full">
+        <mat-label>
+            Destination Address
+        </mat-label>
+        <input matInput formControlName="destinationAddress" placeholder="Select destination location" readonly
+            (click)="selectDestinationLocation()" />
+        <mat-icon matSuffix class="cursor-pointer" (click)="selectDestinationLocation()">
+            location_on
+        </mat-icon>
+        @if (
+        ambulanceForm.get('destinationAddress')?.hasError('required') &&
+        ambulanceForm.get('destinationAddress')?.touched
+        ) {
+        <mat-error>
+            Destination address is required
+        </mat-error>
+        }
+    </mat-form-field>
+    <div class="flex justify-end pt-2">
+        <div class="flex justify-end pt-2">
+            <button mat-flat-button type="submit" [disabled]="submitting">
+                @if (submitting) {
+                <mat-spinner diameter="20">
+                </mat-spinner>
+                }
+                @else {
+                Confirm
+                }
+            </button>
+        </div>
+    </div>
+</form>

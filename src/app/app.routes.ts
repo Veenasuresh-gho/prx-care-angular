@@ -13,6 +13,7 @@ import { DoctorDetails } from './pages/doctor-details/doctor-details';
 import { ClinicalHistory } from './pages/clinical-history/clinical-history';
 import { Allergy } from './pages/allergy/allergy';
 import { HealthInsurance } from './pages/health-insurance/health-insurance';
+import { EmergencyServicesComponent } from './pages/emergency-services/emergency-services';
 
 export const routes: Routes = [
     {
@@ -56,17 +57,21 @@ export const routes: Routes = [
         path: 'emergency-contacts',
         component: EmergencyContacts
     },
-      {
+    {
         path: 'facilitator',
         component: ClinicalHistory
     },
-       {
+    {
         path: 'health-insurance',
         component: HealthInsurance
     },
-      {
+    {
         path: 'allergy',
         component: Allergy
+    },
+    {
+        path: 'emergency-services',
+        component: EmergencyServicesComponent
     },
 
 

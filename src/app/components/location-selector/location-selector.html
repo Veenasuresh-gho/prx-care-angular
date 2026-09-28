@@ -1,0 +1,259 @@
+<div class="location-dialog">
+
+    @if (dialogStep === 'search') {
+
+    <!-- Header -->
+    <div class="dialog-header">
+
+        <button mat-icon-button type="button" (click)="close()" aria-label="Close">
+            <mat-icon>arrow_back</mat-icon>
+        </button>
+
+        <div class="dialog-title">
+            Select Location
+        </div>
+
+    </div>
+
+
+    <!-- Content -->
+    <div class="dialog-content">
+
+        <!-- Search -->
+        <mat-form-field appearance="outline" class="search-field">
+
+            <mat-label>
+                Search location
+            </mat-label>
+
+            <mat-icon matPrefix>
+                search
+            </mat-icon>
+
+            <input matInput type="text" [formControl]="searchControl" placeholder="Search for area, street, landmark..."
+                autocomplete="off" />
+
+            @if (loadingSuggestions) {
+
+            <mat-spinner matSuffix diameter="20" />
+
+            }
+
+        </mat-form-field>
+
+
+        <!-- Google Suggestions -->
+        @if (suggestions.length > 0) {
+
+        <div class="suggestions">
+
+            @for (
+            item of suggestions;
+            track item.place_id
+            ) {
+
+            <button type="button" class="suggestion-item" (click)="selectSuggestion(item)">
+
+                <div class="suggestion-icon">
+                    <mat-icon>
+                        location_on
+                    </mat-icon>
+                </div>
+
+                <div class="suggestion-content">
+
+                    <div class="suggestion-title">
+                        {{
+                        item.structured_formatting?.main_text
+                        || item.description
+                        }}
+                    </div>
+
+                    @if (
+                    item.structured_formatting?.secondary_text
+                    ) {
+
+                    <div class="suggestion-subtitle">
+                        {{
+                        item.structured_formatting.secondary_text
+                        }}
+                    </div>
+
+                    }
+
+                </div>
+
+            </button>
+
+            }
+
+        </div>
+
+        }
+
+
+        <!-- Current Location -->
+        @if (allowCurrentLocation) {
+
+        <button type="button" class="current-location" (click)="useCurrentLocation()"
+            [disabled]="loadingCurrentLocation">
+
+            <div class="current-location-icon">
+
+                @if (loadingCurrentLocation) {
+
+                <mat-spinner diameter="22" />
+
+                } @else {
+
+                <mat-icon>
+                    my_location
+                </mat-icon>
+
+                }
+
+            </div>
+
+
+            <div class="current-location-content">
+
+                <div class="current-location-title">
+
+                    @if (loadingCurrentLocation) {
+                    Getting current location...
+                    } @else {
+                    Use my current location
+                    }
+
+                </div>
+
+                @if (!loadingCurrentLocation) {
+
+                <div class="current-location-subtitle">
+                    Use your device location
+                </div>
+
+                }
+
+            </div>
+
+
+            @if (!loadingCurrentLocation) {
+
+            <mat-icon class="current-arrow">
+                chevron_right
+            </mat-icon>
+
+            }
+
+        </button>
+
+        }
+
+
+        <!-- Saved Addresses -->
+        @if (showSavedAddresses) {
+
+        <div class="saved-section">
+
+            <div class="section-header">
+                <span>SAVED ADDRESSES</span>
+            </div>
+
+
+            @if (loadingAddresses) {
+
+            <div class="loading">
+                <mat-spinner diameter="28" />
+            </div>
+
+            }
+
+            @else if (savedAddresses.length === 0) {
+
+            <div class="empty">
+
+                <mat-icon>
+                    location_off
+                </mat-icon>
+
+                <span>
+                    No saved addresses yet.
+                </span>
+
+            </div>
+
+            }
+
+            @else {
+
+            <div class="address-list">
+
+                @for (
+                address of savedAddresses;
+                track address.addressID
+                ) {
+
+                <button type="button" class="address-item" (click)="selectSavedAddress(address)">
+
+                    <div class="address-icon">
+
+                        <mat-icon>
+                            {{
+                            getAddressIcon(address.label)
+                            }}
+                        </mat-icon>
+
+                    </div>
+
+
+                    <div class="address-content">
+
+                        <div class="address-title">
+
+                            {{
+                            address.label ||
+                            'Saved Address'
+                            }}
+
+                        </div>
+
+                        <div class="address-text">
+                            {{
+                            getAddressText(address)
+                            }}
+                        </div>
+
+                    </div>
+
+
+                    <mat-icon class="arrow">
+                        chevron_right
+                    </mat-icon>
+
+                </button>
+
+                }
+
+            </div>
+
+            }
+
+        </div>
+
+        }
+
+    </div>
+
+    }
+
+
+    <!-- MAP STEP -->
+    @if (dialogStep === 'map') {
+
+    <app-map-pin-confirm [initialLocation]="pendingLocation" (back)="backToSearch()"
+        (confirm)="handleMapConfirm($event)" />
+
+    }
+
+</div>

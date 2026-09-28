@@ -1,0 +1,82 @@
+<div class="confirmation-dialog">
+    <div class="dialog-header">
+        <div class="header-icon">
+            <mat-icon>local_shipping</mat-icon>
+        </div>
+        <div class="header-content">
+            <h2 class="dialog-title">
+                Confirm Ambulance Booking
+            </h2>
+            <p class="dialog-description">
+                Review your trip details and estimated fare before confirming.
+            </p>
+        </div>
+    </div>
+    <div class="summary-card">
+        <div class="summary-title">
+            <mat-icon>route</mat-icon>
+            <span>Trip Summary</span>
+        </div>
+        <div class="detail-row">
+            <div class="detail-info">
+                <div class="detail-icon">
+                    <mat-icon>straighten</mat-icon>
+                </div>
+                <div>
+                    <span class="detail-label">
+                        Total Distance
+                    </span>
+                    <span class="detail-value">
+                        {{ data.distance }}
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="detail-row">
+            <div class="detail-info">
+                <div class="detail-icon">
+                    <mat-icon>schedule</mat-icon>
+                </div>
+                <div>
+                    <span class="detail-label">
+                        Estimated Duration
+                    </span>
+
+                    <span class="detail-value">
+                        {{ data.duration }}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="amount-card">
+
+        <div>
+            <span class="amount-label">
+                Estimated Fare
+            </span>
+
+            <span class="amount-note">
+                Final amount based on trip details
+            </span>
+        </div>
+
+        <span class="amount-value">
+            ₹{{ data.amount | number:'1.0-2' }}
+        </span>
+
+    </div>
+
+
+    <div class="dialog-actions">
+        <button mat-stroked-button type="button" class="cancel-button" [disabled]="loading" (click)="cancel()"> Cancel
+        </button>
+        <button mat-flat-button type="button" class="confirm-button" [disabled]="loading" (click)="confirm()">
+            @if (loading) { <mat-spinner diameter="18"> </mat-spinner> <span>
+                Booking... </span>
+            } @else { <span> Confirm Booking </span>
+            } </button>
+    </div>
+
+</div>
