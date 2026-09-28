@@ -1,0 +1,169 @@
+<div class="my-bookings">
+    @if (loading) {
+    <div class="state-container">
+        <mat-spinner diameter="32"></mat-spinner>
+        <p>
+            Loading ambulance bookings...
+        </p>
+    </div>
+    }
+    @else if (error) {
+    <div class="state-container error-state">
+        <div class="state-icon error-icon">
+            <mat-icon>
+                local_shipping
+            </mat-icon>
+        </div>
+        <p class="error-text">
+            Failed to load ambulance bookings.
+        </p>
+        <button mat-stroked-button type="button" (click)="retry()">
+            Try Again
+        </button>
+    </div>
+    }
+    @else if (bookings.length === 0) {
+    <div class="state-container">
+        <div class="state-icon">
+            <mat-icon>
+                local_shipping
+            </mat-icon>
+        </div>
+        <h3>
+            No ambulance bookings
+        </h3>
+        <p>
+            You don't have any ambulance bookings yet.
+        </p>
+    </div>
+    }
+    @else {
+    <div class="page-header pt-4">
+        <h2>
+            My Ambulance Bookings
+        </h2>
+        <p>
+            View and manage your ambulance requests
+        </p>
+    </div>
+
+    <div class="booking-list">
+        @for (
+        booking of bookings;
+        track booking.ID
+        ) {
+        <div class="booking-card">
+            <div class="booking-header">
+                <div class="booking-heading">
+                    <div class="ambulance-icon">
+                        <mat-icon>
+                            local_shipping
+                        </mat-icon>
+                    </div>
+                    <div>
+                        <h3>
+                            Ambulance Booking
+                            #{{ booking.ID }}
+                        </h3>
+                        <p>
+                            {{ booking.RequestedOn || '-' }}
+                        </p>
+                    </div>
+                </div>
+                <span class="status" [ngClass]="
+                                getStatusClass(booking.Status)
+                            ">
+                    {{ booking.Status || '-' }}
+                </span>
+            </div>
+            <div class="patient-details">
+                <div class="detail">
+                    <div class="detail-label">
+                        Patient
+                    </div>
+                    <div class="detail-value">
+                        {{ booking.PatientName || '-' }}
+                    </div>
+                </div>
+                <div class="detail contact-detail">
+                    <mat-icon>
+                        phone
+                    </mat-icon>
+                    <div>
+                        <div class="detail-label">
+                            Contact
+                        </div>
+                        <div class="detail-value">
+                            {{ booking.ContactNumber || '-' }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="route">
+                <div class="location-row">
+                    <div class="location-indicator">
+                        <mat-icon class="pickup-icon">
+                            location_on
+                        </mat-icon>
+                        <div class="route-line"></div>
+                    </div>
+                    <div class="location-content">
+                        <div class="location-label">
+                            Pickup Location
+                        </div>
+                        <div class="location-address">
+                            {{ booking.PickupAddress || '-' }}
+                        </div>
+                    </div>
+                </div>
+                <div class="location-row">
+                    <div class="location-indicator">
+                        <mat-icon class="drop-icon">
+                            location_on
+                        </mat-icon>
+                    </div>
+                    <div class="location-content">
+                        <div class="location-label">
+                            Drop Location
+                        </div>
+                        <div class="location-address">
+                            {{ booking.DropAddress || '-' }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="booking-footer">
+                <div class="requested-time">
+                    <mat-icon>
+                        schedule
+                    </mat-icon>
+                    <span>
+                        Requested on
+                        {{ booking.RequestedOn || '-' }}
+                    </span>
+                </div>
+
+                @if (
+                booking.Status?.toLowerCase() === 'booked'
+                ) {
+                <button mat-stroked-button type="button" class="cancel-button" [disabled]="isCancelling(booking)"
+                    (click)="cancelBooking(booking)">
+                    @if (isCancelling(booking)) {
+                    <span>
+                        Cancelling...
+                    </span>
+                    }
+                    @else {
+                    <span>
+                        Cancel Booking
+                    </span>
+                    }
+                </button>
+                }
+            </div>
+        </div>
+        }
+    </div>
+    }
+</div>
