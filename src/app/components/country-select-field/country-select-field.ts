@@ -2,13 +2,15 @@ import {
   Component,
   EventEmitter,
   Input,
-  Output,
   OnInit,
+  Output,
 } from '@angular/core';
 
 import { FormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+
 import { GHOService } from '../../services/gho.service';
-import { JsonPipe } from '@angular/common';
 
 export interface Country {
   CountryID: number;
@@ -21,7 +23,11 @@ export interface Country {
 @Component({
   selector: 'app-country-select-field',
   standalone: true,
-  imports: [FormsModule, JsonPipe],
+  imports: [
+    FormsModule,
+    MatFormFieldModule,
+    MatSelectModule,
+  ],
   templateUrl: './country-select-field.html',
 })
 export class CountrySelectField implements OnInit {
@@ -38,7 +44,7 @@ export class CountrySelectField implements OnInit {
 
   countryList: Country[] = [];
 
-  constructor(private srv: GHOService) { }
+  constructor(private srv: GHOService) {}
 
   ngOnInit(): void {
     this.getCountryList();
@@ -46,7 +52,7 @@ export class CountrySelectField implements OnInit {
 
   getCountryList(): void {
     const tv = [
-      { T: 'c10', V: '99' }
+      { T: 'c10', V: '99' },
     ];
 
     this.srv.getdata('lists', tv).subscribe({

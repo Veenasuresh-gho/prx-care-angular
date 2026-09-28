@@ -6,42 +6,111 @@ import {
   OnChanges,
   SimpleChanges,
   inject,
+  OnInit,
 } from '@angular/core';
 
-import { FormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 
 import { Dialog } from '../../../../../../components/dialog/dialog';
 import { Button } from '../../../../../../components/button/button';
-import { CustomInput } from '../../../../../../components/input/input';
+
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { MatInputModule } from '@angular/material/input';
+
+import { CountrySelectField } from '../../../../../../components/country-select-field/country-select-field';
+import { formatDateToDDMMYYYY } from '../../../../../../utils/date';
+import { GHOService } from '../../../../../../services/gho.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-nursing-services',
   standalone: true,
   imports: [
-    FormsModule,
+    ReactiveFormsModule,
     Dialog,
     Button,
-    CustomInput,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatInputModule,
+    CountrySelectField,
   ],
   templateUrl: './nursing-services.html',
 })
-export class NursingServicesDialog implements OnChanges {
+export class NursingServicesDialog implements OnChanges, OnInit {
+
+  private fb = inject(FormBuilder);
+  private srv = inject(GHOService);
+  private toastr = inject(ToastrService);
+
+  patientId: string | null = null;
+
   @Input() open = false;
   @Input() booking: any = null;
 
   @Output() openChange = new EventEmitter<boolean>();
   @Output() refetch = new EventEmitter<void>();
 
-  services = '';
-  duration = '';
-  date = '';
-  name = '';
-  phone = '';
-  countryId = '';
-  address = '';
+  isLoading = false;
+
+  form = this.fb.group({
+    date: [''],
+    name: ['', Validators.required],
+    countryCode: ['91', Validators.required],
+    phone: ['', Validators.required],
+    address: ['', Validators.required],
+    services: ['', Validators.required],
+    duration: ['', Validators.required],
+  });
 
   isSubmitting = false;
   isCancelling = false;
+
+  nursingTypes = [
+    { label: 'Elderly Care', value: 'Elderly Care' },
+    {
+      label: 'Chronic Disease Management',
+      value: 'Chronic Disease Management',
+    },
+    { label: 'Palliative Care', value: 'Palliative Care' },
+    { label: 'Mother & Baby Care', value: 'Mother & Baby Care' },
+    {
+      label: 'Wound Dressing & Care',
+      value: 'Wound Dressing & Care',
+    },
+    { label: 'IV / IM Injections', value: 'IV / IM Injections' },
+    {
+      label: "Catheter & Ryles's Tube Care",
+      value: "Catheter & Ryles's Tube Care",
+    },
+    { label: 'Home ICU Support', value: 'Home ICU Support' },
+    { label: 'Tracheostomy Care', value: 'Tracheostomy Care' },
+    {
+      label: 'Respiratory / Nebulization Care',
+      value: 'Respiratory / Nebulization Care',
+    },
+    {
+      label: 'Physiotherapy Assistance',
+      value: 'Physiotherapy Assistance',
+    },
+    { label: 'Diabetes Care', value: 'Diabetes Care' },
+    {
+      label: 'Blood Pressure Monitoring',
+      value: 'Blood Pressure Monitoring',
+    },
+  ];
+
+  durationTypes = [
+    { label: '1 Hour', value: '1 Hour' },
+    { label: '2 Hours', value: '2 Hours' },
+    { label: '3 Hours', value: '3 Hours' },
+    { label: '4 Hours', value: '4 Hours' },
+    { label: '5 Hours', value: '5 Hours' },
+  ];
 
   get isViewMode(): boolean {
     return !!this.booking;
@@ -53,19 +122,25 @@ export class NursingServicesDialog implements OnChanges {
     }
   }
 
+  ngOnInit(): void {
+    this.patientId = sessionStorage.getItem('id');
+  }
+
   private loadBooking(): void {
     if (!this.open) {
       return;
     }
 
     if (this.booking) {
-      this.services = this.booking?.care || '';
-      this.duration = this.booking?.duration || '';
-      this.date = this.booking?.date || '';
-      this.name = this.booking?.name || '';
-      this.phone = this.booking?.contact || '';
-      this.address = this.booking?.address || '';
-      this.countryId = this.booking?.countryId || '';
+      this.form.patchValue({
+        services: this.booking?.care || '',
+        duration: this.booking?.duration || '',
+        date: this.booking?.date || '',
+        name: this.booking?.name || '',
+        phone: this.booking?.contact || '',
+        countryCode: this.booking?.countryId || '91',
+        address: this.booking?.address || '',
+      });
     } else {
       this.resetForm();
     }
@@ -76,21 +151,30 @@ export class NursingServicesDialog implements OnChanges {
   }
 
   resetForm(): void {
-    this.services = '';
-    this.duration = '';
-    this.date = '';
-    this.name = '';
-    this.phone = '';
-    this.countryId = '';
-    this.address = '';
+    this.form.reset({
+      date: '',
+      name: '',
+      countryCode: '91',
+      phone: '',
+      address: '',
+      services: '',
+      duration: '',
+    });
+
+    this.form.markAsPristine();
+    this.form.markAsUntouched();
+  }
+
+  onCountryChange(country: any): void {
+    this.form.controls.countryCode.setValue(
+      country.CountryCode
+    );
   }
 
   openLocation(): void {
     if (this.isViewMode) {
       return;
     }
-
-    console.log('Open location picker');
   }
 
   confirmBooking(): void {
@@ -98,19 +182,77 @@ export class NursingServicesDialog implements OnChanges {
       return;
     }
 
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
+
+    if (!this.patientId) {
+      this.toastr.error('Patient ID not found');
+      return;
+    }
+
     this.isSubmitting = true;
+    this.isLoading = true;
 
-    console.log({
-      services: this.services,
-      duration: this.duration,
-      date: this.date,
-      name: this.name,
-      phone: this.phone,
-      countryId: this.countryId,
-      address: this.address,
+    const data = this.form.getRawValue();
+
+    const formattedDate = data.date
+      ? formatDateToDDMMYYYY(data.date)
+      : '';
+
+    const tags = [
+      {
+        T: 'dk1',
+        V: this.patientId,
+      },
+      {
+        T: 'dk2',
+        V: formattedDate,
+      },
+      {
+        T: 'c1',
+        V: JSON.stringify({
+          name: data.name ?? '',
+          countryCode: data.countryCode ?? '',
+          phone: data.phone ?? '',
+          address: data.address ?? '',
+          services: data.services ?? '',
+          duration: data.duration ?? '',
+        }),
+      },
+      {
+        T: 'c8',
+        V: '3',
+      },
+      {
+        T: 'c10',
+        V: '1',
+      },
+    ];
+
+    this.srv.getdata('hcare_', tags).subscribe({
+      next: (res) => {
+        this.isSubmitting = false;
+        this.isLoading = false;
+
+        if (res.Status === 1) {
+          this.toastr.success(res?.Data?.[0]?.[0]?.msg);
+          this.refetch.emit();
+          this.close();
+        } else {
+          this.toastr.error(res?.Info || 'Booking failed');
+        }
+      },
+
+      error: (error) => {
+        this.isSubmitting = false;
+        this.isLoading = false;
+
+        console.error('Nursing booking error:', error);
+        this.toastr.error('Something went wrong. Please try again.');
+      },
     });
-
-    // Add your GHOService booking API here.
   }
 
   cancelBooking(): void {
@@ -120,13 +262,16 @@ export class NursingServicesDialog implements OnChanges {
 
     this.isCancelling = true;
 
-    console.log('Cancel nursing booking:', this.booking.id);
-
-    // Add your GHOService cancel API here.
+    console.log(
+      'Cancel nursing booking:',
+      this.booking.id
+    );
   }
 
   trackBooking(): void {
-    // Tracker will be added separately later.
-    console.log('Track booking:', this.booking?.bookingId);
+    console.log(
+      'Track booking:',
+      this.booking?.bookingId
+    );
   }
 }

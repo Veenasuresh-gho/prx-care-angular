@@ -1,18 +1,22 @@
-<div class="w-full">
-    <select [(ngModel)]="selectedCountryCode" (ngModelChange)="onCountryChange($event)" [disabled]="disabled"
-        class="h-11 w-full min-w-0 rounded-md border border-border bg-white px-3 text-sm text-black outline-none transition focus:border-primary focus:ring-1 focus:ring-primary disabled:bg-light-grey">
-        <option value="" disabled>
-            {{ placeholder }}
-        </option>
+<mat-form-field
+  appearance="outline"
+  class="w-full min-w-[300px]"
+>
+  <mat-label>{{ placeholder }}</mat-label>
 
-        @for (country of countryList; track country.CountryID) {
-        <option [value]="country.CountryCode">
-            @if (selectedCountryCode === country.CountryCode) {
-            +{{ country.CountryCode }}
-            } @else {
-            +{{ country.CountryCode }} {{ country.CountryName }}
-            }
-        </option>
+  <mat-select
+    [(ngModel)]="selectedCountryCode"
+    (ngModelChange)="onCountryChange($event)"
+    [disabled]="disabled"
+  >
+    @for (country of countryList; track country.CountryID) {
+      <mat-option [value]="country.CountryCode">
+        +{{ country.CountryCode }}
+
+        @if (selectedCountryCode !== country.CountryCode) {
+          {{ country.CountryName }}
         }
-    </select>
-</div>
+      </mat-option>
+    }
+  </mat-select>
+</mat-form-field>

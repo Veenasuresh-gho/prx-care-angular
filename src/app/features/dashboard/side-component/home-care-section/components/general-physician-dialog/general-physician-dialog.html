@@ -16,45 +16,77 @@
                 Book a physical consultation at your home
             </p>
         </div>
+
         <div class="my-2 border-t border-gray-200"></div>
+
         <!-- Form -->
         <div class="space-y-5">
+
             <!-- Date & Time -->
             <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                <!-- Date is optional -->
-                <app-input label="Date" type="date" name="date" id="date" formControlName="date"
-                    [disabled]="isViewMode" />
-                <!-- Time is required -->
-                <app-input label="Time" type="time" name="time" id="time" formControlName="time" [disabled]="isViewMode"
-                    [required]="true" [error]="
-            form.controls.time.touched &&
-            form.controls.time.hasError('required')
-              ? 'Time is required'
-              : ''
-          " />
+
+                <!-- Date -->
+                <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>Date</mat-label>
+
+                    <input matInput type="date" formControlName="date" [disabled]="isViewMode" />
+                </mat-form-field>
+
+                <!-- Time -->
+                <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>Time</mat-label>
+
+                    <input matInput type="time" formControlName="time" [disabled]="isViewMode" />
+
+                    @if (
+                    form.controls.time.touched &&
+                    form.controls.time.hasError('required')
+                    ) {
+                    <mat-error>
+                        Time is required
+                    </mat-error>
+                    }
+                </mat-form-field>
+
             </div>
+
             <!-- Name -->
-            <app-input label="Name" placeholder="Enter your name" type="text" id="name" formControlName="name"
-                [required]="true" [error]="
-          form.controls.name.touched &&
-          form.controls.name.hasError('required')
-            ? 'Name is required'
-            : ''
-        " />
+            <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Name</mat-label>
+
+                <input matInput type="text" formControlName="name" placeholder="Enter your name"
+                    [disabled]="isViewMode" />
+
+                @if (
+                form.controls.name.touched &&
+                form.controls.name.hasError('required')
+                ) {
+                <mat-error>
+                    Name is required
+                </mat-error>
+                }
+            </mat-form-field>
+
             <!-- Contact Number -->
             <div>
+
                 <label class="mb-2 block text-sm font-medium text-gray-700">
                     Contact Number
                     <span class="text-red-500">*</span>
                 </label>
+
                 <div class="flex flex-col gap-2 sm:flex-row">
+
+                    <!-- Country -->
                     @if (!isViewMode) {
-                    <div class="mt-1 w-full sm:w-20">
+                    <div class="w-full sm:w-24">
+
                         <app-country-select-field [selectedCountryCode]="
                   form.controls.countryCode.value ?? ''
                 " (selectedCountryCodeChange)="
                   form.controls.countryCode.setValue($event)
                 " placeholder="Select country" (countryChange)="onCountryChange($event)" />
+
                         @if (
                         form.controls.countryCode.touched &&
                         form.controls.countryCode.hasError('required')
@@ -63,57 +95,61 @@
                             Country is required
                         </p>
                         }
+
                     </div>
                     }
+
+                    <!-- Phone -->
                     <div class="min-w-0 flex-1">
-                        <app-input placeholder="Enter phone number" type="tel" id="phone" formControlName="phone"
-                            [required]="true" [error]="
-                form.controls.phone.touched &&
-                form.controls.phone.hasError('required')
-                  ? 'Phone number is required'
-                  : ''
-              " />
+
+                        <mat-form-field appearance="outline" class="w-full">
+                            <mat-label>Phone Number</mat-label>
+
+                            <input matInput type="tel" formControlName="phone" placeholder="Enter phone number"
+                                [disabled]="isViewMode" />
+
+                            @if (
+                            form.controls.phone.touched &&
+                            form.controls.phone.hasError('required')
+                            ) {
+                            <mat-error>
+                                Phone number is required
+                            </mat-error>
+                            }
+                        </mat-form-field>
+
                     </div>
 
                 </div>
+
             </div>
 
             <!-- Address -->
             <div>
-                <label class="mb-2 block text-sm font-medium text-gray-700">
-                    Address
-                    <span class="text-red-500">*</span>
-                </label>
 
-                <div class="relative" [class.cursor-pointer]="!isViewMode" (click)="openLocation()">
-                    <textarea formControlName="address" name="address" rows="3"
-                        placeholder="Select your service address" [disabled]="isViewMode" [readonly]="isViewMode" class="w-full resize-none rounded-lg
-                   border border-gray-300
-                   bg-white px-3 py-2.5 pr-11
-                   text-sm text-gray-900
-                   outline-none
-                   placeholder:text-gray-400
-                   focus:border-primary
-                   focus:ring-2
-                   focus:ring-primary/10
-                   disabled:bg-gray-100
-                   disabled:text-gray-500"></textarea>
+                <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>Address</mat-label>
+
+                    <textarea matInput formControlName="address" rows="3" placeholder="Select your service address"
+                        [disabled]="isViewMode" [readonly]="isViewMode"
+                        (click)="!isViewMode && openLocation()"></textarea>
 
                     @if (!isViewMode) {
-                    <span class="pointer-events-none absolute right-3 top-3 text-gray-400">
-                        <span class="text-lg">⌖</span>
-                    </span>
+                    <mat-icon matIconSuffix class="cursor-pointer" (click)="openLocation()">
+                        location_on
+                    </mat-icon>
                     }
-                </div>
 
-                @if (
-                form.controls.address.touched &&
-                form.controls.address.hasError('required')
-                ) {
-                <p class="mt-1 text-xs text-red-500">
-                    Address is required
-                </p>
-                }
+                    @if (
+                    form.controls.address.touched &&
+                    form.controls.address.hasError('required')
+                    ) {
+                    <mat-error>
+                        Address is required
+                    </mat-error>
+                    }
+                </mat-form-field>
+
             </div>
 
         </div>

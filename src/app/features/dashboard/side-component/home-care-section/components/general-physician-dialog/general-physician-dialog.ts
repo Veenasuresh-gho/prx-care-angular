@@ -20,6 +20,9 @@ import { CountrySelectField } from '../../../../../../components/country-select-
 import { GHOService } from '../../../../../../services/gho.service';
 import { formatDateToDDMMYYYY } from '../../../../../../utils/date';
 import { ToastrService } from 'ngx-toastr';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-general-physician-dialog',
@@ -30,6 +33,9 @@ import { ToastrService } from 'ngx-toastr';
     Dialog,
     Button,
     CountrySelectField,
+    MatFormFieldModule,
+    MatInputModule,
+    MatIconModule
   ],
   templateUrl: './general-physician-dialog.html',
 })
