@@ -1,0 +1,41 @@
+<section class="w-full bg-[#2D4680] text-white">
+  <div class="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+    <div class="flex w-full flex-col gap-4">
+      <!-- Breadcrumbs -->
+      @if (breadcrumbs.length > 0) {
+        <nav
+          class="flex flex-wrap items-center gap-1 text-sm"
+          aria-label="Breadcrumb"
+        >
+          @for (item of breadcrumbs; track $index) {
+            @if (!$last) {
+              <a
+                [href]="item.href || '#'"
+                class="text-white/90 transition-colors hover:text-white hover:underline"
+              >
+                {{ item.label }}
+              </a>
+              <mat-icon
+                class="!h-4 !w-4 !text-[16px] !leading-4 text-white/70"
+              >
+                chevron_right
+              </mat-icon>
+            } @else {
+              <span
+                class="text-white/70"
+                aria-current="page"
+              >
+                {{ item.label }}
+              </span>
+            }
+          }
+        </nav>
+      }
+      <h3
+        class="m-0 p-0 text-2xl font-semibold leading-tight text-white sm:text-2xl"
+      >
+        {{ title }}
+      </h3>
+    </div>
+  </div>
+</section>
