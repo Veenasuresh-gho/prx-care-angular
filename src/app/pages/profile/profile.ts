@@ -7,10 +7,11 @@ import {
 import { ROUTER_OUTLET_DATA } from '@angular/router';
 
 import { ProfileCard } from './profile-card/profile-card';
+import { Address } from './address/address';
 
 @Component({
   selector: 'app-profile',
-  imports: [ProfileCard],
+  imports: [ProfileCard, Address],
   templateUrl: './profile.html',
 })
 export class Profile {
