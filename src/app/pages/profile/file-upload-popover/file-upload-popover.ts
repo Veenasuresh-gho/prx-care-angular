@@ -22,26 +22,26 @@ export class FileUploadPopover {
 
     const selectedFile = input.files?.[0] ?? null;
 
-    this.file.set(selectedFile);
 
-    if (selectedFile) {
-      this.showNoFileMessage.set(false);
-    }
+    this.file.set(selectedFile);
+    this.showNoFileMessage.set(false);
   }
 
   handleSubmit(): void {
     const selectedFile = this.file();
-
-    if (selectedFile) {
-      this.fileSubmit.emit(selectedFile);
-      this.open.set(false);
-    } else {
+    if (!selectedFile) {
       this.showNoFileMessage.set(true);
+      return;
     }
+    this.fileSubmit.emit(selectedFile);
+
+    this.open.set(false);
+    this.file.set(null);
   }
 
   togglePopover(): void {
     this.open.update((value) => !value);
+    this.showNoFileMessage.set(false);
   }
 
   closePopover(): void {
@@ -52,4 +52,3 @@ export class FileUploadPopover {
     return (file.size / 1024).toFixed(1);
   }
 }
-

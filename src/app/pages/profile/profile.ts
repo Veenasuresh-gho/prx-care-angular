@@ -1,4 +1,11 @@
-import { Component } from '@angular/core';
+import {
+  Component,
+  inject,
+  Signal,
+} from '@angular/core';
+
+import { ROUTER_OUTLET_DATA } from '@angular/router';
+
 import { ProfileCard } from './profile-card/profile-card';
 
 @Component({
@@ -6,4 +13,12 @@ import { ProfileCard } from './profile-card/profile-card';
   imports: [ProfileCard],
   templateUrl: './profile.html',
 })
-export class Profile { }
+export class Profile {
+  outletData = inject(
+    ROUTER_OUTLET_DATA
+  ) as Signal<{
+    patientDetails: any;
+    advertisements?: any[];
+  }>;
+}
+

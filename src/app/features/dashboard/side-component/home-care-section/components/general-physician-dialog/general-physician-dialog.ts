@@ -145,11 +145,11 @@ export class GeneralPhysicianDialog implements OnInit {
   }
 
   cancelBooking(): void {
-    console.log('Cancel booking');
+
     this.close();
   }
 
   openLocation(): void {
-    console.log('Open location picker');
+  
   }
 }

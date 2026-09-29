@@ -270,14 +270,7 @@ export class LabCollectionDialog implements OnChanges, OnInit {
     if (!this.booking?.id || this.isCancelling) {
       return;
     }
-
-    this.isCancelling = true;
-
-    console.log(
-      'Cancel Lab Collection Booking:',
-      this.booking.id
-    );
-
+   this.isCancelling = true;
     this.isCancelling = false;
   }
 

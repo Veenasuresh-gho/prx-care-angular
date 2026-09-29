@@ -65,8 +65,6 @@ export class SwitchUserPopover {
 
   handleDetach(accountId: string): void {
     this.detachingId.set(accountId);
-    console.log('Detach member:', accountId);
-
     this.detachingId.set(null);
     this.refetch.emit();
   }

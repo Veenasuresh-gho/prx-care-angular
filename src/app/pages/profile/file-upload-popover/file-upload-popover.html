@@ -1,95 +1,112 @@
 <div class="relative inline-block">
 
-    <!-- Pencil Button -->
-    <button type="button" class="absolute bottom-0 right-0 z-10
+  <!-- Pencil button -->
+  <button
+    type="button"
+    aria-label="Change profile photo"
+    class="absolute bottom-0 right-0 z-50
            flex h-6 w-6 items-center justify-center
            rounded-full bg-primary text-white
            shadow
-           sm:h-8 sm:w-8" (click)="togglePopover()">
-        <span class="material-icons text-[12px] sm:text-[16px]">
-            edit
-        </span>
-    </button>
+           sm:h-8 sm:w-8"
+    (click)="togglePopover()"
+  >
+    <span class="material-icons text-[12px] sm:text-[16px]">
+      edit
+    </span>
+  </button>
 
+  @if (open()) {
 
     <!-- Backdrop -->
-    @if (open()) {
-    <div class="fixed inset-0 z-40" (click)="closePopover()"></div>
-    }
-
+    <div
+      class="fixed inset-0 z-[90]"
+      (click)="closePopover()"
+    ></div>
 
     <!-- Popover -->
-    @if (open()) {
-    <div class="absolute right-0 top-full z-50 mt-2
-             w-64 rounded-lg border border-slate-200
-             bg-white p-4 shadow-lg">
+    <div
+      class="absolute -left-6 top-full z-[100] mt-2
+             w-64 max-w-[calc(100vw-2rem)]
+             rounded-lg border border-slate-200
+             bg-white p-4 shadow-xl
+             sm:-left-8"
+      (click)="$event.stopPropagation()"
+    >
 
-        <div class="grid gap-4">
+      <div class="grid gap-4">
 
-            <!-- Header -->
-            <div class="space-y-2">
+        <!-- Header -->
+        <div class="space-y-2">
+          <h4 class="text-sm font-medium text-slate-900">
+            Upload a file
+          </h4>
 
-                <h4 class="text-sm font-medium leading-none text-slate-900">
-                    Upload a file
-                </h4>
+          <p class="text-sm text-slate-500">
+            Choose a file to upload.
+          </p>
+        </div>
 
-                <p class="text-sm text-slate-500">
-                    Choose a file to upload.
-                </p>
+        <!-- File input -->
+        <div class="grid gap-2">
 
-            </div>
-
-
-            <!-- File Input -->
-            <div class="grid gap-2">
-
-                <input id="file" type="file" accept="image/*" class="block w-full cursor-pointer rounded-md
-                   border border-slate-300 bg-white
-                   px-3 py-2 text-xs text-slate-600
-                   file:mr-3 file:rounded-md
-                   file:border-0 file:bg-slate-100
-                   file:px-2 file:py-1
-                   file:text-xs file:font-medium
+          <input
+            type="file"
+            accept="image/*"
+            class="block w-full cursor-pointer
+                   rounded-md border border-slate-300
+                   bg-white px-3 py-2
+                   text-xs text-slate-600
+                   file:mr-3
+                   file:rounded-md
+                   file:border-0
+                   file:bg-slate-100
+                   file:px-2
+                   file:py-1
+                   file:text-xs
+                   file:font-medium
                    file:text-slate-700
-                   hover:file:bg-slate-200" (change)="handleFileChange($event)" />
+                   hover:file:bg-slate-200"
+            (change)="handleFileChange($event)"
+          />
 
+          <!-- Selected file -->
+          @if (file(); as selectedFile) {
+            <p
+              class="mt-1 truncate text-xs text-slate-500"
+              [title]="selectedFile.name"
+            >
+              📄 {{ selectedFile.name }}
+              ({{ getFileSize(selectedFile) }} KB)
+            </p>
+          }
 
-                <!-- Selected File -->
-                @if (file(); as selectedFile) {
+          <!-- No file -->
+          @if (showNoFileMessage()) {
+            <p class="mt-1 text-xs text-red-500">
+              No file chosen
+            </p>
+          }
 
-                <p class="mt-1 truncate text-xs text-slate-500" [title]="selectedFile.name">
-                    📄 {{ selectedFile.name }}
-                    ({{ getFileSize(selectedFile) }} KB)
-                </p>
-
-                }
-
-
-                <!-- No File -->
-                @if (showNoFileMessage() && !file()) {
-
-                <p class="mt-1 text-xs text-red-500">
-                    No file chosen
-                </p>
-
-                }
-
-
-                <!-- Submit -->
-                <button type="button" class="mt-1 inline-flex h-9 w-full
+          <!-- Submit -->
+          <button
+            type="button"
+            class="mt-1 inline-flex h-9 w-full
                    items-center justify-center
                    rounded-md bg-primary px-4
                    text-sm font-medium text-white
                    transition-colors
-                   hover:bg-primary-dark" (click)="handleSubmit()">
-                    Submit
-                </button>
-
-            </div>
+                   hover:bg-primary-dark
+                   disabled:cursor-not-allowed
+                   disabled:opacity-50"
+            [disabled]="!file()"
+            (click)="handleSubmit()"
+          >
+            Submit
+          </button>
 
         </div>
-
+      </div>
     </div>
-    }
-
+  }
 </div>

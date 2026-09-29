@@ -260,18 +260,9 @@ export class NursingServicesDialog implements OnChanges, OnInit {
       return;
     }
 
-    this.isCancelling = true;
-
-    console.log(
-      'Cancel nursing booking:',
-      this.booking.id
-    );
+    this.isCancelling = true; 
   }
 
   trackBooking(): void {
-    console.log(
-      'Track booking:',
-      this.booking?.bookingId
-    );
   }
 }
