@@ -1,0 +1,105 @@
+<div class="rounded-2xl border border-slate-200 bg-white shadow-sm">
+    <!-- Loading -->
+    @if (loading) {
+    <div class="flex flex-col gap-5 p-5
+             sm:flex-row sm:items-center
+             sm:justify-between sm:p-6">
+        <!-- Profile Skeleton -->
+        <div class="flex items-center gap-5 sm:gap-6">
+            <div class="h-20 w-20 shrink-0 animate-pulse
+                 rounded-full bg-slate-200
+                 sm:h-24 sm:w-24"></div>
+            <div class="space-y-2">
+                <div class="h-4 w-40 animate-pulse rounded
+                   bg-slate-200"></div>
+                <div class="h-3 w-28 animate-pulse rounded
+                   bg-slate-200"></div>
+                <div class="h-3 w-32 animate-pulse rounded
+                   bg-slate-200"></div>
+            </div>
+        </div>
+        <!-- Button Skeleton -->
+        <div class="flex w-full justify-start
+               sm:w-auto sm:justify-end">
+            <div class="h-10 w-32 animate-pulse
+                 rounded-full bg-slate-200"></div>
+        </div>
+    </div>
+    }
+    <!-- Content -->
+    @else {
+    <div class="flex flex-col gap-5 p-5
+             sm:flex-row sm:items-center
+             sm:justify-between sm:p-6">
+        <!-- Profile -->
+        <div class="flex items-center gap-5 sm:gap-6">
+            <!-- Avatar -->
+            <div class="relative h-20 w-20 shrink-0
+                 sm:h-24 sm:w-24">
+                <!-- Upload Loading -->
+                @if (isFileUploadLoading()) {
+                <div class="flex h-full w-full items-center
+                     justify-center overflow-hidden
+                     rounded-full border border-slate-200
+                     bg-slate-50">
+                    <span class="h-6 w-6 animate-spin rounded-full
+                       border-2 border-slate-300
+                       border-t-primary"></span>
+                </div>
+                }
+                <!-- Avatar -->
+                @else {
+                <div class="h-full w-full overflow-hidden
+                     rounded-full ring-2 ring-primary/15
+                     ring-offset-2">
+                    @if (avatarPreview() || patientDetails?.imageUrl) {
+                    <img [src]="avatarPreview() || patientDetails?.imageUrl"
+                        [alt]="patientDetails?.firstName || 'Patient Avatar'" class="h-full w-full object-cover" />
+                    }
+                    @else {
+                    <div class="flex h-full w-full items-center
+                         justify-center rounded-full
+                         bg-slate-100">
+                        <span class="material-icons text-3xl
+                           text-slate-400 sm:text-4xl">
+                            person
+                        </span>
+                    </div>
+                    }
+                </div>
+                }
+                <!-- Upload / Edit Button (pinned to the avatar's bottom-right curve) -->
+                <div class="absolute bottom-0.5 right-0.5 z-10
+                     flex items-center justify-center
+                     sm:bottom-0 sm:right-0">
+                    <app-file-upload-popover (fileSubmit)="handleFileSubmit($event)" />
+                </div>
+            </div>
+            <!-- Patient Information -->
+            <div class="min-w-0 space-y-0.5">
+                <h4 class="truncate text-base font-semibold
+                   text-slate-900 sm:text-lg">
+                    {{ patientDetails?.firstName }}
+                    {{ patientDetails?.lastName }}
+                </h4>
+                @if (patientGenderAge) {
+                <p class="text-sm text-slate-500">
+                    {{ patientGenderAge }}
+                </p>
+                }
+                @if (location) {
+                <p class="text-sm text-slate-500">
+                    {{ location }}
+                </p>
+                }
+            </div>
+        </div>
+        <!-- Manage Accounts -->
+        <div class="flex w-full justify-start
+               sm:w-auto sm:justify-end">
+            <app-switch-user-popover [accounts]="accountOptions" [userId]="userId" [owner]="owner"
+                (accountSelected)="handleSelect($event)" (refetch)="handleRefetch()" />
+        </div>
+    </div>
+    }
+</div>

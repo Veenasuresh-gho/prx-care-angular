@@ -14,6 +14,7 @@ import { ClinicalHistory } from './pages/clinical-history/clinical-history';
 import { Allergy } from './pages/allergy/allergy';
 import { HealthInsurance } from './pages/health-insurance/health-insurance';
 import { EmergencyServicesComponent } from './pages/emergency-services/emergency-services';
+import { Profile } from './pages/profile/profile';
 
 export const routes: Routes = [
     {
@@ -73,8 +74,10 @@ export const routes: Routes = [
         path: 'emergency-services',
         component: EmergencyServicesComponent
     },
-
-
+    {
+        path: 'profile',
+        component: Profile
+    },
     {
         path: '**',
         redirectTo: 'auth/sign-in'
