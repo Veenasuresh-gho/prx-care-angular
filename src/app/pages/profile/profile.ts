@@ -8,10 +8,11 @@ import { ROUTER_OUTLET_DATA } from '@angular/router';
 
 import { ProfileCard } from './profile-card/profile-card';
 import { Address } from './address/address';
+import { Settings } from './settings/settings';
 
 @Component({
   selector: 'app-profile',
-  imports: [ProfileCard, Address],
+  imports: [ProfileCard, Address, Settings],
   templateUrl: './profile.html',
 })
 export class Profile {

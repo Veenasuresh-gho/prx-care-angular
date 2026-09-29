@@ -1,0 +1,84 @@
+<div class="w-full">
+    <!-- Settings Card -->
+    <mat-card class="overflow-hidden rounded-2xl border
+           border-[#AEE3FF4D] bg-white
+           shadow-sm">
+        <!-- Header -->
+        <div class="flex items-center justify-between
+             px-5 py-5 sm:px-6">
+            <h2 class="m-0 text-base font-semibold
+               text-slate-900">
+                Settings
+            </h2>
+        </div>
+        <!-- Divider -->
+        <div class="mx-4 border-b border-[#8DD7FF]"></div>
+        <!-- Content -->
+        <div class="p-4">
+            <div class="space-y-2">
+                @for (
+                item of settings;
+                track item.label
+                ) {
+                <button type="button" class="group flex w-full items-center
+                   justify-between rounded-xl
+                   border border-slate-200
+                   bg-white px-4 py-4
+                   text-left transition
+                   hover:bg-slate-50
+                   focus:outline-none
+                   focus:ring-2
+                   focus:ring-primary/20" [class.border-red-500]="
+              item.label === 'Delete Account'
+            " [class.bg-red-50]="
+              item.label === 'Delete Account'
+            " (click)="item.action()">
+                    <!-- Left -->
+                    <div class="flex min-w-0 items-center
+                     gap-3">
+                        <!-- Icon -->
+                        <mat-icon class="shrink-0" [class.text-red-500]="
+                  item.label === 'Delete Account'
+                " [class.text-slate-600]="
+                  item.label !== 'Delete Account'
+                ">
+                            {{ item.icon }}
+                        </mat-icon>
+                        <!-- Label -->
+                        <span class="truncate text-sm
+                       font-normal" [class.text-red-500]="
+                  item.label === 'Delete Account'
+                " [class.text-slate-700]="
+                  item.label !== 'Delete Account'
+                ">
+                            {{ item.label }}
+                        </span>
+
+                    </div>
+
+                    <!-- Right Arrow -->
+                    <mat-icon class="shrink-0 text-[20px]" [class.text-red-500]="
+                item.label === 'Delete Account'
+              " [class.text-slate-400]="
+                item.label !== 'Delete Account'
+              ">
+                        chevron_right
+                    </mat-icon>
+
+                </button>
+
+                }
+
+            </div>
+
+        </div>
+
+    </mat-card>
+
+</div>
+
+
+<!-- Change Password -->
+<app-change-password-dialog [open]="changePasswordOpen" (openChange)="
+    changePasswordOpen = $event
+  " />
