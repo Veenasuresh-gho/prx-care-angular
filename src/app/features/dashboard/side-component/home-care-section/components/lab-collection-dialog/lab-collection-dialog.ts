@@ -122,17 +122,6 @@ export class LabCollectionDialog implements OnChanges {
 
     this.isSubmitting = true;
 
-    console.log({
-      test: this.test,
-      date: this.date,
-      time: this.time,
-      name: this.name,
-      phone: this.phone,
-      countryId: this.countryId,
-      address: this.address,
-      file: this.file,
-    });
-
     // Add your GHOService Lab Collection API here.
   }
 
@@ -142,11 +131,6 @@ export class LabCollectionDialog implements OnChanges {
     }
 
     this.isCancelling = true;
-
-    console.log(
-      'Cancel Lab Collection Booking:',
-      this.booking.id
-    );
 
     // Add your GHOService cancel API here.
   }

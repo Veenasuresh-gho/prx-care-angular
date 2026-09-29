@@ -212,7 +212,6 @@ export class PharmacyDeliveryDialog implements OnChanges, OnInit {
   }
 
   trackBooking(): void {
-    console.log('Track booking', this.booking);
   }
 
   openLocation(): void {

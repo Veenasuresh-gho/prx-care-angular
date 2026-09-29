@@ -14,70 +14,214 @@ import { ClinicalHistory } from './pages/clinical-history/clinical-history';
 import { Allergy } from './pages/allergy/allergy';
 import { HealthInsurance } from './pages/health-insurance/health-insurance';
 import { EmergencyServicesComponent } from './pages/emergency-services/emergency-services';
+import { AboutUs } from './features/footer/components/about-us/about-us';
+import { PublicLayout } from './layouts/public-layout/public-layout';
+import { DashboardLayout } from './layouts/dashboard-layout/dashboard-layout';
+import { Contact } from './features/footer/components/contact/contact';
+import { PrivacyPolicy } from './features/footer/components/privacy-policy/privacy-policy';
+import { ShippingPolicy } from './features/footer/components/shipping-policy/shipping-policy';
+import { CancellationPolicy } from './features/footer/components/cancellation-policy/cancellation-policy';
+import { TermsOfUse } from './features/footer/components/terms-of-use/terms-of-use';
+import { Careers } from './features/footer/components/careers/careers';
+import { Abdm } from './features/abdm/abdm';
+
+// export const routes: Routes = [
+//     {
+//         path: 'dashboard',
+//         canActivate: [authGuard],
+//         component: Dashboard
+//     },
+//     {
+//         path: 'auth/sign-in',
+//         component: SignIn
+//     },
+//     {
+//         path: 'auth/sign-up',
+//         component: SignUp
+//     },
+//     {
+//         path: 'schedule-appointment',
+//         component: ScheduleAppointment
+//     },
+//     {
+//         path: "schedule-appointment/:id",
+//         component: DoctorDetails
+//     },
+//     {
+//         path: 'medications',
+//         component: MedicationsComponent
+//     },
+//     {
+//         path: 'vitals',
+//         component: VitalsComponent
+//     },
+//     {
+//         path: 'consultation-history',
+//         component: ConsultationHistoryComponent
+//     },
+//     {
+//         path: 'lab-records',
+//         component: LabResults
+//     },
+//     {
+//         path: 'emergency-contacts',
+//         component: EmergencyContacts
+//     },
+//     {
+//         path: 'facilitator',
+//         component: ClinicalHistory
+//     },
+//     {
+//         path: 'health-insurance',
+//         component: HealthInsurance
+//     },
+//     {
+//         path: 'allergy',
+//         component: Allergy
+//     },
+//     {
+//         path: 'emergency-services',
+//         component: EmergencyServicesComponent
+//     },
+//     {
+//         path: '',
+//         component: PublicLayout,
+//         children: [
+//             {
+//                 path: 'about',
+//                 component: AboutUs
+//             }
+//         ]
+//     },
+
+
+//     {
+//         path: '**',
+//         redirectTo: 'auth/sign-in'
+//     }
+
+// ];
 
 export const routes: Routes = [
-    {
-        path: 'dashboard',
-        canActivate: [authGuard],
-        component: Dashboard
-    },
+
     {
         path: 'auth/sign-in',
         component: SignIn
     },
+
     {
         path: 'auth/sign-up',
         component: SignUp
     },
-    {
-        path: 'schedule-appointment',
-        component: ScheduleAppointment
-    },
-    {
-        path: "schedule-appointment/:id",
-        component: DoctorDetails
-    },
-    {
-        path: 'medications',
-        component: MedicationsComponent
-    },
-    {
-        path: 'vitals',
-        component: VitalsComponent
-    },
-    {
-        path: 'consultation-history',
-        component: ConsultationHistoryComponent
-    },
-    {
-        path: 'lab-records',
-        component: LabResults
-    },
-    {
-        path: 'emergency-contacts',
-        component: EmergencyContacts
-    },
-    {
-        path: 'facilitator',
-        component: ClinicalHistory
-    },
-    {
-        path: 'health-insurance',
-        component: HealthInsurance
-    },
-    {
-        path: 'allergy',
-        component: Allergy
-    },
-    {
-        path: 'emergency-services',
-        component: EmergencyServicesComponent
-    },
-
 
     {
-        path: '**',
-        redirectTo: 'auth/sign-in'
-    }
+        path: '',
+        component: DashboardLayout,
+        canActivate: [authGuard],
+        children: [
+
+            {
+                path: 'dashboard',
+                component: Dashboard
+            },
+
+            {
+                path: 'schedule-appointment',
+                component: ScheduleAppointment
+            },
+
+            {
+                path: 'schedule-appointment/:id',
+                component: DoctorDetails
+            },
+
+            {
+                path: 'medications',
+                component: MedicationsComponent
+            },
+
+            {
+                path: 'vitals',
+                component: VitalsComponent
+            },
+
+            {
+                path: 'consultation-history',
+                component: ConsultationHistoryComponent
+            },
+
+            {
+                path: 'lab-records',
+                component: LabResults
+            },
+
+            {
+                path: 'emergency-contacts',
+                component: EmergencyContacts
+            },
+
+            {
+                path: 'facilitator',
+                component: ClinicalHistory
+            },
+
+            {
+                path: 'health-insurance',
+                component: HealthInsurance
+            },
+
+            {
+                path: 'allergy',
+                component: Allergy
+            },
+
+            {
+                path: 'emergency-services',
+                component: EmergencyServicesComponent
+            }
+
+        ]
+    },
+
+    {
+        path: '',
+        component: PublicLayout,
+        children: [
+
+            {
+                path: 'about',
+                component: AboutUs
+            },
+            {
+                path:'contact',
+                component: Contact
+            },
+            {
+                path :'privacy-policy',
+                component : PrivacyPolicy
+            },
+            {
+                path:'shipping-policy',
+                component: ShippingPolicy
+            },
+            {
+                path:'cancellation-policy',
+                component:CancellationPolicy
+            },
+            {
+                path:'terms-and-conditions',
+                component:TermsOfUse
+            },
+            {
+                path:'careers',
+                component:Careers
+            },
+            {
+                path:'ayushman-bharath-digital-mission',
+                component:Abdm
+            }
+
+        ]
+    },
+
 ];
-

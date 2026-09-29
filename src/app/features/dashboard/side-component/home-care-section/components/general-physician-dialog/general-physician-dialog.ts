@@ -13,7 +13,6 @@ import {
   Validators,
 } from '@angular/forms';
 
-import { CustomInput } from '../../../../../../components/input/input';
 import { Dialog } from '../../../../../../components/dialog/dialog';
 import { Button } from '../../../../../../components/button/button';
 import { CountrySelectField } from '../../../../../../components/country-select-field/country-select-field';
@@ -29,7 +28,6 @@ import { MatIconModule } from '@angular/material/icon';
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    CustomInput,
     Dialog,
     Button,
     CountrySelectField,
@@ -145,11 +143,9 @@ export class GeneralPhysicianDialog implements OnInit {
   }
 
   cancelBooking(): void {
-    console.log('Cancel booking');
     this.close();
   }
 
   openLocation(): void {
-    console.log('Open location picker');
   }
 }
