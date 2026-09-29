@@ -1,3 +1,4 @@
+
 import {
   Component,
   EventEmitter,
@@ -11,11 +12,15 @@ import {
 
 import { FileUploadPopover } from '../file-upload-popover/file-upload-popover';
 import { FileUploadService } from '../../../services/file-upload-service';
+import { EditPersonalDetailsDialog } from '../edit-personal-details-dialog/edit-personal-details-dialog';
 
 @Component({
   selector: 'app-profile-card',
   standalone: true,
-  imports: [FileUploadPopover],
+  imports: [
+    FileUploadPopover,
+    EditPersonalDetailsDialog,
+  ],
   templateUrl: './profile-card.html',
 })
 export class ProfileCard implements OnChanges {
@@ -27,7 +32,10 @@ export class ProfileCard implements OnChanges {
   @Output() refetch = new EventEmitter<void>();
 
   avatarPreview = signal<string | undefined>(undefined);
+
   isFileUploadLoading = signal(false);
+
+  isEditDialogOpen = signal(false);
 
   skeletonItems = [1, 2, 3, 4, 5, 6];
 
@@ -89,6 +97,19 @@ export class ProfileCard implements OnChanges {
     ];
   }
 
+  openEditDialog(): void {
+    this.isEditDialogOpen.set(true);
+  }
+
+  closeEditDialog(): void {
+    this.isEditDialogOpen.set(false);
+  }
+
+  handlePersonalDetailsRefetch(): void {
+    this.isEditDialogOpen.set(false);
+    this.refetch.emit();
+  }
+
   async handleFileSubmit(file: File): Promise<void> {
     if (!file) {
       console.error('No file received');
@@ -102,38 +123,45 @@ export class ProfileCard implements OnChanges {
 
     const userId = this.userId;
 
-
     if (!userId) {
       console.error(
         'User ID is missing from sessionStorage["id"]'
       );
       return;
     }
+
     const previousPreview = this.avatarPreview();
+
     if (previousPreview?.startsWith('blob:')) {
       URL.revokeObjectURL(previousPreview);
     }
+
     const previewUrl = URL.createObjectURL(file);
+
     this.avatarPreview.set(previewUrl);
     this.isFileUploadLoading.set(true);
+
     try {
       const success =
         await this.fileUploadService.handleFileUpload(
-          "",
+          '',
           userId,
           file,
           '1'
         );
+
       if (success) {
         this.refetch.emit();
       } else {
         console.error('File upload failed');
+
         this.avatarPreview.set(
           this.patientDetails?.imageUrl || undefined
         );
       }
     } catch (error) {
       console.error('Profile image upload error:', error);
+
       this.avatarPreview.set(
         this.patientDetails?.imageUrl || undefined
       );
@@ -150,3 +178,4 @@ export class ProfileCard implements OnChanges {
     );
   }
 }
+

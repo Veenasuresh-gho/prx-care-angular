@@ -1,0 +1,190 @@
+@if (open) {
+<div class="fixed inset-0 z-50 flex items-center justify-center
+           bg-black/40 p-4" (click)="close()">
+  <div class="w-full max-w-4xl overflow-hidden
+             rounded-xl border border-[#739AF680]/50
+             bg-[#F5FBFF]
+             shadow-xl shadow-[#739AF680]/50" (click)="$event.stopPropagation()">
+
+    <!-- Header -->
+    <div class="flex items-center justify-between
+               px-6 py-4">
+      <h2 class="m-0 text-base font-semibold text-slate-900">
+        Edit Your Personal Information
+      </h2>
+
+      <button mat-icon-button type="button" aria-label="Close" [disabled]="isLoading" (click)="close()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <!-- Divider -->
+    <div class="border-t border-[#8DD7FF]"></div>
+
+    <!-- Form -->
+    <form [formGroup]="form" (ngSubmit)="handleSubmit()">
+
+      <div class="grid grid-cols-1 gap-4 p-6
+                 sm:grid-cols-2
+                 lg:grid-cols-3">
+
+        <!-- First Name -->
+        <mat-form-field appearance="outline">
+          <mat-label>First Name</mat-label>
+
+          <input matInput formControlName="FirstName" />
+
+          @if (
+          form.get('FirstName')?.hasError('required') &&
+          form.get('FirstName')?.touched
+          ) {
+          <mat-error>
+            First name is required
+          </mat-error>
+          }
+        </mat-form-field>
+
+        <!-- Last Name -->
+        <mat-form-field appearance="outline">
+          <mat-label>Last Name</mat-label>
+
+          <input matInput formControlName="LastName" />
+
+          @if (
+          form.get('LastName')?.hasError('required') &&
+          form.get('LastName')?.touched
+          ) {
+          <mat-error>
+            Last name is required
+          </mat-error>
+          }
+        </mat-form-field>
+
+        <!-- Birth Date -->
+        <mat-form-field appearance="outline">
+          <mat-label>Date of Birth</mat-label>
+
+          <input matInput type="date" formControlName="BirthDate" />
+        </mat-form-field>
+
+        <!-- Gender -->
+        <mat-form-field appearance="outline">
+          <mat-label>Gender</mat-label>
+
+          <mat-select formControlName="Gender">
+            <mat-option value="">
+              Select gender
+            </mat-option>
+
+            <mat-option value="M">
+              Male
+            </mat-option>
+
+            <mat-option value="F">
+              Female
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <!-- Phone -->
+        <mat-form-field appearance="outline">
+          <mat-label>Mobile Number</mat-label>
+
+          <input matInput type="tel" formControlName="Phone" />
+        </mat-form-field>
+        <!-- Email -->
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
+          <input matInput type="email" formControlName="Email" />
+          @if (
+          form.get('Email')?.hasError('email') &&
+          form.get('Email')?.touched
+          ) {
+          <mat-error>
+            Enter a valid email address
+          </mat-error>
+          }
+        </mat-form-field>
+        <!-- Blood Group -->
+        <mat-form-field appearance="outline">
+          <mat-label>Blood Group</mat-label>
+          <mat-select formControlName="BloodGroup">
+            <mat-option value="">
+              Select blood group
+            </mat-option>
+            <mat-option value="A+">A+</mat-option>
+            <mat-option value="A-">A-</mat-option>
+            <mat-option value="B+">B+</mat-option>
+            <mat-option value="B-">B-</mat-option>
+            <mat-option value="AB+">AB+</mat-option>
+            <mat-option value="AB-">AB-</mat-option>
+            <mat-option value="O+">O+</mat-option>
+            <mat-option value="O-">O-</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <!-- Marital Status -->
+        <mat-form-field appearance="outline">
+          <mat-label>Marital Status</mat-label>
+
+          <mat-select formControlName="MaritalStatus">
+            <mat-option value="">
+              Select status
+            </mat-option>
+
+            <mat-option value="Single">
+              Single
+            </mat-option>
+
+            <mat-option value="Married">
+              Married
+            </mat-option>
+
+            <mat-option value="Divorced">
+              Divorced
+            </mat-option>
+
+            <mat-option value="Widowed">
+              Widowed
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <!-- Occupation -->
+        <mat-form-field appearance="outline">
+          <mat-label>Occupation</mat-label>
+
+          <input matInput formControlName="Occupation" />
+        </mat-form-field>
+
+      </div>
+
+      <!-- Footer -->
+      <div class="flex justify-end gap-3
+                 border-t border-slate-100
+                 p-4">
+
+        <button mat-stroked-button type="button" [disabled]="isLoading" (click)="close()">
+          Cancel
+        </button>
+
+        <button mat-flat-button color="primary" type="submit" [disabled]="isLoading">
+
+          @if (isLoading) {
+          <mat-spinner diameter="18"></mat-spinner>
+
+          <span class="ml-2">
+            Updating...
+          </span>
+          } @else {
+          Update
+          }
+
+        </button>
+
+      </div>
+
+    </form>
+  </div>
+</div>
+}
