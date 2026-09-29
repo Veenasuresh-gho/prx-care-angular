@@ -24,6 +24,7 @@ import { CancellationPolicy } from './features/footer/components/cancellation-po
 import { TermsOfUse } from './features/footer/components/terms-of-use/terms-of-use';
 import { Careers } from './features/footer/components/careers/careers';
 import { Abdm } from './features/abdm/abdm';
+import { Profile } from './pages/profile/profile';
 
 // export const routes: Routes = [
 //     {
@@ -113,7 +114,6 @@ export const routes: Routes = [
         path: 'auth/sign-up',
         component: SignUp
     },
-
     {
         path: '',
         component: DashboardLayout,
@@ -178,7 +178,11 @@ export const routes: Routes = [
             {
                 path: 'emergency-services',
                 component: EmergencyServicesComponent
-            }
+            },
+            {
+                path: 'profile',
+                component: Profile
+            },
 
         ]
     },
@@ -193,32 +197,32 @@ export const routes: Routes = [
                 component: AboutUs
             },
             {
-                path:'contact',
+                path: 'contact',
                 component: Contact
             },
             {
-                path :'privacy-policy',
-                component : PrivacyPolicy
+                path: 'privacy-policy',
+                component: PrivacyPolicy
             },
             {
-                path:'shipping-policy',
+                path: 'shipping-policy',
                 component: ShippingPolicy
             },
             {
-                path:'cancellation-policy',
-                component:CancellationPolicy
+                path: 'cancellation-policy',
+                component: CancellationPolicy
             },
             {
-                path:'terms-and-conditions',
-                component:TermsOfUse
+                path: 'terms-and-conditions',
+                component: TermsOfUse
             },
             {
-                path:'careers',
-                component:Careers
+                path: 'careers',
+                component: Careers
             },
             {
-                path:'ayushman-bharath-digital-mission',
-                component:Abdm
+                path: 'ayushman-bharath-digital-mission',
+                component: Abdm
             }
 
         ]

@@ -194,7 +194,7 @@ export class FileUploadService {
                 },
                 {
                     T: 'c10',
-                    V: '2',
+                    V: '4',
                 },
             ];
 

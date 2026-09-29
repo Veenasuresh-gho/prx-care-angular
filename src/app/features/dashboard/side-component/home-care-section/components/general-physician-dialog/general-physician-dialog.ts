@@ -147,5 +147,6 @@ export class GeneralPhysicianDialog implements OnInit {
   }
 
   openLocation(): void {
+  
   }
 }

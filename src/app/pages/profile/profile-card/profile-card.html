@@ -1,0 +1,230 @@
+<section class="rounded-2xl border border-slate-200 bg-white shadow-sm">
+    <!-- Loading -->
+    @if (loading) {
+
+    <div class="p-5 sm:p-6" aria-busy="true" aria-live="polite">
+        <div class="flex items-center gap-5 sm:gap-6">
+
+            <!-- Avatar Skeleton -->
+            <div class="h-20 w-20 shrink-0 animate-pulse
+                           rounded-full bg-slate-200
+                           sm:h-24 sm:w-24"></div>
+
+            <!-- Name Skeleton -->
+            <div class="space-y-2.5">
+                <div class="h-5 w-44 animate-pulse
+                               rounded bg-slate-200"></div>
+
+                <div class="h-3.5 w-28 animate-pulse
+                               rounded bg-slate-200"></div>
+            </div>
+        </div>
+
+        <div class="my-6 border-t border-slate-100"></div>
+
+        <!-- Details Skeleton -->
+        <div class="grid grid-cols-1 gap-5
+                       sm:grid-cols-2 lg:grid-cols-3">
+            @for (item of skeletonItems; track item) {
+
+            <div class="flex items-center gap-3">
+                <div class="h-10 w-10 shrink-0
+                                   animate-pulse rounded-xl
+                                   bg-slate-200"></div>
+
+                <div class="flex-1 space-y-2">
+                    <div class="h-3 w-20 animate-pulse
+                                       rounded bg-slate-200"></div>
+
+                    <div class="h-4 w-32 animate-pulse
+                                       rounded bg-slate-200"></div>
+                </div>
+            </div>
+
+            }
+        </div>
+    </div>
+
+    }
+
+    <!-- Content -->
+    @else {
+
+    <div class="p-5 sm:p-6">
+
+        <!-- Header -->
+        <div class="flex items-center gap-5 sm:gap-6">
+
+            <!-- Avatar -->
+            <div class="relative h-20 w-20 shrink-0
+                           sm:h-24 sm:w-24">
+
+                @if (isFileUploadLoading()) {
+
+                <!-- Upload Loading -->
+                <div class="flex h-full w-full
+                                   items-center justify-center
+                                   rounded-full border
+                                   border-slate-200 bg-slate-50">
+                    <span class="h-6 w-6 animate-spin
+                                       rounded-full border-2
+                                       border-slate-300
+                                       border-t-primary"></span>
+                </div>
+
+                }
+
+                @else {
+
+                <!-- Avatar -->
+                <div class="h-full w-full overflow-hidden
+                                   rounded-full ring-2
+                                   ring-primary/15 ring-offset-2">
+
+                    @if (patientDetails?._url) {
+
+                    <img [src]="patientDetails?._url" [alt]="
+                                        (patientDetails?.FirstName ||
+                                        'Patient') +
+                                        ' profile photo'
+                                    " class="h-full w-full object-cover" />
+
+                    }
+
+                    @else {
+
+                    <div class="flex h-full w-full
+                                           items-center justify-center
+                                           bg-slate-100">
+                        <span class="material-icons
+                                               text-3xl text-slate-400
+                                               sm:text-4xl" aria-hidden="true">
+                            person
+                        </span>
+                    </div>
+
+                    }
+
+                </div>
+
+                }
+
+                <!-- Profile Image Upload -->
+                <div class="absolute bottom-0 right-0
+                               z-10 flex items-center
+                               justify-center">
+                    <app-file-upload-popover (fileSubmit)="handleFileSubmit($event)" />
+                </div>
+
+            </div>
+
+            <!-- Name + Edit -->
+            <div class="min-w-0 flex-1">
+
+                <div class="flex items-start
+                               justify-between gap-3">
+
+                    <!-- Name -->
+                    <div class="min-w-0">
+
+                        <h2 class="truncate text-lg
+                                       font-semibold tracking-tight
+                                       text-slate-900 sm:text-base">
+                            {{ patientDetails?.FirstName }}
+                            {{ patientDetails?.LastName }}
+                        </h2>
+
+                        @if (genderAge) {
+
+                        <p class="mt-1 text-xs
+                                           text-slate-500">
+                            {{ genderAge }}
+                        </p>
+
+                        }
+
+                    </div>
+
+                    <!-- Edit Button -->
+                    <button type="button" aria-label="Edit personal information" class="inline-flex shrink-0
+                                   items-center gap-1.5
+                                   rounded-lg
+                                   border border-slate-200
+                                   bg-white px-3 py-2
+                                   text-sm font-medium
+                                   text-primary shadow-sm
+                                   transition
+                                   hover:bg-primary-light
+                                   focus:outline-none
+                                   focus:ring-2
+                                   focus:ring-primary/30" (click)="openEditDialog()">
+                        <span class="material-icons text-[18px]" aria-hidden="true">
+                            edit
+                        </span>
+
+                        <span class="hidden sm:inline">
+                            Edit
+                        </span>
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Divider -->
+        <div class="my-6 border-t border-slate-100"></div>
+
+        <!-- Details -->
+        <dl class="grid grid-cols-1 gap-x-8 gap-y-5
+                       sm:grid-cols-2 lg:grid-cols-3">
+
+            @for (
+            item of details;
+            track item.label
+            ) {
+
+            <div class="flex min-w-0 items-center gap-3">
+
+                <!-- Icon -->
+                <span class="flex h-10 w-10 shrink-0
+                                   items-center justify-center
+                                   rounded-xl bg-primary/10
+                                   text-primary">
+                    <span class="material-icons text-[20px]" aria-hidden="true">
+                        {{ item.icon }}
+                    </span>
+                </span>
+
+                <!-- Value -->
+                <div class="min-w-0">
+
+                    <dt class="text-xs font-medium
+                                       text-slate-500">
+                        {{ item.label }}
+                    </dt>
+
+                    <dd class="mt-0.5 truncate
+                                       text-sm font-medium" [class.text-slate-900]="item.value"
+                        [class.text-slate-400]="!item.value" [title]="item.value || ''">
+                        {{ item.value || 'Not available' }}
+                    </dd>
+
+                </div>
+
+            </div>
+
+            }
+
+        </dl>
+
+    </div>
+
+    }
+
+</section>
+
+<!-- Edit Personal Details Dialog -->
+<app-edit-personal-details-dialog [open]="isEditDialogOpen()" [details]="patientDetails"
+    (openChange)="isEditDialogOpen.set($event)" (refetch)="handlePersonalDetailsRefetch()" />

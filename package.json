@@ -22,6 +22,7 @@
     "@tailwindcss/postcss": "^4.3.3",
     "apexcharts": "^7.5.1",
     "ng-apexcharts": "^3.1.0",
+    "ngx-spinner": "^22.0.1",
     "ngx-toastr": "^20.0.5",
     "postcss": "^8.5.28",
     "rxjs": "~7.8.0",

@@ -15,3 +15,57 @@ export function formatDateToMMDDYYYYFromDate(date: Date): string {
 
   return `${month}/${day}/${year}`;
 }
+
+export function formatDateToLongDate(
+  date: string | null | undefined
+): string {
+  if (!date) {
+    return '';
+  }
+
+  const [day, month, year] = date.split('/');
+
+  if (!day || !month || !year) {
+    return date;
+  }
+
+  const months = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
+
+  const monthIndex = Number(month) - 1;
+
+  if (monthIndex < 0 || monthIndex > 11) {
+    return date;
+  }
+
+  return `${day} ${months[monthIndex]} ${year}`;
+}
+
+export function formatDateForInput(
+  date: string | null | undefined
+): string {
+  if (!date) {
+    return '';
+  }
+
+  const [day, month, year] = date.split('/');
+
+  if (!day || !month || !year) {
+    return '';
+  }
+
+  return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+}
+
