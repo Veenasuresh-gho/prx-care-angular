@@ -67,7 +67,6 @@ export class EditAddressDialog implements OnChanges {
       changes['open']?.currentValue === true ||
       changes['details']
     ) {
-      console.log(this.details)
       if (this.open && this.details) {
         this.form.patchValue({
           Address:
@@ -144,20 +143,6 @@ export class EditAddressDialog implements OnChanges {
         if (res?.Status === 1) {
           this.countryList = res?.Data?.[0] ?? [];
 
-          console.log(
-            'Country List:',
-            this.countryList
-          );
-
-          console.log(
-            'First Country:',
-            this.countryList[0]
-          );
-
-          console.log(
-            'Selected Country ID:',
-            this.form.get('CountryID')?.value
-          );
         } else {
           this.countryList = [];
 
@@ -261,20 +246,10 @@ export class EditAddressDialog implements OnChanges {
       },
     ];
 
-    console.log(
-      'Address Update Tags:',
-      tv
-    );
-
     this.isLoading = true;
 
     this.srv.getdata('patient', tv).subscribe({
       next: (res) => {
-        console.log(
-          'Address Update Response:',
-          res
-        );
-
         if (res?.Status === 1) {
           this.toastr.success(
             'Address updated successfully'
