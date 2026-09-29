@@ -1,0 +1,169 @@
+<!-- Hero -->
+<section class="w-full bg-[#2D4680] text-white">
+    <div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+
+        <!-- Breadcrumb -->
+        <nav class="mb-4 flex items-center gap-1 text-sm" aria-label="Breadcrumb">
+            <a   [routerLink]="['/dashboard']" class="text-white/80 transition-colors cursor-pointer hover:text-white hover:underline">
+                Home
+            </a>
+
+            <mat-icon class="!h-4 !w-4 !text-[16px] text-white/60">
+                chevron_right
+            </mat-icon>
+
+            <span class="text-white/60">
+                ABDM
+            </span>
+        </nav>
+
+        <!-- Title -->
+        <h1 class="text-3xl font-semibold sm:text-3xl">
+            Ayushman Bharat Digital Mission
+        </h1>
+
+        <p class="mt-3 max-w-3xl text-white/80">
+            Making Every Step of Your Patient Journey Simple
+        </p>
+
+    </div>
+</section>
+<section class="w-full bg-white py-10">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+
+        <div class="mx-auto max-w-3xl text-center">
+            <h2 class="text-2xl font-semibold text-gray-900 sm:text-3xl">
+                Making Every Step of Your Patient Journey Simple
+            </h2>
+
+            <p class="mt-4 text-base leading-7 text-gray-600">
+                From consultation to recovery, we ensure every step of your
+                healthcare journey is effortless and well-coordinated, with
+                patient-focused support at every touchpoint.
+            </p>
+        </div>
+
+    </div>
+</section>
+
+
+<!-- Logos -->
+<section class="w-full bg-white py-8">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+
+        <div class="grid grid-cols-2 items-center justify-center gap-6 sm:grid-cols-3 md:grid-cols-4">
+
+            @for (logo of logos; track logo.name + $index) {
+
+            <div class="flex items-center justify-center p-4">
+
+                @if (logo.href) {
+
+                <a [href]="logo.href" target="_blank" rel="noopener noreferrer" class="group block w-full">
+                    <div class="mx-auto flex h-24 w-full max-w-[160px] items-center justify-center">
+                        <img [src]="logo.src" [alt]="logo.name"
+                            class="max-h-full max-w-full object-contain grayscale transition-all duration-300 group-hover:grayscale-0" />
+                    </div>
+                </a>
+
+                } @else {
+
+                <div class="mx-auto flex h-24 w-full max-w-[160px] items-center justify-center">
+                    <img [src]="logo.src" [alt]="logo.name" class="max-h-full max-w-full object-contain" />
+                </div>
+
+                }
+
+            </div>
+
+            }
+
+        </div>
+
+    </div>
+</section>
+
+
+<!-- ABHA -->
+<section class="w-full bg-gray-50 py-12">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+
+        <div class="grid items-center gap-10 md:grid-cols-2">
+
+            <div>
+                <span class="text-sm font-semibold uppercase tracking-wide text-[#2D4680]">
+                    ABDM
+                </span>
+
+                <h2 class="mt-2 text-2xl font-semibold text-gray-900 sm:text-3xl">
+                    ABHA
+                </h2>
+
+                <p class="mt-4 leading-7 text-gray-600">
+                    ABHA provides individuals with a unique digital health identity
+                    that helps them securely access and manage their health
+                    information across participating healthcare providers.
+                </p>
+
+                <a href="https://abdm.gov.in/" target="_blank" rel="noopener noreferrer"
+                    class="mt-6 inline-flex items-center gap-2 rounded-md bg-[#2D4680] px-5 py-2.5 text-sm font-medium text-white transition hover:opacity-90">
+                    Know More
+
+                    <mat-icon class="!h-5 !w-5 !text-[20px]">
+                        open_in_new
+                    </mat-icon>
+                </a>
+            </div>
+
+            <div class="flex justify-center">
+                <img [src]="abhaImage" alt="ABHA Card" class="max-h-80 w-auto object-contain" />
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+
+<!-- PHR -->
+<section class="w-full bg-white py-12">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+
+        <div class="grid items-center gap-10 md:grid-cols-2">
+
+            <div class="order-2 flex justify-center md:order-1">
+                <img [src]="phrImage" alt="ABDM PHR App" class="max-h-80 w-auto object-contain" />
+            </div>
+
+            <div class="order-1 md:order-2">
+
+                <span class="text-sm font-semibold uppercase tracking-wide text-[#2D4680]">
+                    ABDM
+                </span>
+
+                <h2 class="mt-2 text-2xl font-semibold text-gray-900 sm:text-3xl">
+                    Patient Health Records PHR
+                </h2>
+
+                <p class="mt-4 leading-7 text-gray-600">
+                    A personal health record, or PHR, is an electronic application
+                    through which patients can maintain and manage their health
+                    information (and that of others for whom they are authorized)
+                    in a private, secure, and confidential environment.
+                </p>
+
+                <a href="https://abdm.gov.in/" target="_blank" rel="noopener noreferrer"
+                    class="mt-6 inline-flex items-center gap-2 rounded-md bg-[#2D4680] px-5 py-2.5 text-sm font-medium text-white transition hover:opacity-90">
+                    Know More
+
+                    <mat-icon class="!h-5 !w-5 !text-[20px]">
+                        open_in_new
+                    </mat-icon>
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+</section>

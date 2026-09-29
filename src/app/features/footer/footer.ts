@@ -40,28 +40,23 @@ export class Footer {
   readonly logo = 'assets/logo.svg';
   readonly tagline = 'Empowering your healthcare journey with innovative solutions.';
 
-  readonly socialLinks: SocialLink[] = [
-    {
-      icon: 'linkedin',
-      link: 'https://linkedin.com/company/aabind-hospital',
-      label: 'LinkedIn',
-    },
-    {
-      icon: 'photo_camera',
-      link: 'https://instagram.com/aabindhospital',
-      label: 'Instagram',
-    },
-    {
-      icon: 'facebook',
-      link: 'https://facebook.com/aabindhospital',
-      label: 'Facebook',
-    },
-    {
-      icon: 'play_circle',
-      link: 'https://youtube.com/@aabindhospital',
-      label: 'Youtube',
-    },
-  ];
+readonly socialLinks: SocialLink[] = [
+  {
+    icon: 'business',
+    link: 'https://www.linkedin.com/company/prx-care',
+    label: 'LinkedIn',
+  },
+  {
+    icon: 'facebook',
+    link: 'https://www.facebook.com/people/PRxcare/61560169178371/',
+    label: 'Facebook',
+  },
+  {
+    icon: 'photo_camera',
+    link: 'https://www.instagram.com/prx.care?stkn=MW9zZGk3ODVwcnhnNg==',
+    label: 'Instagram',
+  },
+];
 
   readonly footerSections: FooterSection[] = [
     {
@@ -73,25 +68,38 @@ export class Footer {
         { label: 'Shipping Policy', link: '/shipping-policy' },
         { label: 'Cancellation Policy', link: '/cancellation-policy' },
         { label: 'Terms & Conditions', link: '/terms-and-conditions' },
+        { label: 'Careers', link: '/careers' },
       ],
     },
     {
       title: 'Services',
-      links: [{ label: 'Book Appointment', link: '/dashboard/schedule-appointment' }],
+      links: [{ label: 'Book Appointment', link: '/schedule-appointment' }],
+    },
+    {
+      title: 'Ayushman Bharath Digital Mission (ABDM)',
+      links: [
+        { label: 'View All ABDM Services', link: '/ayushman-bharath-digital-mission' },
+        {
+          label: 'ABDM Website',
+          link: 'https://abdm.gov.in/',
+          external: true,
+        },
+      ],
+
     },
   ];
 
   readonly storeBadges: StoreBadge[] = [
     {
-      qr: 'assets/aabind-playstore-qr.png',
+      qr: '/qr-code/play-store.svg',
       button: 'assets/playstore.svg',
-      link: 'https://play.google.com/store/apps/details?id=com.aarogyam.aabind',
+      link: 'https://play.google.com/store/apps/details?id=prx.care.patient_journey',
       label: 'Play Store',
     },
     {
-      qr: 'assets/aabind-appstore-qr.png',
+      qr: '/qr-code/app-store.svg',
       button: 'assets/appstore.svg',
-      link: 'https://apps.apple.com/in/app/aarogyam-by-aabind/id6780435426',
+      link: 'https://apps.apple.com/in/app/prx-care/id6739527531',
       label: 'App Store',
     },
   ];

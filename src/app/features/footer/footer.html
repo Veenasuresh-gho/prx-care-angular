@@ -11,16 +11,23 @@
           <!-- Section Links -->
           <ul class="space-y-2 text-sm">
             <li *ngFor="let item of section.links">
-              <a [routerLink]="item.external ? undefined : item.link" [href]="item.external ? item.link : undefined"
-                [target]="item.external ? '_blank' : undefined"
-                [rel]="item.external ? 'noopener noreferrer' : undefined"
-                class="inline-flex items-center gap-1 rounded-sm text-white/90 transition-colors hover:text-white hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white">
-                <span>{{ item.label }}</span>
+              <ng-container *ngIf="!item.external; else externalLink">
+                <a [routerLink]="item.link"
+                  class="inline-flex items-center gap-1 rounded-sm text-white/90 transition-colors hover:text-white hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white">
+                  <span>{{ item.label }}</span>
+                </a>
+              </ng-container>
+              <ng-template #externalLink>
+                <a [href]="item.link" target="_blank" rel="noopener noreferrer"
+                  class="inline-flex items-center gap-1 rounded-sm text-white/90 transition-colors hover:text-white hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white">
+                  <span>{{ item.label }}</span>
 
-                <mat-icon *ngIf="item.external" class="!h-4 !w-4 !text-[16px]">
-                  open_in_new
-                </mat-icon>
-              </a>
+                  <mat-icon class="!h-4 !w-4 !text-[16px]">
+                    open_in_new
+                  </mat-icon>
+                </a>
+              </ng-template>
+
             </li>
           </ul>
 
