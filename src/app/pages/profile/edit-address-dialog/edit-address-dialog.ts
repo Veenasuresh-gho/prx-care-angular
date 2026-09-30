@@ -136,7 +136,6 @@ export class EditAddressDialog implements OnChanges {
             'Unable to load country list'
           );
         }
-
         this.isCountryLoading = false;
       },
 
@@ -163,10 +162,6 @@ export class EditAddressDialog implements OnChanges {
 
     this.openChange.emit(false);
   }
-
-  /**
-   * Submit address.
-   */
   handleSubmit(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
@@ -229,41 +224,28 @@ export class EditAddressDialog implements OnChanges {
       },
     ];
     this.isLoading = true;
-
     this.srv.getdata('patient', tv).subscribe({
       next: (res) => {
-        console.log(
-          'Address Update Response:',
-          res
-        );
-
         if (res?.Status === 1) {
           this.toastr.success(
             'Address updated successfully'
           );
-
           this.isLoading = false;
-
           this.refetch.emit();
           this.openChange.emit(false);
         } else {
           this.isLoading = false;
-
           this.toastr.error(
-
             'Unable to update address'
           );
         }
       },
-
       error: (error) => {
         console.error(
           'Address update error:',
           error
         );
-
         this.isLoading = false;
-
         this.toastr.error(
           'Unable to update address'
         );
