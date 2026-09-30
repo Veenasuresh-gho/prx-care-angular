@@ -1,0 +1,19 @@
+<div>
+    <app-milestone-card [childAge]="details?.ageGroup || ''" />
+    <div>
+        <p class="py-2 font-bold">
+            What to expect at this stage
+        </p>
+    </div>
+    <app-milestone-list [fineMotor]="details?.fineMotor || ''" [grossMotor]="details?.grossMotor || ''"
+        [languageHearing]="details?.languageHearing || ''" [socialAdaptive]="details?.socialAdaptive || ''" />
+    <div class="py-2">
+        <app-button variant="outline" (click)="seeWhatsNext()">
+            See What's Next →
+        </app-button>
+    </div>
+    <div>
+        <app-development-note-card title="Development"
+            message="Milestones can vary from child to child. A single milestone reached slightly early or late is usually not significant" />
+    </div>
+</div>

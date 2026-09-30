@@ -25,92 +25,16 @@ import { TermsOfUse } from './features/footer/components/terms-of-use/terms-of-u
 import { Careers } from './features/footer/components/careers/careers';
 import { Abdm } from './features/abdm/abdm';
 import { Profile } from './pages/profile/profile';
+import { KidsDevelopment } from './pages/kids-development/kids-development';
+import { Milestones } from './pages/kids-development/milestones/milestones';
 import { MedicalRecords } from './pages/medical-records/medical-records';
 import { MedicalRecordsList } from './pages/medical-records/components/medical-record-list/medical-records-list';
-
-// export const routes: Routes = [
-//     {
-//         path: 'dashboard',
-//         canActivate: [authGuard],
-//         component: Dashboard
-//     },
-//     {
-//         path: 'auth/sign-in',
-//         component: SignIn
-//     },
-//     {
-//         path: 'auth/sign-up',
-//         component: SignUp
-//     },
-//     {
-//         path: 'schedule-appointment',
-//         component: ScheduleAppointment
-//     },
-//     {
-//         path: "schedule-appointment/:id",
-//         component: DoctorDetails
-//     },
-//     {
-//         path: 'medications',
-//         component: MedicationsComponent
-//     },
-//     {
-//         path: 'vitals',
-//         component: VitalsComponent
-//     },
-//     {
-//         path: 'consultation-history',
-//         component: ConsultationHistoryComponent
-//     },
-//     {
-//         path: 'lab-records',
-//         component: LabResults
-//     },
-//     {
-//         path: 'emergency-contacts',
-//         component: EmergencyContacts
-//     },
-//     {
-//         path: 'facilitator',
-//         component: ClinicalHistory
-//     },
-//     {
-//         path: 'health-insurance',
-//         component: HealthInsurance
-//     },
-//     {
-//         path: 'allergy',
-//         component: Allergy
-//     },
-//     {
-//         path: 'emergency-services',
-//         component: EmergencyServicesComponent
-//     },
-//     {
-//         path: '',
-//         component: PublicLayout,
-//         children: [
-//             {
-//                 path: 'about',
-//                 component: AboutUs
-//             }
-//         ]
-//     },
-
-
-//     {
-//         path: '**',
-//         redirectTo: 'auth/sign-in'
-//     }
-
-// ];
 
 export const routes: Routes = [
     {
         path: 'auth/sign-in',
         component: SignIn
     },
-
     {
         path: 'auth/sign-up',
         component: SignUp
@@ -120,62 +44,50 @@ export const routes: Routes = [
         component: DashboardLayout,
         canActivate: [authGuard],
         children: [
-
             {
                 path: 'dashboard',
                 component: Dashboard
             },
-
             {
                 path: 'schedule-appointment',
                 component: ScheduleAppointment
             },
-
             {
                 path: 'schedule-appointment/:id',
                 component: DoctorDetails
             },
-
             {
                 path: 'medications',
                 component: MedicationsComponent
             },
-
             {
                 path: 'vitals',
                 component: VitalsComponent
             },
-
             {
                 path: 'consultation-history',
                 component: ConsultationHistoryComponent
             },
-
             {
                 path: 'lab-records',
                 component: LabResults
             },
-
             {
                 path: 'emergency-contacts',
                 component: EmergencyContacts
             },
-
             {
                 path: 'facilitator',
                 component: ClinicalHistory
             },
-
             {
                 path: 'health-insurance',
                 component: HealthInsurance
             },
-
             {
                 path: 'allergy',
                 component: Allergy
             },
-
             {
                 path: 'emergency-services',
                 component: EmergencyServicesComponent
@@ -191,16 +103,21 @@ export const routes: Routes = [
             {
                 path: 'records',
                 component: MedicalRecordsList
-            }
-
+            },
+            {
+                path: 'kids-development',
+                component: KidsDevelopment
+            },
+            {
+                path: 'kids-development/milestones',
+                component: Milestones
+            },
         ]
     },
-
     {
         path: '',
         component: PublicLayout,
         children: [
-
             {
                 path: 'about',
                 component: AboutUs

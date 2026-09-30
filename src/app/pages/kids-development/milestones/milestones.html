@@ -1,0 +1,19 @@
+<div class="space-y-4">
+    <!-- Header -->
+    <div>
+        <h4 class="text-lg font-semibold text-gray-900">
+            Child Development Milestones
+        </h4>
+
+        <p class="text-sm text-gray-600">
+            A complete guide to your child's development milestones
+        </p>
+    </div>
+    @if (isLoading) {
+    <div class="p-4 text-sm text-gray-500">
+        Loading milestones...
+    </div>
+    } @else {
+    <app-milestone-accordion [data]="milestones"></app-milestone-accordion>
+    }
+</div>

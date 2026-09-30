@@ -1,0 +1,14 @@
+<mat-form-field appearance="outline" class="w-full">
+    <mat-label>Pick a date</mat-label>
+
+    <input matInput [matDatepicker]="picker" [value]="value" [min]="restrictToFuture ? today : null"
+        [max]="restrictToFuture ? maxDate : null" (dateChange)="onDateChange($event.value)" readonly />
+
+    <mat-datepicker-toggle matIconSuffix [for]="picker">
+        <mat-icon matDatepickerToggleIcon>
+            calendar_month
+        </mat-icon>
+    </mat-datepicker-toggle>
+
+    <mat-datepicker #picker></mat-datepicker>
+</mat-form-field>

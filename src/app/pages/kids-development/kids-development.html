@@ -1,0 +1,37 @@
+<div class="p-2">
+    <div class="space-y-1">
+        <h4 class="text-lg font-semibold text-gray-900">
+            Child Development
+        </h4>
+        <p class="text-sm text-gray-500">
+            Track milestones by age
+        </p>
+    </div>
+    <div class="flex items-center gap-4 mt-4">
+        <div>
+            <label class="text-xs font-medium uppercase tracking-wide text-gray-400">
+                Child's date of birth
+            </label>
+            <app-date-picker [value]="dob" (valueChange)="onDobChange($event)"></app-date-picker>
+        </div>
+        <app-button [disabled]="!dob || isLoading" (click)="handleTrack()">
+            @if (isLoading) {
+            Loading...
+            } @else {
+            Track
+            }
+        </app-button>
+    </div>
+    <p class="text-sm tracking-wide text-gray-400">
+        We'll show the milestone stage based on your child's age.
+    </p>
+
+    <div class="mt-4">
+        @if (details) {
+        <app-kids-development-details-container [details]="details"></app-kids-development-details-container>
+        } @else {
+        <app-empty></app-empty>
+        }
+    </div>
+
+</div>

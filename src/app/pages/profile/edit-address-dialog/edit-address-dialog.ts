@@ -22,7 +22,6 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { GHOService } from '../../../services/gho.service';
 import { ToastrService } from 'ngx-toastr';
-import { JsonPipe } from '@angular/common';
 
 @Component({
   selector: 'app-edit-address-dialog',
@@ -34,7 +33,6 @@ import { JsonPipe } from '@angular/common';
     MatSelectModule,
     MatIconModule,
     MatProgressSpinnerModule,
-    JsonPipe,
   ],
   templateUrl: './edit-address-dialog.html',
 })
@@ -99,11 +97,6 @@ export class EditAddressDialog implements OnChanges {
       }
     }
   }
-
-  /**
-   * Get Country ID from country list item.
-   * CountryID is used as the mat-select value.
-   */
   getCountryId(country: any): string {
     return String(
       country?.CountryID ??
@@ -113,9 +106,6 @@ export class EditAddressDialog implements OnChanges {
     );
   }
 
-  /**
-   * Get Country Name for display.
-   */
   getCountryName(country: any): string {
     return (
       country?.CountryName ??
@@ -125,9 +115,6 @@ export class EditAddressDialog implements OnChanges {
     );
   }
 
-  /**
-   * Load country list.
-   */
   getCountryList(): void {
     this.isCountryLoading = true;
 
@@ -142,7 +129,6 @@ export class EditAddressDialog implements OnChanges {
       next: (res) => {
         if (res?.Status === 1) {
           this.countryList = res?.Data?.[0] ?? [];
-
         } else {
           this.countryList = [];
 
@@ -150,7 +136,6 @@ export class EditAddressDialog implements OnChanges {
             'Unable to load country list'
           );
         }
-
         this.isCountryLoading = false;
       },
 
@@ -170,9 +155,6 @@ export class EditAddressDialog implements OnChanges {
     });
   }
 
-  /**
-   * Close dialog.
-   */
   close(): void {
     if (this.isLoading) {
       return;
@@ -180,10 +162,6 @@ export class EditAddressDialog implements OnChanges {
 
     this.openChange.emit(false);
   }
-
-  /**
-   * Submit address.
-   */
   handleSubmit(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
@@ -245,38 +223,29 @@ export class EditAddressDialog implements OnChanges {
         V: '2',
       },
     ];
-
     this.isLoading = true;
-
     this.srv.getdata('patient', tv).subscribe({
       next: (res) => {
         if (res?.Status === 1) {
           this.toastr.success(
             'Address updated successfully'
           );
-
           this.isLoading = false;
-
           this.refetch.emit();
           this.openChange.emit(false);
         } else {
           this.isLoading = false;
-
           this.toastr.error(
-          
             'Unable to update address'
           );
         }
       },
-
       error: (error) => {
         console.error(
           'Address update error:',
           error
         );
-
         this.isLoading = false;
-
         this.toastr.error(
           'Unable to update address'
         );
