@@ -1,0 +1,47 @@
+<div class="space-y-4">
+    @for (item of data; track item.milestoneId; let index = $index) {
+    @let palette = getPalette(index);
+    @let expanded = isOpen(item.milestoneId);
+    <div class="overflow-hidden rounded-2xl" [class]="palette.bg">
+        <button type="button" class="flex w-full items-center gap-4 px-5 py-4 text-left" [attr.aria-expanded]="expanded"
+            (click)="toggle(item.milestoneId)">
+            <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-xl"
+                [class]="palette.chip">
+                {{ getAgeGroupIcon(item.milestoneId) }}
+            </div>
+            <div class="flex-1">
+                <p class="text-base font-bold text-gray-900">
+                    {{ item.ageGroup }}
+                </p>
+                <p class="text-sm text-gray-500">
+                    {{ subtitleByMilestoneId[item.milestoneId] ?? '' }}
+                </p>
+            </div>
+            <mat-icon class="shrink-0 text-gray-700 transition-transform duration-200" [class.rotate-180]="expanded">
+                expand_more
+            </mat-icon>
+        </button>
+        @if (expanded) {
+        <div class="space-y-5 rounded-2xl bg-white px-5 py-5">
+            @for (meta of categoryMeta; track meta.key) {
+            <div class="flex gap-4">
+                <!-- Category Icon -->
+                <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg text-xl"
+                    [class]="meta.iconBg">
+                    {{ meta.icon }}
+                </div>
+                <div class="space-y-1">
+                    <h4 class="text-base font-semibold text-gray-900">
+                        {{ meta.title }}
+                    </h4>
+                    <p class="text-sm leading-relaxed text-gray-500">
+                        {{ item[meta.key] }}
+                    </p>
+                </div>
+            </div>
+            }
+        </div>
+        }
+    </div>
+    }
+</div>
