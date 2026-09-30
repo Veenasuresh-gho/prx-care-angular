@@ -1,0 +1,73 @@
+<form [formGroup]="medicalRecordForm" (ngSubmit)="submit()" class="flex h-full min-h-0 flex-col">
+    <div class="space-y-3 overflow-y-auto px-1">
+        <mat-form-field appearance="outline" class="w-full">
+            <mat-label>File Category</mat-label>
+            <mat-select formControlName="documentCategory">
+                @for (category of fileCategory; track category.value) {
+                <mat-option [value]="category.value">
+                    {{ category.label }}
+                </mat-option>
+                }
+            </mat-select>
+            @if (medicalRecordForm.get('documentCategory')?.hasError('required') &&
+            medicalRecordForm.get('documentCategory')?.touched) {
+            <mat-error>
+                File category is required
+            </mat-error>
+            }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-full">
+            <mat-label>File Type</mat-label>
+            <mat-select formControlName="documentType" [disabled]="!selectedCategory">
+                @for (type of selectedCategory?.typeList; track type.value) {
+                <mat-option [value]="type.value">
+                    {{ type.label }}
+                </mat-option>
+                }
+            </mat-select>
+            @if (medicalRecordForm.get('documentType')?.hasError('required') &&
+            medicalRecordForm.get('documentType')?.touched) {
+            <mat-error>
+                File type is required
+            </mat-error>
+            }
+        </mat-form-field>
+
+        <div class="mt-2">
+            <label class="mb-2 block text-sm font-medium text-gray-700">
+                Medical Record
+            </label>
+            <input type="file" accept="image/*,.pdf"
+                class="block w-full rounded-lg border border-gray-300 bg-white p-2 text-sm"
+                (change)="onFileSelected($event)" />
+
+            @if (selectedFile) {
+            <div class="mt-2 flex items-center justify-between rounded-md bg-gray-50 px-3 py-2">
+                <div class="flex min-w-0 items-center gap-2">
+                    <div
+                        class="flex h-8 w-8 shrink-0 items-center justify-center rounded bg-red-50 text-xs font-bold text-red-600">
+                        {{ isPdf ? 'PDF' : 'IMG' }}
+                    </div>
+                    <span class="truncate text-sm text-gray-700">
+                        {{ selectedFile.name }}
+                    </span>
+                </div>
+                <button type="button" mat-icon-button class="shrink-0" (click)="removeFile()">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </div>
+            }
+        </div>
+    </div>
+
+    <div class="mt-4 border-t border-gray-200 pt-4">
+        <button mat-flat-button type="submit" class="w-full" [disabled]="submitting">
+            @if (submitting) {
+            <mat-spinner diameter="20"></mat-spinner>
+            } @else {
+            Add Medical Record
+            }
+        </button>
+    </div>
+</form>

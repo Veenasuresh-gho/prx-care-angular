@@ -1,0 +1,21 @@
+.medical-record-tabs ::ng-deep .mat-mdc-tab {
+    min-width: 0 !important;
+    padding: 0 4px !important;
+    flex: 1 !important;
+}
+
+.medical-record-tabs ::ng-deep .mat-mdc-tab-label-container {
+    width: 100%;
+}
+
+.medical-record-tabs ::ng-deep .mat-mdc-tab-list {
+    width: 100%;
+}
+
+.medical-record-tabs ::ng-deep .mdc-tab__content {
+    width: 100%;
+}
+
+.medical-record-tabs ::ng-deep .mdc-tab__text-label {
+    width: 100%;
+}

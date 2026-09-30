@@ -99,6 +99,7 @@ export class FileUploadService {
         userId: string,
         file: File | null,
         documentTypeId: string,
+        documentCategoryId?: string,
         duration?: number
     ): Promise<boolean> {
 
@@ -132,6 +133,10 @@ export class FileUploadService {
                 {
                     T: 'c4',
                     V: duration?.toString() ?? '',
+                },
+                {
+                    T: 'c5',
+                    V: documentCategoryId?? '',
                 },
                 {
                     T: 'c10',

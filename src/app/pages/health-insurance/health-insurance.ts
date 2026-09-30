@@ -42,7 +42,6 @@ export class HealthInsurance implements OnInit {
     isSheetOpen = false;
     isEditMode = false;
     selectedInsurance: any = null;
-  
     private toastr = inject(ToastrService);
 
     constructor(

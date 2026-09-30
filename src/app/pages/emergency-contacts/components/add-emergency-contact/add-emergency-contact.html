@@ -1,11 +1,7 @@
 <form [formGroup]="emergencyContactForm" (ngSubmit)="submit()" class="flex flex-col h-full min-h-0">
-
     <div class="space-y-2 overflow-y-auto px-1">
-
-        <!-- First Name -->
         <mat-form-field appearance="outline" class="w-full">
             <mat-label>First Name</mat-label>
-
             <input matInput formControlName="firstName" placeholder="Enter first name" />
 
             @if (
@@ -23,12 +19,8 @@
             }
 
         </mat-form-field>
-
-
-        <!-- Last Name -->
         <mat-form-field appearance="outline" class="w-full">
             <mat-label>Last Name</mat-label>
-
             <input matInput formControlName="lastName" placeholder="Enter last name" />
 
             @if (
@@ -108,7 +100,7 @@
                 <mat-form-field appearance="outline" class="w-38">
 
                     <mat-label>
-                       Country Code
+                        Country Code
                     </mat-label>
 
                     <mat-select formControlName="countryId" (selectionChange)="onCountryChange($event.value)">

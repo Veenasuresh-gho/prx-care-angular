@@ -27,6 +27,8 @@ import { Abdm } from './features/abdm/abdm';
 import { Profile } from './pages/profile/profile';
 import { KidsDevelopment } from './pages/kids-development/kids-development';
 import { Milestones } from './pages/kids-development/milestones/milestones';
+import { MedicalRecords } from './pages/medical-records/medical-records';
+import { MedicalRecordsList } from './pages/medical-records/components/medical-record-list/medical-records-list';
 
 export const routes: Routes = [
     {
@@ -93,6 +95,14 @@ export const routes: Routes = [
             {
                 path: 'profile',
                 component: Profile
+            },
+            {
+                path: 'medical-records',
+                component: MedicalRecords
+            },
+            {
+                path: 'records',
+                component: MedicalRecordsList
             },
             {
                 path: 'kids-development',

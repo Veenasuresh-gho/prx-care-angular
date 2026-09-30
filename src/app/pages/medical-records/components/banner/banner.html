@@ -1,0 +1,35 @@
+<div class="overflow-hidden rounded-lg border border-[#2563EB]/15
+           bg-gradient-to-br from-[#EEF3FB] to-white">
+    <div class="flex flex-col gap-6 p-6
+               md:flex-row md:items-center md:justify-between md:p-7">
+        <div class="flex items-start gap-4
+                   md:items-center">
+            <div class="flex h-14 w-14 shrink-0 items-center justify-center
+                       rounded-2xl border border-[#2563EB]/15
+                       bg-white shadow-sm">
+                <img src="medical-records/medicalRecords.png" alt="" class="h-8 w-8 object-contain" />
+            </div>
+            <div class="space-y-1.5">
+                <h1 class="text-base font-semibold text-slate-900
+                           md:text-lg">
+                    Access your medical records
+                </h1>
+                <p class="max-w-lg text-[13.5px] leading-relaxed text-slate-600">
+                    View and download records provided by your hospital or
+                    healthcare provider — including lab results, discharge
+                    summaries, X-rays, and scan reports.
+                </p>
+            </div>
+        </div>
+        <button type="button" (click)="handleViewRecords()" class="flex shrink-0 items-center self-start
+                   rounded-md bg-primary px-4 py-2.5
+                   text-sm font-medium text-white
+                   transition-colors hover:bg-primary/80
+                   md:self-center">
+            View records
+            <mat-icon class="ml-1.5 !h-4 !w-4 !text-base">
+                arrow_forward
+            </mat-icon>
+        </button>
+    </div>
+</div>
