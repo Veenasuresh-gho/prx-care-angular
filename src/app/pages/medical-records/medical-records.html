@@ -1,0 +1,104 @@
+<div class="py-3">
+    <app-medical-records-banner></app-medical-records-banner>
+</div>
+<div class="w-full">
+    <div class="flex items-center justify-between">
+        <div>
+            <p class="py-4 text-xl font-semibold">
+                Upload Medical Documents
+            </p>
+        </div>
+
+        <div>
+            <button mat-flat-button color="primary" type="button" (click)="openAddSheet()"
+                class="flex items-center gap-1.5">
+                <mat-icon class="!h-4 !w-4 !text-base">
+                    add
+                </mat-icon>
+                <span>New</span>
+            </button>
+        </div>
+    </div>
+
+    <mat-tab-group class="medical-record-tabs" [selectedIndex]="selectedTab"
+        (selectedIndexChange)="onTabChange($event)">
+        @for (tab of tabContent; track tab.value) {
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <div class="flex w-full items-center justify-center gap-1.5 rounded-md px-1 py-0.5"
+                    [style.background-color]="tab.color">
+                    <img [src]="tab.icon" [alt]="tab.label" class="h-7 w-7 shrink-0 object-contain" />
+
+                    <span class="whitespace-nowrap text-[11px] font-medium">
+                        {{ tab.label }}
+                    </span>
+                </div>
+            </ng-template>
+
+            <div class="py-3">
+                @if (isLoading) {
+                <div class="flex justify-center py-8">
+                    <mat-spinner diameter="28"></mat-spinner>
+                </div>
+                } @else {
+                @if (fileList.length === 0) {
+                <div class="py-8 text-center text-gray-500">
+                    No medical records found.
+                </div>
+                } @else {
+                <div class="space-y-3">
+                    @for (record of fileList; track record.ID) {
+                    <div class="rounded-lg border border-gray-200 bg-white p-4">
+                        <div class="flex items-center justify-between gap-4">
+                            <div class="min-w-0 flex-1">
+                                <p class="truncate font-medium text-gray-800">
+                                    {{ record.DocumentName }}
+                                </p>
+
+                                <p class="mt-1 text-sm text-gray-500">
+                                    {{ record.Category }}
+                                </p>
+
+                                <p class="mt-1 text-xs text-gray-400">
+                                    {{ record.UploadedDate }}
+                                    ·
+                                    {{ record.Size }} bytes
+                                </p>
+                            </div>
+
+                            <div class="flex shrink-0 items-center gap-2">
+                                <button mat-stroked-button type="button" (click)="viewRecord(record)"
+                                    class="!flex !h-9 !w-9 !min-w-0 items-center justify-center !p-0">
+                                    <mat-icon class="!m-0 !text-[18px]">
+                                        visibility
+                                    </mat-icon>
+                                </button>
+
+                                <button mat-stroked-button type="button" (click)="deleteRecord(record)"
+                                    [disabled]="deletingRecordId !== null"
+                                    class="!flex !h-9 !w-9 !min-w-0 items-center justify-center !p-0 !text-red-600">
+                                    @if (deletingRecordId === record.ID) {
+                                    <mat-spinner diameter="18"></mat-spinner>
+                                    } @else {
+                                    <mat-icon class="!m-0 !text-[18px]">
+                                        delete
+                                    </mat-icon>
+                                    }
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    }
+                </div>
+                }
+                }
+            </div>
+        </mat-tab>
+        }
+    </mat-tab-group>
+</div>
+
+<app-sheet [(open)]="isSheetOpen" side="right" width="500px" title="Add Medical Records"
+    description="Upload and manage your medical documents.">
+    <add-medical-record (saved)="MedicalRecordSaved()"></add-medical-record>
+</app-sheet>

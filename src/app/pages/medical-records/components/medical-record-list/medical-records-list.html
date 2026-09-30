@@ -1,0 +1,76 @@
+<div class="mx-auto max-w-7xl px-6">
+    <div class="mb-6">
+        <h1 class="text-lg font-bold text-slate-900">
+            Your Medical Records
+        </h1>
+        <p class="mt-1 text-sm text-slate-500">
+            View and manage your uploaded reports and lab results
+        </p>
+        <div class="mt-4 flex gap-3">
+            <input type="text" [(ngModel)]="search" (input)="onSearchChange(search)" placeholder="Search records..."
+                class="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none focus:border-primary" />
+            <select [(ngModel)]="sortBy" (change)="onSortChange(sortBy)"
+                class="rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none">
+                <option value="newest">
+                    Newest
+                </option>
+                <option value="oldest">
+                    Oldest
+                </option>
+            </select>
+        </div>
+    </div>
+    @if (isLoading) {
+    <div class="grid gap-4 sm:grid-cols-2">
+        @for (item of [1, 2, 3, 4, 5, 6]; track item) {
+        <div class="h-32 animate-pulse rounded-xl bg-slate-200"></div>
+        }
+    </div>
+    } @else if (records.length === 0) {
+    <div class="flex h-60 flex-col items-center justify-center rounded-xl border border-dashed border-slate-300">
+        <mat-icon class="mb-3 !h-12 !w-12 !text-5xl text-slate-400">
+            folder_off
+        </mat-icon>
+        <p class="text-sm text-slate-500">
+            No medical records found
+        </p>
+    </div>
+    } @else if (filteredRecords.length === 0) {
+    <div class="flex h-60 flex-col items-center justify-center rounded-xl border border-dashed border-slate-300">
+        <mat-icon class="mb-3 !h-12 !w-12 !text-5xl text-slate-400">
+            search_off
+        </mat-icon>
+        <p class="text-sm text-slate-500">
+            No matching records
+        </p>
+    </div>
+    } @else {
+    <div class="mt-6 grid gap-4 sm:grid-cols-2">
+        @for (record of filteredRecords; track record.RecordID) {
+        <div class="rounded-xl border border-gray-200 bg-white p-4">
+            <div class="flex items-center justify-between gap-4">
+                <div class="min-w-0 flex-1">
+                    <p class="truncate font-medium text-slate-800">
+                        {{ record.FileName }}
+                    </p>
+                    <p class="mt-1 text-sm text-slate-500">
+                        {{ record.Category }}
+                    </p>
+                    <p class="mt-1 text-xs text-slate-400">
+                        Record ID: {{ record.RecordID }}
+                    </p>
+                </div>
+                <div class="flex shrink-0 items-center">
+                    <button type="button" (click)="viewRecord(record)"
+                        class="!flex !h-9 !w-9 !min-w-0 items-center justify-center rounded-md border border-gray-300 !p-0">
+                        <mat-icon class="!m-0 !text-[18px]">
+                            visibility
+                        </mat-icon>
+                    </button>
+                </div>
+            </div>
+        </div>
+        }
+    </div>
+    }
+</div>

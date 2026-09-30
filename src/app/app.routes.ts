@@ -25,6 +25,8 @@ import { TermsOfUse } from './features/footer/components/terms-of-use/terms-of-u
 import { Careers } from './features/footer/components/careers/careers';
 import { Abdm } from './features/abdm/abdm';
 import { Profile } from './pages/profile/profile';
+import { MedicalRecords } from './pages/medical-records/medical-records';
+import { MedicalRecordsList } from './pages/medical-records/components/medical-record-list/medical-records-list';
 
 // export const routes: Routes = [
 //     {
@@ -104,7 +106,6 @@ import { Profile } from './pages/profile/profile';
 // ];
 
 export const routes: Routes = [
-
     {
         path: 'auth/sign-in',
         component: SignIn
@@ -183,6 +184,14 @@ export const routes: Routes = [
                 path: 'profile',
                 component: Profile
             },
+            {
+                path: 'medical-records',
+                component: MedicalRecords
+            },
+            {
+                path: 'records',
+                component: MedicalRecordsList
+            }
 
         ]
     },
