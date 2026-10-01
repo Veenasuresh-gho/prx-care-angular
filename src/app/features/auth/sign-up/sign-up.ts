@@ -24,7 +24,8 @@ import { formatDateToDDMMYYYY } from '../../../utils/date';
     CustomInput,
     Button
   ],
-  templateUrl: './sign-up.html'
+  templateUrl: './sign-up.html',
+  
 })
 export class SignUp implements OnInit {
 
