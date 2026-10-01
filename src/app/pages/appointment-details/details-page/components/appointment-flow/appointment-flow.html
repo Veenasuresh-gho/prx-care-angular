@@ -1,0 +1,12 @@
+@if (loading || steps.length > 0) {
+  <div class="space-y-3">
+    <h4 class="text-lg font-bold">
+      Consultation status update
+    </h4>
+
+    <app-stepper-timeline
+      [steps]="steps"
+      [loading]="loading"
+    />
+  </div>
+}

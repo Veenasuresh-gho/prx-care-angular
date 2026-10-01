@@ -1,0 +1,179 @@
+@if (!isCancelled && pendingAmount > 0) {
+  <mat-card
+    class="mt-4 rounded-xl border border-slate-200 bg-white shadow-none"
+  >
+    <div class="p-5">
+
+      <!-- Header -->
+      <div class="mb-4 flex items-center gap-2">
+        <span
+          class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-amber-50"
+        >
+          <mat-icon
+            class="!flex !h-auto !w-auto !items-center !justify-center !text-[14px] !leading-none text-amber-600"
+          >
+            warning
+          </mat-icon>
+        </span>
+
+        <span
+          class="text-[13.5px] font-semibold text-slate-900"
+        >
+          Payment Due
+        </span>
+      </div>
+
+      <!-- Payment Details -->
+      <div
+        class="flex items-center justify-between gap-3"
+      >
+        <div class="min-w-0">
+          <p
+            class="truncate text-[13.5px] text-slate-900"
+          >
+            Consultation Fee
+          </p>
+
+          <p
+            class="text-[12px] text-muted-foreground"
+          >
+            Appointment #{{ appointment?.ID }}
+          </p>
+        </div>
+
+        <div class="shrink-0 text-right">
+          <p
+            class="text-[16px] font-semibold text-slate-900"
+          >
+            {{ currency }}
+            {{ formatAmount(pendingAmount) }}
+          </p>
+
+          <p
+            class="text-[12px] text-muted-foreground"
+          >
+            Pending
+          </p>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div
+        class="mt-4 flex flex-col items-stretch justify-end gap-2 sm:flex-row sm:items-center"
+      >
+        <app-button
+          size="sm"
+          variant="outline"
+          (click)="openShareDialog(pendingAmount)"
+        >
+          <mat-icon
+            class="!mr-1.5 !text-[14px]"
+          >
+            share
+          </mat-icon>
+
+          Share payment link
+        </app-button>
+
+        <app-button
+          size="sm"
+          [disabled]="isGetPatientBillingLoading"
+          (click)="handlePayment(pendingAmount)"
+        >
+          @if (isGetPatientBillingLoading) {
+            Processing...
+          } @else {
+            Pay {{ currency }}
+            {{ formatAmount(pendingAmount) }}
+          }
+        </app-button>
+      </div>
+    </div>
+  </mat-card>
+}
+
+
+@if (
+  !isCancelled &&
+  pendingAmount === 0 &&
+  amountPaid > 0 &&
+  isConfirmed
+) {
+  <mat-card
+    class="mt-4 rounded-xl border border-dashed border-primary bg-primary/5 shadow-none"
+  >
+    <div
+      class="flex flex-col gap-4 p-5 text-primary"
+    >
+
+      <!-- Success Header -->
+      <div class="flex items-center gap-4">
+
+        <div
+          class="flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-full bg-primary-light"
+        >
+          <mat-icon
+            class="!text-[20px]"
+          >
+            thumb_up
+          </mat-icon>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <mat-icon
+            class="!text-[16px]"
+          >
+            check_circle
+          </mat-icon>
+
+          <p
+            class="text-[13.5px] leading-relaxed"
+          >
+            Your consultation fee has been paid
+            successfully.
+          </p>
+        </div>
+      </div>
+
+      <!-- Information -->
+      <div
+        class="space-y-1.5 pl-[50px] pr-4"
+      >
+        <p
+          class="text-[13.5px] font-semibold leading-relaxed"
+        >
+          Amount paid:
+          {{ currency }}
+          {{ formatAmount(amountPaid) }}
+        </p>
+
+        <p
+          class="text-[13px] leading-relaxed opacity-90"
+        >
+          Check-in will be available 30 minutes
+          before your appointment and only near the
+          hospital location.
+        </p>
+
+        <p
+          class="text-[13px] leading-relaxed opacity-90"
+        >
+          You can check in via the PRx.Care app or at
+          the registration counter/OPD.
+        </p>
+      </div>
+    </div>
+  </mat-card>
+}
+
+<app-send-payment-request-dialog
+  [open]="isRequestDialogOpen"
+  [amount]="activeShareTarget?.amount ?? 0"
+  [appointmentId]="appointment?.ID"
+  (openChange)="
+    $event
+      ? (isRequestDialogOpen = true)
+      : closeShareDialog()
+  "
+  (send)="handleSendPaymentRequest($event)"
+/>

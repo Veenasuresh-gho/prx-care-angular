@@ -32,6 +32,8 @@ import { MedicalRecordsList } from './pages/medical-records/components/medical-r
 import { FindPharmacy } from './pages/find-pharmacy/find-pharmacy';
 import { FindLab } from './pages/find-lab/find-lab';
 import { LabDetails } from './pages/find-lab/components/lab-details/lab-details';
+import { AppointmentDetails } from './pages/appointment-details/appointment-details';
+import { DetailsPage } from './pages/appointment-details/details-page/details-page';
 
 export const routes: Routes = [
     {
@@ -126,6 +128,14 @@ export const routes: Routes = [
             {
                 path: 'find-lab/lab-details/:id',
                 component: LabDetails
+            },
+            {
+                path: 'appointments',
+                component: AppointmentDetails
+            },
+            {
+                path: 'appointments/:id',
+                component: DetailsPage
             },
         ]
     },
