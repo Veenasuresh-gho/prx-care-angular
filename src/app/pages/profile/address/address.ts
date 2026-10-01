@@ -5,8 +5,6 @@ import {
   Input,
   Output,
 } from '@angular/core';
-
-import { Button } from '../../../components/button/button';
 import { EditAddressDialog } from '../edit-address-dialog/edit-address-dialog';
 
 @Component({
@@ -14,7 +12,6 @@ import { EditAddressDialog } from '../edit-address-dialog/edit-address-dialog';
   standalone: true,
   imports: [
     EditAddressDialog,
-    Button,
   ],
   templateUrl: './address.html',
 })

@@ -29,6 +29,9 @@ import { KidsDevelopment } from './pages/kids-development/kids-development';
 import { Milestones } from './pages/kids-development/milestones/milestones';
 import { MedicalRecords } from './pages/medical-records/medical-records';
 import { MedicalRecordsList } from './pages/medical-records/components/medical-record-list/medical-records-list';
+import { FindPharmacy } from './pages/find-pharmacy/find-pharmacy';
+import { FindLab } from './pages/find-lab/find-lab';
+import { LabDetails } from './pages/find-lab/components/lab-details/lab-details';
 
 export const routes: Routes = [
     {
@@ -111,6 +114,18 @@ export const routes: Routes = [
             {
                 path: 'kids-development/milestones',
                 component: Milestones
+            },
+            {
+                path: 'find-pharmacy',
+                component: FindPharmacy
+            },
+            {
+                path: 'find-lab',
+                component: FindLab
+            },
+            {
+                path: 'find-lab/lab-details/:id',
+                component: LabDetails
             },
         ]
     },

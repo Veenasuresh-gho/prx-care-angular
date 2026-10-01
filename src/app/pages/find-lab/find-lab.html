@@ -1,0 +1,70 @@
+<div class="py-4">
+    <div class="relative w-full">
+        <mat-icon class="absolute left-2 top-1/2 -translate-y-1/2 text-gray-500">
+            search
+        </mat-icon>
+
+        <input type="text" placeholder="- Search Labs -"
+            class="w-full bg-white pl-8 pr-3 py-2 rounded-md shadow outline-none" [(ngModel)]="searchTerm"
+            (input)="onSearch()" />
+    </div>
+</div>
+
+<div>
+    <h4 class="text-lg font-bold py-4">
+        Available Labs
+    </h4>
+
+    @if (loading) {
+    <div class="flex justify-center items-center py-10">
+        <mat-spinner diameter="32"></mat-spinner>
+    </div>
+    } @else if (labList.length > 0) {
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        @for (lab of labList; track $index) {
+        <div class="bg-white shadow-xl p-6 flex flex-col justify-between cursor-pointer" (click)="viewLabDetails(lab)">
+            <div class="space-y-4">
+                <p class="text-primary font-semibold">
+                    {{ lab.Lab }}
+                </p>
+
+                <div class="min-h-[3rem]">
+                    @if (lab.Address) {
+                    <p class="text-gray-500 text-sm">
+                        {{ lab.Address }}
+                    </p>
+                    } @else {
+                    <p class="text-gray-400 text-sm italic">
+                        No address provided
+                    </p>
+                    }
+                </div>
+
+                <span class="py-1 px-4 bg-blue-50 text-primary rounded-full text-xs">
+                    {{ lab.ServiceType }}
+                </span>
+            </div>
+
+            <div class="space-y-3 mt-4">
+                <div class="flex justify-between">
+                    <p class="font-semibold">
+                        Hours:
+                        <span class="text-success">
+                            {{ lab.WorkingHours || '8 hours' }}
+                        </span>
+                    </p>
+
+                    <p class="font-semibold">
+                        {{ lab.Location }}
+                    </p>
+                </div>
+            </div>
+        </div>
+        }
+    </div>
+    } @else {
+    <div class="py-6 text-center text-gray-500">
+        <p>No Labs Found</p>
+    </div>
+    }
+</div>

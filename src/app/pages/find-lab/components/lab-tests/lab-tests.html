@@ -1,0 +1,157 @@
+<div class="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-5xl max-h-[90vh] rounded-2xl shadow-2xl overflow-hidden flex flex-col">
+        <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between shrink-0">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
+                    <mat-icon>{{ serviceType === 0 ? 'bloodtype' : 'radiology' }}</mat-icon>
+                </div>
+                <div>
+                    <h2 class="text-lg font-bold text-gray-900">{{ title }}</h2>
+                    <p class="text-xs text-gray-400 mt-0.5">{{ subtitle }}</p>
+                </div>
+            </div>
+            <button type="button" (click)="close()" class="w-9 h-9 rounded-full hover:bg-gray-100 flex items-center justify-center text-gray-500">
+                <mat-icon>close</mat-icon>
+            </button>
+        </div>
+
+        @if (loading) {
+            <div class="flex-1 flex items-center justify-center py-20">
+                <div class="text-center">
+                    <mat-spinner diameter="36"></mat-spinner>
+                    <p class="text-sm text-gray-500 mt-4">Loading available services...</p>
+                </div>
+            </div>
+        } @else {
+            <div class="px-5 pt-4">
+                <div class="flex items-center gap-3 border border-gray-200 rounded-xl px-3 h-11 focus-within:border-blue-400 focus-within:ring-2 focus-within:ring-blue-50">
+                    <mat-icon class="text-gray-400">search</mat-icon>
+                    <input type="text" [(ngModel)]="searchText" [placeholder]="serviceType === 0 ? 'Search tests...' : 'Search scans...'" class="w-full outline-none text-sm text-gray-700 placeholder:text-gray-400" />
+                </div>
+            </div>
+
+            @if (categories.length > 1) {
+                <div class="px-5 pt-4">
+                    <div class="flex gap-2 overflow-x-auto pb-1">
+                        @for (category of categories; track category) {
+                            <button type="button" (click)="selectCategory(category)" class="shrink-0 px-3 py-1.5 rounded-full text-xs font-medium border transition" [class.bg-blue-600]="selectedCategory === category" [class.text-white]="selectedCategory === category" [class.border-blue-600]="selectedCategory === category" [class.bg-white]="selectedCategory !== category" [class.text-gray-600]="selectedCategory !== category" [class.border-gray-200]="selectedCategory !== category">
+                                {{ category }}
+                            </button>
+                        }
+                    </div>
+                </div>
+            }
+            <div class="px-5 pt-4 pb-2">
+                <p class="text-xs text-gray-400">
+                    Showing
+                    <span class="font-semibold text-gray-700">{{ filteredServices.length }}</span>
+                    {{ serviceType === 0 ? 'tests' : 'scans' }}
+                </p>
+            </div>
+            <div class="flex-1 overflow-y-auto px-5 pb-5">
+                @if (filteredServices.length > 0) {
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        @for (service of filteredServices; track service.Id) {
+                            <div class="border border-gray-100 rounded-xl p-4 hover:border-blue-200 hover:shadow-sm transition">
+                                <div class="flex justify-between gap-4">
+                                    <div class="min-w-0">
+                                        <span class="inline-flex px-2 py-1 rounded-md bg-blue-50 text-blue-600 text-[10px] font-semibold">
+                                            {{ service.TestCategory }}
+                                        </span>
+                                        <h3 class="font-semibold text-sm text-gray-900 mt-2">
+                                            {{ service.TestName }}
+                                        </h3>
+                                        <p class="text-xs text-gray-500 mt-1.5 leading-5">
+                                            {{ service.TestDescription }}
+                                        </p>
+                                    </div>
+
+                                    <div class="shrink-0 text-right">
+                                        <p class="text-base font-bold text-gray-900">
+                                            ₹{{ service.Cost }}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="flex flex-wrap gap-x-4 gap-y-2 mt-4 pt-3 border-t border-gray-100">
+                                    @if (service.SampleType) {
+                                        <div class="flex items-center gap-1.5 text-xs text-gray-500">
+                                            <mat-icon class="text-[16px] !w-4 !h-4">science</mat-icon>
+                                            {{ service.SampleType }}
+                                        </div>
+                                    }
+
+                                    @if (service.ReportTime) {
+                                        <div class="flex items-center gap-1.5 text-xs text-gray-500">
+                                            <mat-icon class="text-[16px] !w-4 !h-4">schedule</mat-icon>
+                                            {{ service.ReportTime }}
+                                        </div>
+                                    }
+
+                                    @if (service.Preparation) {
+                                        <div class="flex items-center gap-1.5 text-xs text-gray-500">
+                                            <mat-icon class="text-[16px] !w-4 !h-4">info</mat-icon>
+                                            {{ service.Preparation }}
+                                        </div>
+                                    }
+                                </div>
+
+                                <button type="button" (click)="bookService(service)" class="w-full mt-4 h-9 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold transition">
+                                    Book {{ serviceType === 0 ? 'Test' : 'Scan' }}
+                                </button>
+                            </div>
+                        }
+                    </div>
+                } @else {
+                    <div class="py-16 text-center">
+                        <div class="w-12 h-12 mx-auto rounded-full bg-gray-100 flex items-center justify-center">
+                            <mat-icon class="text-gray-400">search_off</mat-icon>
+                        </div>
+                        <h3 class="font-semibold text-gray-800 mt-4">
+                            No {{ serviceType === 0 ? 'tests' : 'scans' }} found
+                        </h3>
+                        <p class="text-xs text-gray-400 mt-1">
+                            Try changing your search or category.
+                        </p>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+
+    @if (bookingMessageVisible) {
+        <div class="absolute inset-0 z-10 flex items-center justify-center p-4">
+            <div class="absolute inset-0 bg-black/20" (click)="closeBookingMessage()"></div>
+            <div class="relative w-full max-w-sm bg-white rounded-2xl shadow-2xl p-6 text-center">
+                <div class="w-14 h-14 mx-auto rounded-full bg-blue-50 flex items-center justify-center">
+                    <mat-icon class="text-blue-600 !text-[28px]">construction</mat-icon>
+                </div>
+
+                <h3 class="text-lg font-bold text-gray-900 mt-4">
+                    Booking Coming Soon
+                </h3>
+
+                <p class="text-sm text-gray-500 mt-2 leading-6">
+                    Online booking for
+                    <span class="font-semibold text-gray-700">
+                        {{ serviceType === 0 ? 'lab tests' : 'scans' }}
+                    </span>
+                    is currently unavailable.
+                </p>
+
+                @if (selectedService?.TestName) {
+                    <div class="mt-4 px-3 py-2.5 rounded-lg bg-gray-50">
+                        <p class="text-xs text-gray-400">Selected Service</p>
+                        <p class="text-sm font-semibold text-gray-800 mt-1">
+                            {{ selectedService.TestName }}
+                        </p>
+                    </div>
+                }
+
+                <button type="button" (click)="closeBookingMessage()" class="w-full mt-5 h-10 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold transition">
+                    Okay
+                </button>
+            </div>
+        </div>
+    }
+</div>
