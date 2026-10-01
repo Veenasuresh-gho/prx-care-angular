@@ -1,0 +1,46 @@
+@if (payStatus === 'PENDING') {
+  <mat-card
+    class="mt-4 border-none bg-white shadow-none"
+  >
+    <div
+      class="flex items-center justify-between px-4 py-4"
+    >
+      <p class="text-sm text-slate-900">
+        Complete payment to check-in
+      </p>
+
+      <div class="flex gap-2">
+        <app-button
+          variant="outline"
+          [disabled]="
+            isCancelled ||
+            isCancelAppointmentLoading
+          "
+          (click)="handleCancelClick()"
+        >
+          @if (isCancelAppointmentLoading) {
+            <mat-icon
+              class="mr-2 !h-4 !w-4 animate-spin !text-[16px]"
+            >
+              refresh
+            </mat-icon>
+
+            Cancelling...
+          } @else if (isCancelled) {
+            Cancelled
+          } @else {
+            Cancel Appointment
+          }
+        </app-button>
+      </div>
+    </div>
+  </mat-card>
+}
+
+<app-cancel-appointment
+  [open]="open"
+  [appointmentId]="appointment?.ID"
+  (openChange)="handleDialogChange($event)"
+  (confirm)="handleConfirmCancel()"
+/>
+

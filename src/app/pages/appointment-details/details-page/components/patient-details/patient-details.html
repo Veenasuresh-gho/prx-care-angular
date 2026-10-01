@@ -1,0 +1,121 @@
+@if (loading) {
+<div class="w-full rounded-lg border border-slate-200 bg-white">
+    <div class="space-y-5 p-6">
+        <!-- Header -->
+        <div class="flex items-center gap-2">
+            <div class="h-4 w-1 rounded-full bg-primary"></div>
+            <div class="h-4 w-24 animate-pulse rounded bg-light-grey"></div>
+        </div>
+        <!-- Skeleton -->
+        <div class="grid grid-cols-2 gap-5
+               sm:grid-cols-2
+               md:grid-cols-3
+               lg:grid-cols-5">
+            @for (item of [1, 2, 3, 4, 5]; track item) {
+            <div class="min-w-0 space-y-2">
+                <div class="h-3 w-24 animate-pulse rounded bg-light-grey"></div>
+                <div class="h-4 w-32 animate-pulse rounded bg-light-grey"></div>
+            </div>
+            }
+        </div>
+    </div>
+</div>
+} @else {
+<div class="w-full rounded-lg border border-slate-200 bg-white">
+    <div class="space-y-5 p-6">
+        <!-- Header -->
+        <div class="flex items-center gap-2">
+            <div class="h-4 w-1 rounded-full bg-primary"></div>
+            <h4 class="text-[15px] font-semibold text-slate-900">
+                Patient info
+            </h4>
+        </div>
+        <!-- Patient Information -->
+        <div class="grid grid-cols-2 gap-5
+               sm:grid-cols-2
+               md:grid-cols-3
+               lg:grid-cols-5">
+            <!-- Patient Name -->
+            <div class="flex min-w-0 flex-col gap-1.5">
+                <p class="flex items-center gap-1.5 truncate
+                   text-[12px] font-medium text-grey">
+                    <mat-icon class="!m-0 !h-[14px] !w-[14px]
+                     !text-[14px] text-primary">
+                        person
+                    </mat-icon>
+
+                    Patient name
+                </p>
+                <p class="break-words text-[13.5px]
+                   font-semibold text-slate-900">
+                    {{ appointment?.PatientInfo || '-' }}
+                </p>
+            </div>
+            <!-- Gender -->
+            <div class="flex min-w-0 flex-col gap-1.5">
+                <p class="flex items-center gap-1.5 truncate
+                   text-[12px] font-medium text-grey">
+                    <mat-icon class="!m-0 !h-[14px] !w-[14px]
+                     !text-[14px] text-primary">
+                        person_outline
+                    </mat-icon>
+
+                    Gender
+                </p>
+                <p class="break-words text-[13.5px]
+                   font-semibold text-slate-900">
+                    {{ appointment?.gender || '-' }}
+                </p>
+            </div>
+            <!-- Age -->
+            <div class="flex min-w-0 flex-col gap-1.5">
+                <p class="flex items-center gap-1.5 truncate
+                   text-[12px] font-medium text-grey">
+                    <mat-icon class="!m-0 !h-[14px] !w-[14px]
+                     !text-[14px] text-primary">
+                        calendar_month
+                    </mat-icon>
+
+                    Age
+                </p>
+                <p class="break-words text-[13.5px]
+                   font-semibold text-slate-900">
+                    {{ appointment?.age || '-' }}
+                </p>
+            </div>
+            <!-- Phone -->
+            <div class="flex min-w-0 flex-col gap-1.5">
+                <p class="flex items-center gap-1.5 truncate
+                   text-[12px] font-medium text-grey">
+                    <mat-icon class="!m-0 !h-[14px] !w-[14px]
+                     !text-[14px] text-primary">
+                        phone
+                    </mat-icon>
+
+                    Phone number
+                </p>
+                <p class="break-words text-[13.5px]
+                   font-semibold text-slate-900">
+                    {{ appointment?.PPhone || '-' }}
+                </p>
+            </div>
+            <!-- Email -->
+            <div class="flex min-w-0 flex-col gap-1.5">
+                <p class="flex items-center gap-1.5 truncate
+                   text-[12px] font-medium text-grey">
+                    <mat-icon class="!m-0 !h-[14px] !w-[14px]
+                     !text-[14px] text-primary">
+                        email
+                    </mat-icon>
+
+                    Email ID
+                </p>
+                <p class="break-words text-[13.5px]
+                   font-semibold text-slate-900">
+                    {{ appointment?.Email || '-' }}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+}

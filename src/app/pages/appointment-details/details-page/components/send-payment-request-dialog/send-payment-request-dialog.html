@@ -1,0 +1,94 @@
+<app-dialog
+  [open]="open"
+  (openChange)="handleDialogChange($event)"
+  size="md"
+>
+  <div class="w-full">
+
+    <!-- Header -->
+    <div class="mb-1">
+      <h2
+        class="text-left text-xl font-bold text-slate-900"
+      >
+        Send Payment Request
+      </h2>
+    </div>
+
+    <!-- Description -->
+    <p
+      class="mt-1 mb-1 text-[14px] text-slate-500"
+    >
+      Enter the details of the person you'd like to
+      request payment from.
+    </p>
+
+    <!-- Amount -->
+    <p
+      class="mb-6 text-[14px] text-slate-700"
+    >
+      Amount to request:
+
+      <span
+        class="font-semibold text-slate-900"
+      >
+        ₹{{ amount.toFixed(2) }}
+      </span>
+    </p>
+
+    <!-- Form -->
+    <form
+      [formGroup]="form"
+      class="space-y-4"
+      (ngSubmit)="handleSend()"
+    >
+
+      <!-- Full Name -->
+      <input
+        type="text"
+        formControlName="fullName"
+        placeholder="Full Name"
+        class="h-14 w-full rounded-xl border border-slate-200 bg-white px-4 text-[15px] text-slate-900 outline-none placeholder:text-slate-400 focus:border-primary focus:ring-1 focus:ring-primary"
+      />
+
+      <!-- Country + Phone -->
+      <div
+        class="grid grid-cols-[minmax(0,0.32fr)_minmax(0,0.68fr)] gap-3"
+      >
+
+        <!-- Country -->
+        <!-- <app-country-select-field
+          formControlName="countryCode"
+          [countries]="countries"
+          [loading]="isCountryLoading"
+        /> -->
+
+        <!-- Phone -->
+        <input
+          type="tel"
+          formControlName="phoneNumber"
+          placeholder="Phone Number"
+          class="h-14 w-full rounded-xl border border-slate-200 bg-white px-4 text-[15px] text-slate-900 outline-none placeholder:text-slate-400 focus:border-primary focus:ring-1 focus:ring-primary"
+        />
+      </div>
+
+      <!-- Email -->
+      <input
+        type="email"
+        formControlName="email"
+        placeholder="Email"
+        class="h-14 w-full rounded-xl border border-slate-200 bg-white px-4 text-[15px] text-slate-900 outline-none placeholder:text-slate-400 focus:border-primary focus:ring-1 focus:ring-primary"
+      />
+
+      <!-- Submit -->
+      <app-button
+        type="submit"
+        class="mt-8 block w-full"
+        [disabled]="!isValid || isLoading"
+      >
+        {{ isLoading ? 'Sending...' : 'Send Payment Link' }}
+      </app-button>
+
+    </form>
+  </div>
+</app-dialog>
+

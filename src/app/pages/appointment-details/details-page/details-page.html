@@ -1,0 +1,28 @@
+<div class="space-y-4">
+    <h4 class="mt-4 text-lg font-bold">
+        Appointment Details
+    </h4>
+    <div>
+        <app-appointment-card [appointment]="appointmentDetails" />
+    </div>
+    <div>
+        <app-patient-details [appointment]="appointmentDetails" />
+    </div>
+
+    <div>
+        @if (!isCancelled) {
+        <app-payment-alert [appointment]="appointmentDetails" />
+        }
+    </div>
+    <div>
+        @if (isConfirmed) {
+        <app-checkin-or-payment-proceed [appointment]="appointmentDetails" (cancelled)="refetch()" />
+        }
+    </div>
+    <div>
+        @if (!isConfirmed) {
+        <app-appointment-flow [appointmenttrack]="appointmentTrack" />
+        }
+    </div>
+
+</div>

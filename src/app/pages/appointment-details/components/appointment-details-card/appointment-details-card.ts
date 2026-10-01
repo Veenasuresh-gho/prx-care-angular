@@ -101,7 +101,7 @@ export class AppointmentDetailsCard {
 
   handleViewClick(): void {
     this.router.navigate([
-      '/en/appointments/appointment-details',
+      '/appointments',
       this.appointment.ID,
     ]);
   }

@@ -19,7 +19,7 @@ export class SideComponent {
   private router = inject(Router);
 
   viewAppointments() {
-    this.router.navigate(['/appointment-details']);
+    this.router.navigate(['/appointments']);
   }
 
   bookAppointment() {
