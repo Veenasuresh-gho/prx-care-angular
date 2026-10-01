@@ -5,7 +5,6 @@ import {
   Input,
   Output,
 } from '@angular/core';
-
 import { EditAddressDialog } from '../edit-address-dialog/edit-address-dialog';
 
 @Component({

@@ -1,0 +1,36 @@
+<div class="py-4">
+    <h4 class="font-bold text-lg">Find Pharmacy</h4>
+    <p class="text-gray-500">
+        For urgent prescriptions, contact the pharmacy directly through the listed phone number for availability and delivery options.
+    </p>
+</div>
+
+<div>
+    @if (loading) {
+        <div class="flex justify-center items-center py-10">
+            <mat-spinner diameter="32"></mat-spinner>
+        </div>
+    } @else if (pharmacyList.length > 0) {
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            @for (pharma of pharmacyList; track $index) {
+                <div class="bg-white shadow-xl p-6 flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <p class="text-primary font-semibold">{{ pharma?.PharmacyName }}</p>
+                        <p class="text-gray-500 text-sm">{{ pharma?.Address }}</p>
+                        <p class="flex items-center gap-2">
+                            <mat-icon class="text-primary">phone</mat-icon>
+                            <span class="font-bold">{{ pharma?.Phone }}</span>
+                        </p>
+                        <span class="py-1 px-4 bg-blue-50 text-primary rounded-full text-xs">
+                            {{ pharma.Location }}
+                        </span>
+                    </div>
+                </div>
+            }
+        </div>
+    } @else {
+        <div class="py-6 text-center text-gray-500">
+            <p>No Pharmacy Found</p>
+        </div>
+    }
+</div>

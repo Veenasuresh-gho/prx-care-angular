@@ -109,13 +109,6 @@ export class PaymentAlert {
     const paymentLink = this.buildPaymentLink(
       this.activeShareTarget.amount
     );
-
-    console.log('Payment request:', {
-      ...data,
-      phone: `${data.countryCode}${data.phoneNumber}`,
-      paymentLink,
-      appointmentId: this.appointment?.ID,
-    });
   }
 
   private buildPaymentLink(amount: number): string {

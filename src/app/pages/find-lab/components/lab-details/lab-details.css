@@ -1,0 +1,13 @@
+/* Hide scrollbar for horizontal galleries */
+::-webkit-scrollbar {
+    height: 5px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #d1d5db;
+    border-radius: 999px;
+}
