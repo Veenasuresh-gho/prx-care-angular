@@ -29,6 +29,7 @@ import { KidsDevelopment } from './pages/kids-development/kids-development';
 import { Milestones } from './pages/kids-development/milestones/milestones';
 import { MedicalRecords } from './pages/medical-records/medical-records';
 import { MedicalRecordsList } from './pages/medical-records/components/medical-record-list/medical-records-list';
+import { AppointmentDetails } from './pages/appointment-details/appointment-details';
 
 export const routes: Routes = [
     {
@@ -111,6 +112,10 @@ export const routes: Routes = [
             {
                 path: 'kids-development/milestones',
                 component: Milestones
+            },
+            {
+                path: 'appointment-details',
+                component: AppointmentDetails
             },
         ]
     },

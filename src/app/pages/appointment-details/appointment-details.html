@@ -1,0 +1,35 @@
+<div class="w-full">
+    <div class="mb-3">
+        <h2 class="text-base font-semibold text-black">
+            My Appointments
+        </h2>
+        <p class="text-xs text-grey">
+            View and manage your upcoming and past appointments.
+        </p>
+    </div>
+    @if (appontmentList?.length) {
+    <div class="space-y-4">
+        @for (appointment of appontmentList; track appointment.ID) {
+        <app-appointment-details-card [appointment]="appointment" />
+        }
+    </div>
+    } @else {
+    <!-- Empty State -->
+    <div class="flex min-h-[220px] flex-col items-center justify-center
+             rounded-xl border border-border bg-white px-6 py-10
+             text-center">
+        <div class="mb-4 flex h-12 w-12 items-center justify-center
+               rounded-full bg-primary-light text-primary">
+            <mat-icon class="!text-[24px]">
+                calendar_month
+            </mat-icon>
+        </div>
+        <h3 class="text-base font-semibold text-black">
+            No appointments found
+        </h3>
+        <p class="mt-1 max-w-md text-sm text-grey">
+            You don't have any appointments at the moment.
+        </p>
+    </div>
+    }
+</div>
