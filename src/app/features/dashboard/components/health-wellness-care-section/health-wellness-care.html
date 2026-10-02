@@ -1,0 +1,22 @@
+<div class="space-y-3">
+    <h2 class="text-base font-semibold text-slate-900 md:text-xl">
+        Health &amp; Wellness Care
+    </h2>
+    <div class="grid grid-cols-3 gap-3 md:gap-4">
+        @for (item of content; track item.label) {
+        <div role="button" tabindex="0"
+            class="group flex w-full cursor-pointer flex-col items-center rounded-2xl p-3 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 md:p-5"
+            [style.background-color]="activeItem === item.label ? item.hoverBg : item.bg" (click)="navigate(item.path)"
+            (mouseenter)="setHover(item.label)" (mouseleave)="removeHover()" (keydown.enter)="navigate(item.path)"
+            (keydown.space)="navigate(item.path)">
+            <div class="flex h-10 w-10 items-center justify-center md:h-12 md:w-12">
+                <img [src]="item.icon" [alt]="item.label"
+                    class="h-full w-full object-contain transition-transform duration-200 group-hover:scale-110" />
+            </div>
+            <p class="mt-2 text-center text-xs font-medium leading-tight text-slate-800 md:mt-3 md:text-sm">
+                {{ item.label }}
+            </p>
+        </div>
+        }
+    </div>
+</div>
