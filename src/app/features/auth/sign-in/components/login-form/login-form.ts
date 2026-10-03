@@ -14,7 +14,8 @@ import { Button } from '../../../../../components/button/button';
   selector: 'app-login-form',
   standalone: true,
   imports: [ReactiveFormsModule, CustomInput,Button],
-  templateUrl: './login-form.html'
+  templateUrl: './login-form.html',
+
 })
 
 export class LoginForm {
