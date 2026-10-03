@@ -1,0 +1,58 @@
+<div>
+  <!-- Header -->
+  <div class="mb-4">
+    <h4 class="text-lg font-semibold text-[#111827]">
+      My Bookings
+    </h4>
+
+    <p class="text-sm text-gray-500">
+      View your submitted home care service requests and their current status.
+    </p>
+  </div>
+  <!-- Loading -->
+  @if (isLoading) {
+    <div class="flex h-[50vh] items-center justify-center">
+      <div class="flex items-center gap-1.5">
+        <span
+          class="h-3 w-3 animate-bounce rounded-full bg-[#244b8b]"
+        ></span>
+
+        <span
+          class="h-3 w-3 animate-bounce rounded-full bg-[#244b8b] [animation-delay:150ms]"
+        ></span>
+
+        <span
+          class="h-3 w-3 animate-bounce rounded-full bg-[#244b8b] [animation-delay:300ms]"
+        ></span>
+      </div>
+    </div>
+  } @else {
+    <div class="space-y-4">
+
+      <!-- General Physician -->
+      <app-general-physician-card
+        [generalPhysician]="generalPhysician ?? []"
+        (refetch)="refetchBookings()"
+      />
+
+      <!-- Pharmacy Delivery -->
+      <app-pharmacy-delivery-card
+        [pharmacyDelivery]="pharmacyDelivery ?? []"
+        (refetch)="refetchBookings()"
+      />
+
+      <!-- Nursing Services -->
+      <app-nursing-services-card
+        [nursingServices]="nursingServices ?? []"
+        (refetch)="refetchBookings()"
+      />
+
+      <!-- Lab Collection -->
+      <app-lab-collection-card
+        [labCollection]="labCollection ?? []"
+        (refetch)="refetchBookings()"
+      />
+
+    </div>
+  }
+</div>

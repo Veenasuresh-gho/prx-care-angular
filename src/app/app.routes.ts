@@ -34,6 +34,7 @@ import { FindLab } from './pages/find-lab/find-lab';
 import { LabDetails } from './pages/find-lab/components/lab-details/lab-details';
 import { AppointmentDetails } from './pages/appointment-details/appointment-details';
 import { DetailsPage } from './pages/appointment-details/details-page/details-page';
+import { Bookings } from './pages/bookings/bookings';
 
 export const routes: Routes = [
     {
@@ -136,6 +137,10 @@ export const routes: Routes = [
             {
                 path: 'appointments/:id',
                 component: DetailsPage
+            },
+            {
+                path: 'bookings',
+                component: Bookings
             },
         ]
     },

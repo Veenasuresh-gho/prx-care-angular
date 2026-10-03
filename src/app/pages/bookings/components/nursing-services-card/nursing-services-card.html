@@ -1,0 +1,123 @@
+
+<div>
+  @if (nursingServices.length > 0) {
+    <div class="space-y-4">
+      @for (booking of nursingServices; track booking.ID) {
+        <div
+          (click)="handleCardClick(booking)"
+          class="w-full rounded-xl border-0 bg-white p-4 shadow-sm transition-shadow duration-150 md:p-5"
+          [class.opacity-60]="booking.Status?.toLowerCase() === 'cancelled'"
+          [class.cursor-not-allowed]="booking.Status?.toLowerCase() === 'cancelled'"
+          [class.cursor-pointer]="booking.Status?.toLowerCase() !== 'cancelled'"
+          [class.hover:shadow-md]="booking.Status?.toLowerCase() !== 'cancelled'"
+        >
+          <div class="space-y-4">
+            <!-- Header -->
+            <div class="flex items-start justify-between">
+              <h4 class="font-semibold text-[#1F3159]">
+                Nursing Services
+              </h4>
+
+              @if (booking.Status) {
+                <span
+                  class="inline-flex items-center gap-1 whitespace-nowrap rounded-full px-2 py-1 text-xs font-semibold"
+                  [class.bg-red-100]="booking.Status?.toLowerCase() === 'cancelled'"
+                  [class.text-red-700]="booking.Status?.toLowerCase() === 'cancelled'"
+                  [class.bg-[#2D4680]/10]="booking.Status?.toLowerCase() === 'booked'"
+                  [class.text-[#2D4680]]="booking.Status?.toLowerCase() === 'booked'"
+                  [class.bg-green-100]="booking.Status?.toLowerCase() !== 'cancelled' && booking.Status?.toLowerCase() !== 'booked'"
+                  [class.text-green-700]="booking.Status?.toLowerCase() !== 'cancelled' && booking.Status?.toLowerCase() !== 'booked'"
+                >
+                  @if (booking.Status?.toLowerCase() === 'cancelled') {
+                    <mat-icon class="!h-4 !w-4 !text-base">
+                      info
+                    </mat-icon>
+                  } @else {
+                    <mat-icon class="!h-4 !w-4 !text-base">
+                      verified
+                    </mat-icon>
+                  }
+
+                  {{ booking.Status }}
+                </span>
+              }
+            </div>
+
+            <!-- Type of nursing care -->
+            <div class="flex items-center gap-2.5">
+              <div
+                class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#2D4680]/[0.08]"
+              >
+                <mat-icon class="!h-5 !w-5 !text-xl text-[#2D4680]">
+                  medical_services
+                </mat-icon>
+              </div>
+
+              <div>
+                <p class="text-xs text-slate-500">
+                  Type of nursing care
+                </p>
+                <p class="text-sm font-semibold text-[#1F3159]">
+                  {{ booking?.NursingCare }}
+                </p>
+              </div>
+            </div>
+
+            <!-- Date and duration -->
+            <div class="flex items-center justify-between gap-3">
+              <!-- Preferred date -->
+              <div class="flex items-center gap-2.5">
+                <div
+                  class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#2D4680]/[0.08]"
+                >
+                  <mat-icon class="!h-5 !w-5 !text-xl text-[#2D4680]">
+                    calendar_today
+                  </mat-icon>
+                </div>
+
+                <div>
+                  <p class="text-xs text-slate-500">
+                    Preferred date
+                  </p>
+                  <p class="text-sm font-semibold text-[#1F3159]">
+                    {{ booking?.PreferredDate }}
+                  </p>
+                </div>
+              </div>
+
+              <!-- Estimated duration -->
+              <div class="flex items-center gap-2.5">
+                <div
+                  class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#2D4680]/[0.08]"
+                >
+                  <mat-icon class="!h-5 !w-5 !text-xl text-[#2D4680]">
+                    schedule
+                  </mat-icon>
+                </div>
+
+                <div>
+                  <p class="text-xs text-slate-500">
+                    Estimated duration
+                  </p>
+                  <p class="text-sm font-semibold text-[#1F3159]">
+                    {{ booking?.EstimatedDuration }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>
+
+<!-- Nursing Services Dialog -->
+@if (selectedBooking) {
+  <app-nursing-services
+    [open]="openDialog"
+    [booking]="selectedBooking"
+    (openChange)="onDialogChange($event)"
+    (refetch)="onRefetch()"
+  />
+}

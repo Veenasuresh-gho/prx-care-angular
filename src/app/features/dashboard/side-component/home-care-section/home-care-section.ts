@@ -6,14 +6,17 @@ import { PharmacyDeliveryDialog } from './components/pharmacy-delivery/pharmacy-
 import { NursingServicesDialog } from './components/nursing-services/nursing-services';
 import { LabCollectionDialog } from './components/lab-collection-dialog/lab-collection-dialog';
 import { GHOService } from '../../../../services/gho.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home-care-section',
   imports: [Button, NgClass, GeneralPhysicianDialog, PharmacyDeliveryDialog, NursingServicesDialog, LabCollectionDialog],
   templateUrl: './home-care-section.html',
 })
-export class HomeCareSection  {
+export class HomeCareSection {
   srv = inject(GHOService);
+  router = inject(Router)
+
   showGeneralDialog = false;
   showPharmacyDialog = false;
   showNursingDialog = false;
@@ -72,6 +75,6 @@ export class HomeCareSection  {
   }
 
   handleShowBookings(): void {
-    // navigate/open bookings
+    this.router.navigate(['/bookings']);
   }
 }
