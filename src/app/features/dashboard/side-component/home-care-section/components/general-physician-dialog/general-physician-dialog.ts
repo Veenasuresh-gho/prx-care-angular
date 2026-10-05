@@ -15,6 +15,8 @@ import {
   Validators,
 } from '@angular/forms';
 
+import { MatDialog } from '@angular/material/dialog';
+
 import { Dialog } from '../../../../../../components/dialog/dialog';
 import { Button } from '../../../../../../components/button/button';
 import { CountrySelectField } from '../../../../../../components/country-select-field/country-select-field';
@@ -32,6 +34,12 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 
+import {
+  LocationSelectorComponent,
+  LocationResult,
+} from '../../../../../../components/location-selector/location-selector';
+
+
 @Component({
   selector: 'app-general-physician-dialog',
   standalone: true,
@@ -46,10 +54,12 @@ import { MatIconModule } from '@angular/material/icon';
   ],
   templateUrl: './general-physician-dialog.html',
 })
-export class GeneralPhysicianDialog implements OnInit, OnChanges {
+export class GeneralPhysicianDialog
+  implements OnInit, OnChanges {
   private fb = inject(FormBuilder);
   private srv = inject(GHOService);
   private toastr = inject(ToastrService);
+  private dialog = inject(MatDialog);
 
   patientId: string | null = null;
 
@@ -99,23 +109,15 @@ export class GeneralPhysicianDialog implements OnInit, OnChanges {
       booking?.PreferredTime
     );
 
-    console.log('Booking:', booking);
-    console.log('PreferredDate:', booking?.PreferredDate);
-    console.log('Formatted date:', date);
-    console.log('PreferredTime:', booking?.PreferredTime);
-    console.log('Formatted time:', time);
-
     this.form.patchValue({
-      date: formatApiDateForInput(
-        this.booking.PreferredDate
+      date,
+      time,
+      name: booking?.PatientName ?? '',
+      countryCode: String(
+        booking?.CountryId ?? '91'
       ),
-      time: formatTimeForInput(
-        this.booking.PreferredTime
-      ),
-      name: this.booking.PatientName ?? '',
-      countryCode: String(this.booking.CountryId ?? '91'),
-      phone: this.booking.ContactNumber ?? '',
-      address: this.booking.HomeAddress ?? '',
+      phone: booking?.ContactNumber?.trim() ?? '',
+      address: booking?.HomeAddress ?? '',
     });
   }
 
@@ -140,6 +142,66 @@ export class GeneralPhysicianDialog implements OnInit, OnChanges {
     this.openChange.emit(false);
     this.form.markAsUntouched();
   }
+
+  openLocation(): void {
+    if (this.isViewMode) {
+      return;
+    }
+
+    const dialogRef = this.dialog.open(
+      LocationSelectorComponent,
+      {
+        width: '600px',
+        maxWidth: '95vw',
+        height: '80vh',
+        maxHeight: '90vh',
+        panelClass: 'location-selector-dialog',
+        data: {
+          patientId: this.patientId,
+          initialAddress:
+            this.form.controls.address.value ?? '',
+          showSavedAddresses: true,
+          allowCurrentLocation: true,
+        },
+      }
+    );
+
+    dialogRef
+      .afterClosed()
+      .subscribe(
+        (
+          location: LocationResult | undefined
+        ) => {
+          if (!location) {
+            return;
+          }
+
+          console.log(
+            'Selected location:',
+            location
+          );
+
+          const address =
+            location.fullAddress ||
+            location.formattedAddress ||
+            '';
+
+          console.log(
+            'Selected address:',
+            address
+          );
+
+          this.form.patchValue({
+            address,
+          });
+
+          this.form.controls.address.markAsTouched();
+          this.form.controls.address.markAsDirty();
+          this.form.controls.address.updateValueAndValidity();
+        }
+      );
+  }
+
 
   confirmBooking(): void {
     if (this.form.invalid) {
@@ -215,8 +277,5 @@ export class GeneralPhysicianDialog implements OnInit, OnChanges {
   cancelBooking(): void {
     this.close();
   }
-
-  openLocation(): void {
-    // Add location selection here
-  }
 }
+

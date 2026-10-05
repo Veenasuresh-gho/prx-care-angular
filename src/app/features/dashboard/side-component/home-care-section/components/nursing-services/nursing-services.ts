@@ -15,14 +15,22 @@ import {
   Validators,
 } from '@angular/forms';
 
+import { MatDialog } from '@angular/material/dialog';
+
 import { Dialog } from '../../../../../../components/dialog/dialog';
 import { Button } from '../../../../../../components/button/button';
 
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
 
 import { CountrySelectField } from '../../../../../../components/country-select-field/country-select-field';
+
+import {
+  LocationSelectorComponent,
+  LocationResult,
+} from '../../../../../../components/location-selector/location-selector';
 
 import { formatDateToDDMMYYYY } from '../../../../../../utils/date';
 
@@ -40,15 +48,16 @@ import { ToastrService } from 'ngx-toastr';
     MatSelectModule,
     MatInputModule,
     CountrySelectField,
+    MatIconModule
   ],
   templateUrl: './nursing-services.html',
 })
 export class NursingServicesDialog
-  implements OnChanges, OnInit
-{
+  implements OnChanges, OnInit {
   private fb = inject(FormBuilder);
   private srv = inject(GHOService);
   private toastr = inject(ToastrService);
+  private matDialog = inject(MatDialog);
 
   patientId: string | null = null;
 
@@ -203,10 +212,7 @@ export class NursingServicesDialog
     }
 
     if (this.booking) {
-      console.log(
-        'Nursing Booking:',
-        this.booking
-      );
+      console.log('Nursing Booking:', this.booking);
 
       const formattedDate =
         this.formatApiDateForInput(
@@ -217,30 +223,25 @@ export class NursingServicesDialog
         date: formattedDate,
 
         name:
-          this.booking.PatientName ??
-          '',
+          this.booking.PatientName ?? '',
 
         countryCode:
           String(
-            this.booking.CountryId ??
-            '91'
+            this.booking.CountryId ?? '91'
           ),
 
         phone:
-          this.booking.ContactNumber?.trim() ??
-          '',
+          this.booking.ContactNumber?.trim() ?? '',
 
         address:
-          this.booking.Address ??
-          '',
+          this.booking.HomeAddress ?? '',
 
         services:
-          this.booking.NursingCare ??
-          '',
+          this.booking.RequestTypeNote ?? '',
 
         duration:
           this.normalizeDuration(
-            this.booking.EstimatedDuration
+            this.booking.Duration
           ),
       });
 
@@ -346,9 +347,50 @@ export class NursingServicesDialog
       return;
     }
 
-    /*
-     * Add location selection logic here.
-     */
+    const dialogRef = this.matDialog.open(
+      LocationSelectorComponent,
+      {
+        width: '600px',
+        maxWidth: '95vw',
+        height: '80vh',
+        maxHeight: '90vh',
+        panelClass: 'location-selector-dialog',
+
+        data: {
+          patientId: this.patientId,
+
+          initialAddress:
+            this.form.controls.address.value ?? '',
+
+          showSavedAddresses: true,
+
+          allowCurrentLocation: true,
+        },
+      }
+    );
+
+    dialogRef
+      .afterClosed()
+      .subscribe(
+        (
+          location: LocationResult | undefined
+        ) => {
+          if (!location) {
+            return;
+          }
+          const address =
+            location.fullAddress ||
+            location.formattedAddress ||
+            '';
+          this.form.controls.address.setValue(
+            address
+          );
+
+          this.form.controls.address.markAsTouched();
+          this.form.controls.address.markAsDirty();
+          this.form.controls.address.updateValueAndValidity();
+        }
+      );
   }
 
   confirmBooking(): void {
@@ -378,8 +420,8 @@ export class NursingServicesDialog
     const formattedDate =
       data.date
         ? formatDateToDDMMYYYY(
-            data.date
-          )
+          data.date
+        )
         : '';
 
     const tags = [
@@ -396,22 +438,22 @@ export class NursingServicesDialog
       {
         T: 'c1',
         V: JSON.stringify({
-          name:
+          PatientName:
             data.name ?? '',
 
           countryCode:
             data.countryCode ?? '',
 
-          phone:
+          ContactNumber:
             data.phone ?? '',
 
-          address:
+          Address:
             data.address ?? '',
 
-          services:
+          NursingCare:
             data.services ?? '',
 
-          duration:
+          EstimatedDuration:
             data.duration ?? '',
         }),
       },
@@ -440,7 +482,7 @@ export class NursingServicesDialog
           if (res?.Status === 1) {
             this.toastr.success(
               res?.Data?.[0]?.[0]?.msg ||
-                'Nursing service request submitted successfully'
+              'Nursing service request submitted successfully'
             );
 
             this.refetch.emit();
@@ -449,7 +491,7 @@ export class NursingServicesDialog
           } else {
             this.toastr.error(
               res?.Info ||
-                'Booking failed'
+              'Booking failed'
             );
           }
         },

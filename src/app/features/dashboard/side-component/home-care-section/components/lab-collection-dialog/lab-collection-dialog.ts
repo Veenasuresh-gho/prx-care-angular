@@ -15,11 +15,21 @@ import {
   Validators,
 } from '@angular/forms';
 
+import { MatDialog } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+
 import { Dialog } from '../../../../../../components/dialog/dialog';
 import { Button } from '../../../../../../components/button/button';
+
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+
 import { CountrySelectField } from '../../../../../../components/country-select-field/country-select-field';
+
+import {
+  LocationSelectorComponent,
+  LocationResult,
+} from '../../../../../../components/location-selector/location-selector';
 
 import { formatDateToDDMMYYYY } from '../../../../../../utils/date';
 import { FileUploadService } from '../../../../../../services/file-upload-service';
@@ -35,22 +45,28 @@ import { ToastrService } from 'ngx-toastr';
     Button,
     MatFormFieldModule,
     MatInputModule,
+    MatIconModule,
     CountrySelectField,
   ],
   templateUrl: './lab-collection-dialog.html',
 })
 export class LabCollectionDialog
   implements OnChanges, OnInit {
+
   private fb = inject(FormBuilder);
   private fileUploadService = inject(FileUploadService);
   private srv = inject(GHOService);
   private toastr = inject(ToastrService);
+  private matDialog = inject(MatDialog);
 
   @Input() open = false;
   @Input() booking: any = null;
 
-  @Output() openChange = new EventEmitter<boolean>();
-  @Output() refetch = new EventEmitter<void>();
+  @Output() openChange =
+    new EventEmitter<boolean>();
+
+  @Output() refetch =
+    new EventEmitter<void>();
 
   patientId: string | null = null;
 
@@ -60,15 +76,19 @@ export class LabCollectionDialog
   isCancelling = false;
   isFileUploading = false;
 
-  view: 'form' | 'location' = 'form';
-
   form = this.fb.group({
     test: ['', Validators.required],
+
     date: ['', Validators.required],
+
     time: ['', Validators.required],
+
     name: ['', Validators.required],
+
     countryId: ['91', Validators.required],
+
     phone: ['', Validators.required],
+
     address: ['', Validators.required],
   });
 
@@ -77,18 +97,30 @@ export class LabCollectionDialog
   }
 
   ngOnInit(): void {
-    this.patientId = sessionStorage.getItem('id');
+    this.patientId =
+      sessionStorage.getItem('id');
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['booking'] || changes['open']) {
-      if (this.open && this.booking) {
+  ngOnChanges(
+    changes: SimpleChanges
+  ): void {
+    if (
+      changes['booking'] ||
+      changes['open']
+    ) {
+      if (
+        this.open &&
+        this.booking
+      ) {
         this.loadBooking();
       }
-    }
 
-    if (changes['open'] && !this.open) {
-      this.view = 'form';
+      if (
+        this.open &&
+        !this.booking
+      ) {
+        this.resetForm();
+      }
     }
   }
 
@@ -97,27 +129,45 @@ export class LabCollectionDialog
       return;
     }
 
-    if (this.booking) {
-      this.form.patchValue({
-        test: this.booking.TestName ?? '',
-        date: this.formatApiDateForInput(
-          this.booking.CollectionDate
-        ),
-        time: this.formatApiTimeForInput(
-          this.booking.CollectionTime
-        ),
-        name: this.booking.PatientName ?? '',
-        countryId: String(
-          this.booking.CountryId ?? '91'
-        ),
-        phone: this.booking.ContactNumber?.trim() ?? '',
-        address: this.booking.Address ?? '',
-      });
-
+    if (!this.booking) {
+      this.resetForm();
       return;
     }
 
-    this.resetForm();
+    this.form.patchValue({
+      test:
+        this.booking.RequestTypeNote ??
+        '',
+
+      date:
+        this.formatApiDateForInput(
+          this.booking.PreferredDate
+        ),
+
+      time:
+        this.formatApiDateForInput(
+          this.booking.PreferredTime
+        ),
+
+      name:
+        this.booking.PatientName ??
+        '',
+
+      countryId:
+        String(
+          this.booking.CountryId ??
+          '91'
+        ),
+
+      phone:
+        this.booking.ContactNumber?.trim() ??
+        '',
+
+      address:
+        this.booking.HomeAddress ??
+        this.booking.Address ??
+        '',
+    });
   }
 
   private formatApiDateForInput(
@@ -127,84 +177,68 @@ export class LabCollectionDialog
       return '';
     }
 
-    const parsedDate = new Date(date);
+    const parsedDate =
+      new Date(date);
 
-    if (Number.isNaN(parsedDate.getTime())) {
+    if (
+      Number.isNaN(
+        parsedDate.getTime()
+      )
+    ) {
       return '';
     }
 
-    const year = parsedDate.getFullYear();
-    const month = String(
-      parsedDate.getMonth() + 1
-    ).padStart(2, '0');
-    const day = String(
-      parsedDate.getDate()
-    ).padStart(2, '0');
+    const year =
+      parsedDate.getFullYear();
+
+    const month =
+      String(
+        parsedDate.getMonth() + 1
+      ).padStart(2, '0');
+
+    const day =
+      String(
+        parsedDate.getDate()
+      ).padStart(2, '0');
 
     return `${year}-${month}-${day}`;
   }
 
-  private formatApiTimeForInput(
-    time: string | null | undefined
-  ): string {
-    if (!time) {
-      return '';
-    }
-
-    const value = time
-      .trim()
-      .toUpperCase()
-      .replace(/\s+/g, '');
-
-    const match = value.match(
-      /^(\d{1,2}):(\d{2})(AM|PM)$/
-    );
-
-    if (!match) {
-      return '';
-    }
-
-    let hours = Number(match[1]);
-    const minutes = match[2];
-    const period = match[3];
-
-    if (period === 'AM' && hours === 12) {
-      hours = 0;
-    }
-
-    if (period === 'PM' && hours !== 12) {
-      hours += 12;
-    }
-
-    return `${String(hours).padStart(2, '0')}:${minutes}`;
-  }
-
   close(): void {
     this.openChange.emit(false);
+
     this.form.markAsUntouched();
   }
 
   resetForm(): void {
     this.form.reset({
       test: '',
+
       date: '',
+
       time: '',
+
       name: '',
+
       countryId: '91',
+
       phone: '',
+
       address: '',
     });
 
     this.file = null;
 
     this.isSubmitting = false;
-    this.isCancelling = false;
-    this.isFileUploading = false;
 
-    this.view = 'form';
+    this.isCancelling = false;
+
+    this.isFileUploading = false;
   }
 
-  onFileChange(file: File | null): void {
+  onFileChange(
+    file: File | null
+  ): void {
     this.file = file;
   }
 
@@ -213,23 +247,63 @@ export class LabCollectionDialog
       return;
     }
 
-    this.view = 'location';
-  }
+    const dialogRef =
+      this.matDialog.open(
+        LocationSelectorComponent,
+        {
+          width: '600px',
+          maxWidth: '95vw',
+          height: '80vh',
+          maxHeight: '90vh',
 
-  handleLocationSelect(
-    selectedAddress: string
-  ): void {
-    this.form.controls.address.setValue(
-      selectedAddress
-    );
+          panelClass:
+            'location-selector-dialog',
 
-    this.form.controls.address.markAsTouched();
+          data: {
+            patientId:
+              this.patientId,
 
-    this.view = 'form';
-  }
+            initialAddress:
+              this.form.controls
+                .address.value ?? '',
 
-  handleLocationBack(): void {
-    this.view = 'form';
+            showSavedAddresses: true,
+
+            allowCurrentLocation: true,
+          },
+        }
+      );
+
+    dialogRef
+      .afterClosed()
+      .subscribe(
+        (
+          location:
+            | LocationResult
+            | undefined
+        ) => {
+          if (!location) {
+            return;
+          }
+
+          const address =
+            location.fullAddress ||
+            location.formattedAddress ||
+            '';
+
+          this.form.controls.address
+            .setValue(address);
+
+          this.form.controls.address
+            .markAsTouched();
+
+          this.form.controls.address
+            .markAsDirty();
+
+          this.form.controls.address
+            .updateValueAndValidity();
+        }
+      );
   }
 
   confirmBooking(): void {
@@ -246,118 +320,166 @@ export class LabCollectionDialog
       this.toastr.error(
         'Patient ID not found'
       );
+
       return;
     }
 
     this.isSubmitting = true;
 
-    const data = this.form.getRawValue();
+    const data =
+      this.form.getRawValue();
 
-    const formattedDate = data.date
-      ? formatDateToDDMMYYYY(data.date)
-      : '';
+    const formattedDate =
+      data.date
+        ? formatDateToDDMMYYYY(
+          data.date
+        )
+        : '';
 
     const tags = [
       {
         T: 'dk1',
         V: this.patientId,
       },
+
       {
         T: 'dk2',
         V: formattedDate,
       },
+
       {
         T: 'c1',
         V: JSON.stringify({
-          TestName: data.test ?? '',
-          CollectionTime: data.time ?? '',
-          PatientName: data.name ?? '',
-          CountryId: data.countryId ?? '',
-          ContactNumber: data.phone ?? '',
-          Address: data.address ?? '',
+          TestName:
+            data.test ?? '',
+
+          CollectionTime:
+            data.time ?? '',
+
+          PatientName:
+            data.name ?? '',
+
+          CountryId:
+            data.countryId ?? '',
+
+          ContactNumber:
+            data.phone ?? '',
+
+          Address:
+            data.address ?? '',
         }),
       },
+
       {
         T: 'c8',
         V: '4',
       },
+
       {
         T: 'c10',
         V: '1',
       },
     ];
 
-    this.srv.getdata('hcare_', tags).subscribe({
-      next: async (res) => {
-        if (res?.Status !== 1) {
-          this.isSubmitting = false;
+    this.srv
+      .getdata(
+        'hcare_',
+        tags
+      )
+      .subscribe({
+        next: async (res) => {
+          if (
+            res?.Status !== 1
+          ) {
+            this.isSubmitting =
+              false;
 
-          this.toastr.error(
-            res?.Info ||
-            'Unable to create lab collection request'
-          );
-
-          return;
-        }
-
-        const bookingId =
-          res?.Data?.[0]?.[0]?.id;
-
-        if (!bookingId) {
-          this.isSubmitting = false;
-
-          this.toastr.error(
-            'Booking created, but booking ID was not returned'
-          );
-
-          return;
-        }
-
-        if (this.file) {
-          this.isFileUploading = true;
-
-          const uploadSuccess =
-            await this.fileUploadService.handleFileUpload(
-              String(bookingId),
-              this.patientId ?? '',
-              this.file,
-              '33'
+            this.toastr.error(
+              res?.Info ||
+              'Unable to create lab collection request'
             );
 
-          this.isFileUploading = false;
-
-          if (!uploadSuccess) {
-            this.isSubmitting = false;
             return;
           }
-        }
 
-        this.toastr.success(
-          res?.Data?.[0]?.[0]?.msg ||
-          'Lab sample collection request submitted successfully'
-        );
+          const bookingId =
+            res?.Data?.[0]?.[0]?.id;
 
-        this.isSubmitting = false;
+          if (!bookingId) {
+            this.isSubmitting =
+              false;
 
-        this.refetch.emit();
+            this.toastr.error(
+              'Booking created, but booking ID was not returned'
+            );
 
-        this.close();
-      },
+            return;
+          }
 
-      error: (error) => {
-        console.error(
-          'Lab collection booking error:',
-          error
-        );
+          /*
+           * Upload prescription/file
+           * after booking creation.
+           */
+          if (this.file) {
+            this.isFileUploading =
+              true;
 
-        this.isSubmitting = false;
-        this.isFileUploading = false;
+            const uploadSuccess =
+              await this.fileUploadService
+                .handleFileUpload(
+                  String(
+                    bookingId
+                  ),
 
-        this.toastr.error(
-          'Unable to submit lab collection request'
-        );
-      },
-    });
+                  this.patientId ?? '',
+
+                  this.file,
+
+                  '33'
+                );
+
+            this.isFileUploading =
+              false;
+
+            if (!uploadSuccess) {
+              this.isSubmitting =
+                false;
+
+              return;
+            }
+          }
+
+          this.toastr.success(
+            res?.Data?.[0]?.[0]
+              ?.msg ||
+            'Lab sample collection request submitted successfully'
+          );
+
+          this.isSubmitting =
+            false;
+
+          this.refetch.emit();
+
+          this.close();
+        },
+
+        error: (error) => {
+          console.error(
+            'Lab collection booking error:',
+            error
+          );
+
+          this.isSubmitting =
+            false;
+
+          this.isFileUploading =
+            false;
+
+          this.toastr.error(
+            'Unable to submit lab collection request'
+          );
+        },
+      });
   }
 
   cancelBooking(): void {
@@ -370,22 +492,29 @@ export class LabCollectionDialog
 
     this.isCancelling = true;
 
-    // Cancellation API can be added here.
+    /*
+     * Cancellation API can be
+     * added here.
+     */
 
     this.isCancelling = false;
   }
 
   openExistingFile(): void {
-    const fileUrl = this.booking?._url;
+    const fileUrl =
+      this.booking?._url;
 
     if (!fileUrl) {
       this.toastr.error(
         'Lab prescription file is not available'
       );
+
       return;
     }
 
-    window.open(fileUrl, '_blank');
+    window.open(
+      fileUrl,
+      '_blank'
+    );
   }
 }
-

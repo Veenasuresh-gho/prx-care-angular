@@ -55,37 +55,63 @@ export class Bookings implements OnInit {
         V: this.patientId,
       },
       {
+        T: 'c8',
+        V: '21',
+      },
+      {
         T: 'c10',
         V: '2',
       },
     ];
 
-    this.srv.getdata('homecare', tv).subscribe({
+    this.srv.getdata('hcare_', tv).subscribe({
       next: (res) => {
-        if (res.Status === 1) {
-          const data = res?.Data ?? [];
+        if (res?.Status === 1) {
+          const bookings = res?.Data?.[0] ?? [];
 
-          this.generalPhysician = data[0] ?? [];
-          this.pharmacyDelivery = data[1] ?? [];
-          this.nursingServices = data[2] ?? [];
-          this.labCollection = data[3] ?? [];
+          this.generalPhysician = bookings.filter(
+            (item: any) =>
+              item.Type?.toLowerCase() === 'general physician'
+          );
+
+          this.pharmacyDelivery = bookings.filter(
+            (item: any) =>
+              item.Type?.toLowerCase() === 'pharmacy delivery'
+          );
+
+          this.nursingServices = bookings.filter(
+            (item: any) =>
+              item.Type?.toLowerCase() === 'nursing services'
+          );
+
+          this.labCollection = bookings.filter(
+            (item: any) =>
+              item.Type?.toLowerCase() === 'lab collection'
+          );
         } else {
-          this.generalPhysician = [];
-          this.pharmacyDelivery = [];
-          this.nursingServices = [];
-          this.labCollection = [];
+          this.clearBookings();
         }
 
         this.isLoading = false;
         this.cdr.detectChanges();
       },
 
-      error: () => {
-        this.isLoading = false;
+      error: (error) => {
+        console.error('Bookings API error:', error);
 
+        this.clearBookings();
+
+        this.isLoading = false;
         this.cdr.detectChanges();
       },
     });
+  }
+
+  private clearBookings(): void {
+    this.generalPhysician = [];
+    this.pharmacyDelivery = [];
+    this.nursingServices = [];
+    this.labCollection = [];
   }
 
   refetchBookings(): void {

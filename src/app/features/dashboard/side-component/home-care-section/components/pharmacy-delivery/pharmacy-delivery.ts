@@ -15,6 +15,8 @@ import {
   Validators,
 } from '@angular/forms';
 
+import { MatDialog } from '@angular/material/dialog';
+
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
@@ -24,6 +26,11 @@ import {
   CountrySelectField,
 } from '../../../../../../components/country-select-field/country-select-field';
 import { Button } from '../../../../../../components/button/button';
+
+import {
+  LocationSelectorComponent,
+  LocationResult,
+} from '../../../../../../components/location-selector/location-selector';
 
 import { GHOService } from '../../../../../../services/gho.service';
 import { ToastrService } from 'ngx-toastr';
@@ -45,10 +52,12 @@ import { FileUploadService } from '../../../../../../services/file-upload-servic
 })
 export class PharmacyDeliveryDialog
   implements OnChanges, OnInit {
+
   private fb = inject(FormBuilder);
   private srv = inject(GHOService);
   private toastr = inject(ToastrService);
   private fileUploadService = inject(FileUploadService);
+  private matDialog = inject(MatDialog);
 
   @Input() open = false;
   @Input() booking: any = null;
@@ -133,7 +142,7 @@ export class PharmacyDeliveryDialog
 
         address:
           this.booking.Address ??
-          this.booking.DeliveryAddress ??
+          this.booking.HomeAddress ??
           '',
 
         notes:
@@ -151,6 +160,65 @@ export class PharmacyDeliveryDialog
     this.openChange.emit(false);
 
     this.form.markAsUntouched();
+  }
+
+  openLocation(): void {
+    if (this.isViewMode) {
+      return;
+    }
+
+    const dialogRef = this.matDialog.open(
+      LocationSelectorComponent,
+      {
+        width: '600px',
+        maxWidth: '95vw',
+        height: '80vh',
+        maxHeight: '90vh',
+        panelClass: 'location-selector-dialog',
+        data: {
+          patientId: this.patientId,
+          initialAddress:
+            this.form.controls.address.value ?? '',
+          showSavedAddresses: true,
+          allowCurrentLocation: true,
+        },
+      }
+    );
+
+    dialogRef
+      .afterClosed()
+      .subscribe(
+        (
+          location: LocationResult | undefined
+        ) => {
+          if (!location) {
+            return;
+          }
+
+          console.log(
+            'Selected pharmacy location:',
+            location
+          );
+
+          const address =
+            location.fullAddress ||
+            location.formattedAddress ||
+            '';
+
+          console.log(
+            'Selected pharmacy address:',
+            address
+          );
+
+          this.form.patchValue({
+            address,
+          });
+
+          this.form.controls.address.markAsTouched();
+          this.form.controls.address.markAsDirty();
+          this.form.controls.address.updateValueAndValidity();
+        }
+      );
   }
 
   confirmBooking(): void {
@@ -241,10 +309,6 @@ export class PharmacyDeliveryDialog
             return;
           }
 
-          /*
-           * Upload prescription after
-           * successful booking creation.
-           */
           if (this.file) {
             const uploadSuccess =
               await this.fileUploadService.handleFileUpload(
@@ -267,14 +331,8 @@ export class PharmacyDeliveryDialog
 
           this.isSubmitting = false;
 
-          /*
-           * Refresh My Bookings list.
-           */
           this.refetch.emit();
 
-          /*
-           * Close dialog.
-           */
           this.close();
         },
 
@@ -310,16 +368,6 @@ export class PharmacyDeliveryDialog
   trackBooking(): void {
     /*
      * Add tracking logic here.
-     */
-  }
-
-  openLocation(): void {
-    if (this.isViewMode) {
-      return;
-    }
-
-    /*
-     * Add location selection logic here.
      */
   }
 
