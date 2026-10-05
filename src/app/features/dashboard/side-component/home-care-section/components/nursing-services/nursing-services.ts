@@ -212,7 +212,6 @@ export class NursingServicesDialog
     }
 
     if (this.booking) {
-      console.log('Nursing Booking:', this.booking);
 
       const formattedDate =
         this.formatApiDateForInput(

@@ -1,0 +1,103 @@
+<div class="px-4 lg:px-10 xl:px-44 py-6">
+    <button type="button" (click)="goBack()"
+        class="flex items-center gap-2 text-sm font-medium text-gray-600 hover:text-[#2D4680] transition-colors cursor-pointer">
+        <mat-icon class="!text-[20px]">arrow_back</mat-icon>
+        Back
+    </button>
+    <div class="flex items-center gap-3">
+        <h1 class="text-lg font-semibold pt-3">
+            Nutrition Care
+        </h1>
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div>
+            <div class="bg-[#FFF0CE] flex gap-2 items-center p-3 mt-2 rounded-lg">
+                <img src="/assets/star.svg" alt="star" class="w-5 h-5">
+                <p class="text-sm">
+                    Personalised nutrition plan for a healthier you.
+                </p>
+            </div>
+            <div class="grid grid-cols-2 lg:grid-cols-2 gap-3 mt-3">
+                <div (click)="handleDiet()"
+                    class="border-2 border-nutrition border-b-8 rounded-xl border-cyan-500 p-5 cursor-pointer hover:bg-gray-50 transition">
+                    <img src="/assets/diet-plan.png" alt="Diet plan" class="w-[50px] h-[50px] object-contain">
+                    <p class="font-bold mt-3">
+                        My Diet Plans
+                    </p>
+                </div>
+
+                <div (click)="handleScan()"
+                    class="border-2 border-nutrition border-b-8 border-cyan-500 rounded-xl p-5 cursor-pointer hover:bg-gray-50 transition">
+                    <img src="/assets/food-scan.png" alt="Food scan" class="w-[50px] h-[50px] object-contain">
+                    <p class="font-bold mt-3">
+                        Scan My Foods
+                    </p>
+                </div>
+                <div (click)="openChat()"
+                    class="border-2 border-nutrition border-b-8 rounded-xl p-5 cursor-pointer hover:bg-gray-50 transition lg:hidden">
+                    <img src="/assets/nutrition.png" alt="NutriCoach" class="w-[50px] h-[50px] object-contain">
+                    <p class="font-bold mt-3">
+                        NutriCoach
+                    </p>
+                </div>
+            </div>
+            <div class="mt-3 border-2 border-cyan-500 border-nutrition p-5 rounded-xl">
+                <div class="flex gap-4">
+                    <img src="/assets/dietician.png" alt="Dietician" class="w-[50px] h-[50px] object-contain">
+                    <div>
+                        <p class="text-xl font-bold">
+                            Consult a Dietician Quickly
+                        </p>
+                        <div class="flex items-center gap-1 mt-1">
+                            <img src="/assets/verify.svg" alt="Verified" class="w-5 h-5">
+                            <p>
+                                Talk to a Dietician
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <p class="py-4 text-black">
+                    Connect instantly with certified nutrition experts for
+                    personalized meal planning, weight management, and medical
+                    diet guidance.
+                </p>
+                <div class="flex flex-wrap gap-2">
+                    <span class="border border-gray-300 py-1 px-4 rounded-lg">
+                        Video
+                    </span>
+                    <span class="border border-gray-300 py-1 px-4 rounded-lg">
+                        Secure
+                    </span>
+                    <span class="border border-gray-300 py-1 px-4 rounded-lg">
+                        Expert Verified
+                    </span>
+                </div>
+                <div class="py-6">
+                    <button type="button" (click)="handleConsultation()"
+                        class="w-full py-3 rounded-lg text-white  bg-cyan-500 font-semibold hover:opacity-90 transition">
+                        Start Consultation
+                    </button>
+                </div>
+            </div>
+
+            <div
+                class="bg-white border border-cyan-500 rounded-xl flex flex-col justify-center items-center text-center p-6 mt-3">
+                <img src="/assets/no-track.png" alt="No track" class="w-[200px] h-[150px] object-contain">
+                <p class="font-bold text-lg ">
+                    Nothing Tracked Yet!
+                </p>
+                <p class="mt-2 text-gray-500">
+                    Log your meal, workout, water or sleep & get detailed
+                    feedback & suggestions
+                </p>
+                <button type="button" (click)="handleTrack()"
+                    class="mt-4 px-6 py-2.5 rounded-lg bg-cyan-500 text-white font-semibold hover:opacity-90 transition">
+                    Track Now
+                </button>
+            </div>
+        </div>
+        <div class="hidden lg:block">
+            <app-nutrition-chat></app-nutrition-chat>
+        </div>
+    </div>
+</div>
