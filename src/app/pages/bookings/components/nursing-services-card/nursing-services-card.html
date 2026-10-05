@@ -17,7 +17,6 @@
               <h4 class="font-semibold text-[#1F3159]">
                 Nursing Services
               </h4>
-
               @if (booking.Status) {
                 <span
                   class="inline-flex items-center gap-1 whitespace-nowrap rounded-full px-2 py-1 text-xs font-semibold"
@@ -58,7 +57,7 @@
                   Type of nursing care
                 </p>
                 <p class="text-sm font-semibold text-[#1F3159]">
-                  {{ booking?.NursingCare }}
+                  {{ booking?.RequestTypeNote }}
                 </p>
               </div>
             </div>
@@ -100,7 +99,7 @@
                     Estimated duration
                   </p>
                   <p class="text-sm font-semibold text-[#1F3159]">
-                    {{ booking?.EstimatedDuration }}
+                    {{ booking?.Duration }}
                   </p>
                 </div>
               </div>

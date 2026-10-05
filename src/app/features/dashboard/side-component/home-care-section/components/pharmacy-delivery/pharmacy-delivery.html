@@ -87,16 +87,11 @@
       </div>
 
 
-      <!-- Delivery Address -->
       <mat-form-field appearance="outline" class="w-full">
-        <mat-label>
-          Delivery Address
-        </mat-label>
+        <mat-label>Delivery Address</mat-label>
 
         <textarea matInput formControlName="address" rows="3" placeholder="Select your delivery address"
-          [readonly]="isViewMode" (click)="
-            !isViewMode && openLocation()
-          "></textarea>
+          [readonly]="isViewMode" (click)="openLocation()" class="cursor-pointer"></textarea>
 
         @if (!isViewMode) {
         <mat-icon matIconSuffix class="cursor-pointer" (click)="openLocation()">
@@ -113,7 +108,6 @@
         </mat-error>
         }
       </mat-form-field>
-
 
       <!-- Additional Notes -->
       <mat-form-field appearance="outline" class="w-full">
