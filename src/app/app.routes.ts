@@ -35,6 +35,11 @@ import { LabDetails } from './pages/find-lab/components/lab-details/lab-details'
 import { AppointmentDetails } from './pages/appointment-details/appointment-details';
 import { DetailsPage } from './pages/appointment-details/details-page/details-page';
 import { Bookings } from './pages/bookings/bookings';
+import { WellnessCareComponent } from './pages/wellness-care/wellness-care';
+import { MentalHealth } from './pages/mental-health/mental-health';
+import { NutritionCare } from './pages/nutrition-care/nutrition-care';
+import { FoodScanner } from './pages/nutrition-care/components/food-scanner/food-scanner';
+import { ScannedFoodS } from './pages/nutrition-care/components/scanned-food/scanned-foods';
 
 export const routes: Routes = [
     {
@@ -179,6 +184,26 @@ export const routes: Routes = [
             {
                 path: 'ayushman-bharath-digital-mission',
                 component: Abdm
+            },
+            {
+                path: 'wellness',
+                component: WellnessCareComponent
+            },
+             {
+                path: 'mental-health',
+                component: MentalHealth
+            },
+            {
+                path:'nutrition',
+                component:NutritionCare
+            },
+            {
+                path: 'nutrition-scanner',
+                component: FoodScanner
+            },
+            {
+                path: 'nutrition/track-your-food',
+                component:ScannedFoodS
             }
 
         ]

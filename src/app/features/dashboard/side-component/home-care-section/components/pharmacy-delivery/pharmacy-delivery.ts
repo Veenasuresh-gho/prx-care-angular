@@ -113,10 +113,6 @@ export class PharmacyDeliveryDialog
     }
 
     if (this.booking) {
-      console.log(
-        'Pharmacy Booking:',
-        this.booking
-      );
 
       this.form.patchValue({
         name:

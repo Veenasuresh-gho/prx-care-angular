@@ -1,0 +1,115 @@
+<div class="px-4 lg:px-10 xl:px-44">
+
+    <div class="flex items-center gap-3 pt-4">
+        <button type="button" (click)="goBack()"
+            class="flex items-center gap-2 text-sm font-medium text-gray-600 hover:text-[#2D4680] transition-colors cursor-pointer">
+            <mat-icon class="!text-[20px]">arrow_back</mat-icon>
+            Back
+        </button>
+    </div>
+    <h2 class="text-lg font-semibold pt-1">
+        Mental Health
+    </h2>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 py-6">
+        <div>
+            <div>
+                <div class="relative bg-gradient-to-b from-[#ede4c6] to-[#F6F4ED] rounded-md overflow-hidden">
+                    <div class="p-5 sm:p-6 flex justify-between items-center gap-4">
+                        <div class="max-w-[65%] sm:max-w-xl z-10">
+                            <img src="assets/message.png" alt="message"
+                                class="w-14 sm:w-16 md:w-20 h-auto object-contain mb-2">
+                            <p class="text-lg sm:text-xl md:text-2xl font-semibold">
+                                Chat with MindMate
+                            </p>
+                            <p class="text-sm sm:text-base text-gray-600 py-3">
+                                Get instant, personalized mental health support whenever you need it.
+                                Talk about stress, anxiety, sleep, emotional well-being, or everyday challenges.
+                            </p>
+                        </div>
+                        <div class="shrink-0">
+                            <img src="assets/bot.png" alt="bot"
+                                class="w-32 sm:w-40 md:w-52 lg:w-60 h-auto object-contain">
+                        </div>
+                    </div>
+                    <div class="px-5 sm:px-6 lg:hidden pb-6">
+                        <button type="button" (click)="openChat()"
+                            class="bg-[#F6F4ED] text-gray-500 hover:bg-[#E6E9E9] hover:text-[#2d4739] px-5 py-2.5 border rounded-lg">
+                            Talk to MindMate
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="relative bg-[#F6F4ED] my-2 mx-1 rounded-md p-5 min-h-[190px] overflow-hidden">
+                <div class="relative z-10 w-[68%]">
+                    <div>
+                        <img src="/assets/chat.png" alt="Chat" class="w-10 h-10 object-contain">
+
+                        <p class="text-lg lg:text-2xl font-semibold text-[#2d4739] mt-2 leading-tight">
+                            Talk to a Mental Health Expert
+                        </p>
+
+                        <div class="flex items-center gap-1 mt-1">
+                            <mat-icon class="!w-4 !h-4 !text-[17px] !text-[#2d4739]">
+                                verified
+                            </mat-icon>
+
+                            <p class="text-xs lg:text-sm text-[#2d4739]">
+                                Instant Consultation
+                            </p>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <p class="text-xs lg:text-sm text-[#2d4739] leading-relaxed">
+                            Connect with qualified mental health professionals for
+                            personalized support with stress, anxiety, sleep, and
+                            emotional well-being.
+                        </p>
+                    </div>
+
+                    <div class="mt-3">
+                        <h2 class="font-bold text-sm lg:text-base text-[#2d4739]">
+                            What You’ll Get:
+                        </h2>
+
+                        <div class="text-xs lg:text-sm text-[#2d4739] space-y-0.5 mt-1">
+                            <p>✅ Personalized mental wellness guidance</p>
+                            <p>✅ Stress and anxiety support</p>
+                            <p>✅ Sleep and emotional well-being guidance</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap gap-1.5 mt-3">
+                        <span
+                            class="border border-white px-2.5 py-1 rounded-lg shadow-sm bg-white/40 text-[10px] font-semibold text-[#2d4739]">
+                            Secure
+                        </span>
+                        <span
+                            class="border border-white px-2.5 py-1 rounded-lg shadow-sm bg-white/40 text-[10px] font-semibold text-[#2d4739]">
+                            Private
+                        </span>
+
+                        <span
+                            class="border border-white px-2.5 py-1 rounded-lg shadow-sm bg-white/40 text-[10px] font-semibold text-[#2d4739]">
+                            Expert Support
+                        </span>
+                    </div>
+
+                    <div class="mt-3">
+                        <button type="button" (click)="handleTherapist()"
+                            class="bg-[#2d4739] hover:bg-[#243b2f] text-white rounded-lg px-4 py-2 text-sm transition-colors cursor-pointer">
+                            Start Consultation
+                        </button>
+                    </div>
+
+                </div>
+                <div class="absolute right-0 bottom-0 w-[45%] h-full flex items-end justify-end pointer-events-none ">
+                    <img src="/assets/therapist.png" alt="Therapist"
+                        class="w-full h-full object-contain object-right-bottom opacity-90">
+                </div>
+
+            </div>
+        </div>
+        <div class="hidden lg:block">
+            <app-chat-with-expert />
+        </div>
+    </div>
+</div>

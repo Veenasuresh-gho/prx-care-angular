@@ -1,0 +1,142 @@
+<div class="py-6 px-4 lg:px-10 xl:px-44">
+    <div class="mb-3">
+        <button type="button" class="flex items-center gap-2 text-gray-700 cursor-pointer" (click)="goBack()">
+            <mat-icon>arrow_back</mat-icon>
+            <span class="font-medium">Back</span>
+        </button>
+    </div>
+    <h1 class="text-lg font-bold">Scanned Food</h1>
+    @if (isLoading) {
+    <div class="flex justify-center items-center py-20">
+        <div class="flex gap-2">
+            <span class="w-3 h-3 rounded-full bg-[#2D4680] animate-bounce"></span>
+            <span class="w-3 h-3 rounded-full bg-[#2D4680] animate-bounce" style="animation-delay: 150ms">
+            </span>
+            <span class="w-3 h-3 rounded-full bg-[#2D4680] animate-bounce" style="animation-delay: 300ms">
+            </span>
+        </div>
+    </div>
+    } @else {
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 py-4 items-stretch">
+        @if (nutritionList.length === 0) {
+        <div class="col-span-full text-center text-gray-500 py-10">
+            No scanned food available
+        </div>
+        } @else {
+        @for (item of nutritionList; track item.id) {
+        <div class="relative h-full">
+            @if (mealTypeId && date) {
+            <div class="absolute top-3 left-3 z-10 bg-white rounded p-1 shadow-sm">
+                <mat-checkbox [checked]="isSelected(item.id)" (change)="handleToggle(item)">
+                </mat-checkbox>
+            </div>
+            }
+            <div class="border shadow-sm overflow-hidden h-full flex flex-col transition-all duration-200 rounded-lg"
+                [class.border-blue-500]="isSelected(item.id)" [class.ring-1]="isSelected(item.id)"
+                [class.ring-blue-400]="isSelected(item.id)" [class.border-gray-200]="!isSelected(item.id)">
+                <div class="relative w-full h-44 bg-gray-100 overflow-hidden">
+                    @if (item.imageUrl) {
+                    <img [src]="item.imageUrl" [alt]="item.foodName"
+                        class="w-full h-full object-cover transition-transform duration-300 hover:scale-105" />
+                    } @else {
+                    <div class="w-full h-full flex flex-col items-center justify-center gap-2 bg-gray-50">
+                        <mat-icon class="!text-gray-300 !w-10 !h-10 !text-[40px]">
+                            local_fire_department
+                        </mat-icon>
+                        <span class="text-xs text-gray-400">
+                            No image
+                        </span>
+                    </div>
+                    }
+                    @if (item.date) {
+                    <div
+                        class="absolute bottom-2 right-2 bg-black/50 backdrop-blur-sm text-white text-[10px] flex items-center gap-1 px-2 py-0.5 rounded-full">
+                        <mat-icon class="!text-white !w-3 !h-3 !text-[12px]">
+                            calendar_today
+                        </mat-icon>
+                        <span>
+                            {{ item.date }}
+                        </span>
+                    </div>
+                    }
+                </div>
+                <div class="flex-1 pt-4 px-4 pb-4">
+                    <div class="h-14 border-b border-gray-200 pb-3 mb-3">
+                        <p class="text-lg font-bold line-clamp-2" [title]="item.foodName">
+                            {{ item.foodName.length > 55
+                            ? (item.foodName | slice:0:55) + '...'
+                            : item.foodName }}
+                        </p>
+                    </div>
+                    <div class="space-y-2.5">
+                        <div class="flex justify-between items-center">
+                            <div class="text-sm flex gap-1.5 items-center text-gray-600">
+                                <mat-icon class="!text-orange-500 !w-4 !h-4 !text-[16px]">
+                                    local_fire_department
+                                </mat-icon>
+                                <span>Calories</span>
+                            </div>
+                            <div class="text-xs text-gray-400">
+                                <span class="text-base font-bold text-gray-900">
+                                    {{ item.totalCalories }}
+                                </span>
+                                kcal
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div class="text-sm flex gap-1.5 items-center text-gray-600">
+                                <mat-icon class="!text-red-500 !w-4 !h-4 !text-[16px]">
+                                    fitness_center
+                                </mat-icon>
+                                <span>Protein</span>
+                            </div>
+                            <span class="text-sm font-bold text-gray-900">
+                                {{ item.totalProtein }}
+                            </span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div class="text-sm flex gap-1.5 items-center text-gray-600">
+                                <mat-icon class="!text-yellow-500 !w-4 !h-4 !text-[16px]">
+                                    grain
+                                </mat-icon>
+                                <span>Carbs</span>
+                            </div>
+                            <span class="text-sm font-bold text-gray-900">
+                                {{ item.totalCarbs }}
+                            </span>
+                        </div>
+
+                        <div class="flex justify-between items-center">
+                            <div class="text-sm flex gap-1.5 items-center text-gray-600">
+                                <mat-icon class="!text-blue-500 !w-4 !h-4 !text-[16px]">
+                                    water_drop
+                                </mat-icon>
+
+                                <span>Fat</span>
+                            </div>
+                            <span class="text-sm font-bold text-gray-900">
+                                {{ item.totalFat }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        }
+        }
+    </div>
+
+    <!-- @if (selectedItems.length > 0) {
+            <div class="flex justify-end mt-4">
+                <button
+                    mat-flat-button
+                    color="primary"
+                    type="button"
+                    (click)="openMealDialog()">
+                    Add {{ selectedItems.length }} item(s) to Meal
+                </button>
+            </div>
+        } -->
+    }
+
+</div>

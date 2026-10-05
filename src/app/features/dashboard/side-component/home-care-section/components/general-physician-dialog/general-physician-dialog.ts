@@ -99,11 +99,6 @@ export class GeneralPhysicianDialog implements OnInit, OnChanges {
       booking?.PreferredTime
     );
 
-    console.log('Booking:', booking);
-    console.log('PreferredDate:', booking?.PreferredDate);
-    console.log('Formatted date:', date);
-    console.log('PreferredTime:', booking?.PreferredTime);
-    console.log('Formatted time:', time);
 
     this.form.patchValue({
       date: formatApiDateForInput(
