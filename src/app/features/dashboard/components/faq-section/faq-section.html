@@ -1,0 +1,42 @@
+<section class="w-full py-8">
+    <div class="w-full">
+        <h2 class="text-xl font-semibold text-gray-900 md:text-xl">
+            Frequently Asked Questions
+        </h2>
+        <div class="w-full">
+            @for (faq of faqs; track faq.question; let i = $index) {
+            <div class="border-b border-gray-200">
+                <button type="button"
+                    class="flex w-full items-center justify-between gap-4 py-3 text-left transition-colors hover:text-[#2D4680]"
+                    (click)="toggle(i)" [attr.aria-expanded]="openIndex === i">
+                    <span class="text-sm font-medium leading-6 text-gray-800 md:text-base">
+                        {{ faq.question }}
+                    </span>
+
+                    <span
+                        class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-gray-500 transition-all duration-200"
+                        [class.bg-[#EEF2FF]]="openIndex === i" [class.text-[#2D4680]]="openIndex === i">
+                        @if (openIndex === i) {
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="m18 15-6-6-6 6" />
+                        </svg>
+                        } @else {
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="m6 9 6 6 6-6" />
+                        </svg>
+                        }
+                    </span>
+                </button>
+
+                @if (openIndex === i) {
+                <div class="max-w-4xl pb-1 pr-12 text-xs leading-6 text-gray-600 md:text-base">
+                    {{ faq.answer }}
+                </div>
+                }
+            </div>
+            }
+        </div>
+    </div>
+</section>
