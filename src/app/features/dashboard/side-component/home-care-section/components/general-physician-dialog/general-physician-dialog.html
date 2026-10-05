@@ -1,7 +1,5 @@
 <form [formGroup]="form">
-
     <app-dialog [open]="open" (openChange)="openChange.emit($event)">
-
         <!-- Header -->
         <div>
             <h1 class="text-xl font-bold text-gray-900">
@@ -24,19 +22,16 @@
 
             <!-- Date & Time -->
             <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-
-                <!-- Date -->
                 <mat-form-field appearance="outline" class="w-full">
                     <mat-label>Date</mat-label>
 
-                    <input matInput type="date" formControlName="date" [disabled]="isViewMode" />
+                    <input matInput type="date" formControlName="date" [readonly]="isViewMode" />
                 </mat-form-field>
 
-                <!-- Time -->
                 <mat-form-field appearance="outline" class="w-full">
                     <mat-label>Time</mat-label>
 
-                    <input matInput type="time" formControlName="time" [disabled]="isViewMode" />
+                    <input matInput type="time" formControlName="time" [readonly]="isViewMode" />
 
                     @if (
                     form.controls.time.touched &&
@@ -47,7 +42,6 @@
                     </mat-error>
                     }
                 </mat-form-field>
-
             </div>
 
             <!-- Name -->
@@ -55,7 +49,7 @@
                 <mat-label>Name</mat-label>
 
                 <input matInput type="text" formControlName="name" placeholder="Enter your name"
-                    [disabled]="isViewMode" />
+                    [readonly]="isViewMode" />
 
                 @if (
                 form.controls.name.touched &&
@@ -69,7 +63,6 @@
 
             <!-- Contact Number -->
             <div>
-
                 <label class="mb-2 block text-sm font-medium text-gray-700">
                     Contact Number
                     <span class="text-red-500">*</span>
@@ -80,7 +73,6 @@
                     <!-- Country -->
                     @if (!isViewMode) {
                     <div class="w-full sm:w-24">
-
                         <app-country-select-field [selectedCountryCode]="
                   form.controls.countryCode.value ?? ''
                 " (selectedCountryCodeChange)="
@@ -95,18 +87,16 @@
                             Country is required
                         </p>
                         }
-
                     </div>
                     }
 
                     <!-- Phone -->
                     <div class="min-w-0 flex-1">
-
                         <mat-form-field appearance="outline" class="w-full">
                             <mat-label>Phone Number</mat-label>
 
                             <input matInput type="tel" formControlName="phone" placeholder="Enter phone number"
-                                [disabled]="isViewMode" />
+                                [readonly]="isViewMode" />
 
                             @if (
                             form.controls.phone.touched &&
@@ -117,22 +107,18 @@
                             </mat-error>
                             }
                         </mat-form-field>
-
                     </div>
 
                 </div>
-
             </div>
 
             <!-- Address -->
             <div>
-
                 <mat-form-field appearance="outline" class="w-full">
                     <mat-label>Address</mat-label>
 
                     <textarea matInput formControlName="address" rows="3" placeholder="Select your service address"
-                        [disabled]="isViewMode" [readonly]="isViewMode"
-                        (click)="!isViewMode && openLocation()"></textarea>
+                        [readonly]="isViewMode" (click)="!isViewMode && openLocation()"></textarea>
 
                     @if (!isViewMode) {
                     <mat-icon matIconSuffix class="cursor-pointer" (click)="openLocation()">
@@ -149,38 +135,25 @@
                     </mat-error>
                     }
                 </mat-form-field>
-
             </div>
 
         </div>
 
         <!-- Footer -->
-        <div class="mt-6 flex flex-col-reverse gap-3
-             border-t border-gray-200 pt-5
-             sm:flex-row sm:justify-end">
-
-            @if (booking?.status?.toLowerCase() === 'booked') {
-
+        <div class="mt-6 flex flex-col-reverse gap-3 border-t border-gray-200 pt-5 sm:flex-row sm:justify-end">
+            @if (booking?.Status?.toLowerCase() === 'booked') {
             <app-button variant="destructive" (click)="close()">
                 Cancel Booking Request
             </app-button>
-
             } @else if (booking) {
-
             <app-button variant="destructive" (click)="close()">
                 Close
             </app-button>
-
             } @else {
-
             <app-button (click)="confirmBooking()">
                 Confirm Booking Request
             </app-button>
-
             }
-
         </div>
-
     </app-dialog>
-
 </form>

@@ -29,15 +29,14 @@
                   [class.text-green-700]="booking.Status?.toLowerCase() !== 'cancelled' && booking.Status?.toLowerCase() !== 'booked'"
                 >
                   @if (booking.Status?.toLowerCase() === 'cancelled') {
-                    <mat-icon class="!h-4 !w-4 !text-base">
+                    <mat-icon class="!text-base">
                       info
                     </mat-icon>
                   } @else {
-                    <mat-icon class="!h-4 !w-4 !text-base">
+                    <mat-icon class="!text-base">
                       verified
                     </mat-icon>
                   }
-
                   {{ booking.Status }}
                 </span>
               }
@@ -48,7 +47,7 @@
               <div
                 class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#2D4680]/[0.08]"
               >
-                <mat-icon class="!h-5 !w-5 !text-xl text-[#2D4680]">
+                <mat-icon class="!text-xl text-[#2D4680]">
                   location_on
                 </mat-icon>
               </div>

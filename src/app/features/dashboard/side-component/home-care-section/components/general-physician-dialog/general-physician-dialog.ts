@@ -3,6 +3,8 @@ import {
   EventEmitter,
   Input,
   OnInit,
+  OnChanges,
+  SimpleChanges,
   Output,
   inject,
 } from '@angular/core';
@@ -17,8 +19,15 @@ import { Dialog } from '../../../../../../components/dialog/dialog';
 import { Button } from '../../../../../../components/button/button';
 import { CountrySelectField } from '../../../../../../components/country-select-field/country-select-field';
 import { GHOService } from '../../../../../../services/gho.service';
-import { formatDateToDDMMYYYY } from '../../../../../../utils/date';
+
+import {
+  formatDateToDDMMYYYY,
+  formatTimeForInput,
+  formatApiDateForInput,
+} from '../../../../../../utils/date';
+
 import { ToastrService } from 'ngx-toastr';
+
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
@@ -33,11 +42,11 @@ import { MatIconModule } from '@angular/material/icon';
     CountrySelectField,
     MatFormFieldModule,
     MatInputModule,
-    MatIconModule
+    MatIconModule,
   ],
   templateUrl: './general-physician-dialog.html',
 })
-export class GeneralPhysicianDialog implements OnInit {
+export class GeneralPhysicianDialog implements OnInit, OnChanges {
   private fb = inject(FormBuilder);
   private srv = inject(GHOService);
   private toastr = inject(ToastrService);
@@ -48,11 +57,12 @@ export class GeneralPhysicianDialog implements OnInit {
   @Input() booking: any = null;
 
   @Output() openChange = new EventEmitter<boolean>();
+  @Output() refetch = new EventEmitter<void>();
 
   isLoading = false;
 
   form = this.fb.group({
-    date: [''],
+    date: ['', Validators.required],
     time: ['', Validators.required],
     name: ['', Validators.required],
     countryCode: ['91', Validators.required],
@@ -66,6 +76,58 @@ export class GeneralPhysicianDialog implements OnInit {
 
   ngOnInit(): void {
     this.patientId = sessionStorage.getItem('id');
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['booking']) {
+      if (this.booking) {
+        this.setBookingDetails();
+      } else {
+        this.resetForm();
+      }
+    }
+  }
+
+  private setBookingDetails(): void {
+    const booking = this.booking;
+
+    const date = formatApiDateForInput(
+      booking?.PreferredDate
+    );
+
+    const time = formatTimeForInput(
+      booking?.PreferredTime
+    );
+
+    console.log('Booking:', booking);
+    console.log('PreferredDate:', booking?.PreferredDate);
+    console.log('Formatted date:', date);
+    console.log('PreferredTime:', booking?.PreferredTime);
+    console.log('Formatted time:', time);
+
+    this.form.patchValue({
+      date: formatApiDateForInput(
+        this.booking.PreferredDate
+      ),
+      time: formatTimeForInput(
+        this.booking.PreferredTime
+      ),
+      name: this.booking.PatientName ?? '',
+      countryCode: String(this.booking.CountryId ?? '91'),
+      phone: this.booking.ContactNumber ?? '',
+      address: this.booking.HomeAddress ?? '',
+    });
+  }
+
+  private resetForm(): void {
+    this.form.reset({
+      date: '',
+      time: '',
+      name: '',
+      countryCode: '91',
+      phone: '',
+      address: '',
+    });
   }
 
   onCountryChange(country: any): void {
@@ -95,6 +157,7 @@ export class GeneralPhysicianDialog implements OnInit {
     const formattedDate = data.date
       ? formatDateToDDMMYYYY(data.date)
       : '';
+
     this.isLoading = true;
 
     const tags = [
@@ -104,7 +167,7 @@ export class GeneralPhysicianDialog implements OnInit {
       },
       {
         T: 'dk2',
-        V: formattedDate
+        V: formattedDate,
       },
       {
         T: 'c1',
@@ -129,14 +192,21 @@ export class GeneralPhysicianDialog implements OnInit {
     this.srv.getdata('hcare_', tags).subscribe({
       next: (res) => {
         this.isLoading = false;
+
         if (res.Status === 1) {
-          this.toastr.success(res?.Data[0][0]?.msg)
+          this.toastr.success(
+            res?.Data?.[0]?.[0]?.msg
+          );
+
+          this.refetch.emit();
+
           this.close();
         } else {
-          this.toastr.error(res?.Info)
+          this.toastr.error(res?.Info);
         }
       },
-      error: (error) => {
+
+      error: () => {
         this.isLoading = false;
       },
     });
@@ -147,6 +217,6 @@ export class GeneralPhysicianDialog implements OnInit {
   }
 
   openLocation(): void {
-  
+    // Add location selection here
   }
 }
