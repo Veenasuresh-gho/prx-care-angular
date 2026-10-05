@@ -23,7 +23,9 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 
 import { CountrySelectField } from '../../../../../../components/country-select-field/country-select-field';
+
 import { formatDateToDDMMYYYY } from '../../../../../../utils/date';
+
 import { GHOService } from '../../../../../../services/gho.service';
 import { ToastrService } from 'ngx-toastr';
 
@@ -41,8 +43,9 @@ import { ToastrService } from 'ngx-toastr';
   ],
   templateUrl: './nursing-services.html',
 })
-export class NursingServicesDialog implements OnChanges, OnInit {
-
+export class NursingServicesDialog
+  implements OnChanges, OnInit
+{
   private fb = inject(FormBuilder);
   private srv = inject(GHOService);
   private toastr = inject(ToastrService);
@@ -52,43 +55,87 @@ export class NursingServicesDialog implements OnChanges, OnInit {
   @Input() open = false;
   @Input() booking: any = null;
 
-  @Output() openChange = new EventEmitter<boolean>();
-  @Output() refetch = new EventEmitter<void>();
+  @Output() openChange =
+    new EventEmitter<boolean>();
+
+  @Output() refetch =
+    new EventEmitter<void>();
 
   isLoading = false;
-
-  form = this.fb.group({
-    date: [''],
-    name: ['', Validators.required],
-    countryCode: ['91', Validators.required],
-    phone: ['', Validators.required],
-    address: ['', Validators.required],
-    services: ['', Validators.required],
-    duration: ['', Validators.required],
-  });
-
   isSubmitting = false;
   isCancelling = false;
 
+  form = this.fb.group({
+    date: [''],
+
+    name: [
+      '',
+      Validators.required,
+    ],
+
+    countryCode: [
+      '91',
+      Validators.required,
+    ],
+
+    phone: [
+      '',
+      Validators.required,
+    ],
+
+    address: [
+      '',
+      Validators.required,
+    ],
+
+    services: [
+      '',
+      Validators.required,
+    ],
+
+    duration: [
+      '',
+      Validators.required,
+    ],
+  });
+
   nursingTypes = [
-    { label: 'Elderly Care', value: 'Elderly Care' },
+    {
+      label: 'Elderly Care',
+      value: 'Elderly Care',
+    },
     {
       label: 'Chronic Disease Management',
       value: 'Chronic Disease Management',
     },
-    { label: 'Palliative Care', value: 'Palliative Care' },
-    { label: 'Mother & Baby Care', value: 'Mother & Baby Care' },
+    {
+      label: 'Palliative Care',
+      value: 'Palliative Care',
+    },
+    {
+      label: 'Mother & Baby Care',
+      value: 'Mother & Baby Care',
+    },
     {
       label: 'Wound Dressing & Care',
       value: 'Wound Dressing & Care',
     },
-    { label: 'IV / IM Injections', value: 'IV / IM Injections' },
+    {
+      label: 'IV / IM Injections',
+      value: 'IV / IM Injections',
+    },
     {
       label: "Catheter & Ryles's Tube Care",
       value: "Catheter & Ryles's Tube Care",
     },
-    { label: 'Home ICU Support', value: 'Home ICU Support' },
-    { label: 'Tracheostomy Care', value: 'Tracheostomy Care' },
+    {
+      label: 'Home ICU Support',
+      value: 'Home ICU Support',
+    },
+    {
+      label: 'Tracheostomy Care',
+      value: 'Tracheostomy Care',
+    },
     {
       label: 'Respiratory / Nebulization Care',
       value: 'Respiratory / Nebulization Care',
@@ -97,7 +144,10 @@ export class NursingServicesDialog implements OnChanges, OnInit {
       label: 'Physiotherapy Assistance',
       value: 'Physiotherapy Assistance',
     },
-    { label: 'Diabetes Care', value: 'Diabetes Care' },
+    {
+      label: 'Diabetes Care',
+      value: 'Diabetes Care',
+    },
     {
       label: 'Blood Pressure Monitoring',
       value: 'Blood Pressure Monitoring',
@@ -105,25 +155,46 @@ export class NursingServicesDialog implements OnChanges, OnInit {
   ];
 
   durationTypes = [
-    { label: '1 Hour', value: '1 Hour' },
-    { label: '2 Hours', value: '2 Hours' },
-    { label: '3 Hours', value: '3 Hours' },
-    { label: '4 Hours', value: '4 Hours' },
-    { label: '5 Hours', value: '5 Hours' },
+    {
+      label: '1 Hour',
+      value: '1 Hour',
+    },
+    {
+      label: '2 Hours',
+      value: '2 Hours',
+    },
+    {
+      label: '3 Hours',
+      value: '3 Hours',
+    },
+    {
+      label: '4 Hours',
+      value: '4 Hours',
+    },
+    {
+      label: '5 Hours',
+      value: '5 Hours',
+    },
   ];
 
   get isViewMode(): boolean {
     return !!this.booking;
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['booking'] || changes['open']) {
-      this.loadBooking();
-    }
+  ngOnInit(): void {
+    this.patientId =
+      sessionStorage.getItem('id');
   }
 
-  ngOnInit(): void {
-    this.patientId = sessionStorage.getItem('id');
+  ngOnChanges(
+    changes: SimpleChanges
+  ): void {
+    if (
+      changes['booking'] ||
+      changes['open']
+    ) {
+      this.loadBooking();
+    }
   }
 
   private loadBooking(): void {
@@ -132,22 +203,115 @@ export class NursingServicesDialog implements OnChanges, OnInit {
     }
 
     if (this.booking) {
+      console.log(
+        'Nursing Booking:',
+        this.booking
+      );
+
+      const formattedDate =
+        this.formatApiDateForInput(
+          this.booking.PreferredDate
+        );
+
       this.form.patchValue({
-        services: this.booking?.care || '',
-        duration: this.booking?.duration || '',
-        date: this.booking?.date || '',
-        name: this.booking?.name || '',
-        phone: this.booking?.contact || '',
-        countryCode: this.booking?.countryId || '91',
-        address: this.booking?.address || '',
+        date: formattedDate,
+
+        name:
+          this.booking.PatientName ??
+          '',
+
+        countryCode:
+          String(
+            this.booking.CountryId ??
+            '91'
+          ),
+
+        phone:
+          this.booking.ContactNumber?.trim() ??
+          '',
+
+        address:
+          this.booking.Address ??
+          '',
+
+        services:
+          this.booking.NursingCare ??
+          '',
+
+        duration:
+          this.normalizeDuration(
+            this.booking.EstimatedDuration
+          ),
       });
-    } else {
-      this.resetForm();
+
+      return;
     }
+
+    this.resetForm();
+  }
+
+  private formatApiDateForInput(
+    date: string | null | undefined
+  ): string {
+    if (!date) {
+      return '';
+    }
+
+    const parsedDate =
+      new Date(date);
+
+    if (
+      Number.isNaN(
+        parsedDate.getTime()
+      )
+    ) {
+      return '';
+    }
+
+    const year =
+      parsedDate.getFullYear();
+
+    const month =
+      String(
+        parsedDate.getMonth() + 1
+      ).padStart(2, '0');
+
+    const day =
+      String(
+        parsedDate.getDate()
+      ).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+  }
+
+  private normalizeDuration(
+    duration: string | null | undefined
+  ): string {
+    if (!duration) {
+      return '';
+    }
+
+    const value =
+      duration
+        .trim()
+        .toLowerCase();
+
+    const match =
+      value.match(
+        /^(\d+)\s*hour/
+      );
+
+    if (!match) {
+      return duration;
+    }
+
+    return `${match[1]} Hour${match[1] === '1' ? '' : 's'}`;
   }
 
   close(): void {
     this.openChange.emit(false);
+
+    this.form.markAsUntouched();
   }
 
   resetForm(): void {
@@ -163,11 +327,17 @@ export class NursingServicesDialog implements OnChanges, OnInit {
 
     this.form.markAsPristine();
     this.form.markAsUntouched();
+
+    this.isSubmitting = false;
+    this.isCancelling = false;
+    this.isLoading = false;
   }
 
-  onCountryChange(country: any): void {
+  onCountryChange(
+    country: any
+  ): void {
     this.form.controls.countryCode.setValue(
-      country.CountryCode
+      country?.CountryCode ?? '91'
     );
   }
 
@@ -175,6 +345,10 @@ export class NursingServicesDialog implements OnChanges, OnInit {
     if (this.isViewMode) {
       return;
     }
+
+    /*
+     * Add location selection logic here.
+     */
   }
 
   confirmBooking(): void {
@@ -188,81 +362,135 @@ export class NursingServicesDialog implements OnChanges, OnInit {
     }
 
     if (!this.patientId) {
-      this.toastr.error('Patient ID not found');
+      this.toastr.error(
+        'Patient ID not found'
+      );
+
       return;
     }
 
     this.isSubmitting = true;
     this.isLoading = true;
 
-    const data = this.form.getRawValue();
+    const data =
+      this.form.getRawValue();
 
-    const formattedDate = data.date
-      ? formatDateToDDMMYYYY(data.date)
-      : '';
+    const formattedDate =
+      data.date
+        ? formatDateToDDMMYYYY(
+            data.date
+          )
+        : '';
 
     const tags = [
       {
         T: 'dk1',
         V: this.patientId,
       },
+
       {
         T: 'dk2',
         V: formattedDate,
       },
+
       {
         T: 'c1',
         V: JSON.stringify({
-          name: data.name ?? '',
-          countryCode: data.countryCode ?? '',
-          phone: data.phone ?? '',
-          address: data.address ?? '',
-          services: data.services ?? '',
-          duration: data.duration ?? '',
+          name:
+            data.name ?? '',
+
+          countryCode:
+            data.countryCode ?? '',
+
+          phone:
+            data.phone ?? '',
+
+          address:
+            data.address ?? '',
+
+          services:
+            data.services ?? '',
+
+          duration:
+            data.duration ?? '',
         }),
       },
+
       {
         T: 'c8',
         V: '3',
       },
+
       {
         T: 'c10',
         V: '1',
       },
     ];
 
-    this.srv.getdata('hcare_', tags).subscribe({
-      next: (res) => {
-        this.isSubmitting = false;
-        this.isLoading = false;
+    this.srv
+      .getdata(
+        'hcare_',
+        tags
+      )
+      .subscribe({
+        next: (res) => {
+          this.isSubmitting = false;
+          this.isLoading = false;
 
-        if (res.Status === 1) {
-          this.toastr.success(res?.Data?.[0]?.[0]?.msg);
-          this.refetch.emit();
-          this.close();
-        } else {
-          this.toastr.error(res?.Info || 'Booking failed');
-        }
-      },
+          if (res?.Status === 1) {
+            this.toastr.success(
+              res?.Data?.[0]?.[0]?.msg ||
+                'Nursing service request submitted successfully'
+            );
 
-      error: (error) => {
-        this.isSubmitting = false;
-        this.isLoading = false;
+            this.refetch.emit();
 
-        console.error('Nursing booking error:', error);
-        this.toastr.error('Something went wrong. Please try again.');
-      },
-    });
+            this.close();
+          } else {
+            this.toastr.error(
+              res?.Info ||
+                'Booking failed'
+            );
+          }
+        },
+
+        error: (error) => {
+          this.isSubmitting = false;
+          this.isLoading = false;
+
+          console.error(
+            'Nursing booking error:',
+            error
+          );
+
+          this.toastr.error(
+            'Something went wrong. Please try again.'
+          );
+        },
+      });
   }
 
   cancelBooking(): void {
-    if (!this.booking?.id || this.isCancelling) {
+    if (
+      this.isCancelling ||
+      !this.booking
+    ) {
       return;
     }
 
-    this.isCancelling = true; 
+    this.isCancelling = true;
+
+    /*
+     * Add cancellation API here.
+     */
+
+    this.isCancelling = false;
   }
 
   trackBooking(): void {
+    /*
+     * Add tracking logic here.
+     */
   }
 }
+

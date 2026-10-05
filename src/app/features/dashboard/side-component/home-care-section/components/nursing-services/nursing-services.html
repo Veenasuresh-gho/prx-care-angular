@@ -7,7 +7,9 @@
 
     <!-- Header -->
     <div>
-      <h1 class="text-2xl font-bold">
+      <h1
+        class="text-2xl font-bold text-gray-900"
+      >
         {{
           isViewMode
             ? 'Nursing Services Booking Details'
@@ -15,13 +17,20 @@
         }}
       </h1>
 
-      <p class="mt-2 text-sm font-semibold">
-        When your request is received, our team will reach out soon
-        to schedule the service.
+      <p
+        class="mt-2 text-sm font-semibold text-gray-700"
+      >
+        When your request is received, our team
+        will reach out soon to schedule the service.
       </p>
     </div>
 
-    <div class="my-4 w-full border border-gray-200"></div>
+
+    <!-- Divider -->
+    <div
+      class="my-4 w-full border-t border-gray-200"
+    ></div>
+
 
     <!-- Form -->
     <div class="space-y-4">
@@ -31,14 +40,21 @@
         appearance="outline"
         class="w-full"
       >
-        <mat-label>Nursing Service</mat-label>
+        <mat-label>
+          Nursing Service
+        </mat-label>
 
         <mat-select
           formControlName="services"
           [disabled]="isViewMode"
         >
-          @for (service of nursingTypes; track service.value) {
-            <mat-option [value]="service.value">
+          @for (
+            service of nursingTypes;
+            track service.value
+          ) {
+            <mat-option
+              [value]="service.value"
+            >
               {{ service.label }}
             </mat-option>
           }
@@ -54,22 +70,32 @@
         }
       </mat-form-field>
 
+
       <!-- Duration + Date -->
-      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <div
+        class="grid grid-cols-1 gap-4 sm:grid-cols-2"
+      >
 
         <!-- Duration -->
         <mat-form-field
           appearance="outline"
           class="w-full"
         >
-          <mat-label>Estimated Duration</mat-label>
+          <mat-label>
+            Estimated Duration
+          </mat-label>
 
           <mat-select
             formControlName="duration"
             [disabled]="isViewMode"
           >
-            @for (item of durationTypes; track item.value) {
-              <mat-option [value]="item.value">
+            @for (
+              item of durationTypes;
+              track item.value
+            ) {
+              <mat-option
+                [value]="item.value"
+              >
                 {{ item.label }}
               </mat-option>
             }
@@ -85,12 +111,15 @@
           }
         </mat-form-field>
 
+
         <!-- Service Date -->
         <mat-form-field
           appearance="outline"
           class="w-full"
         >
-          <mat-label>Service Date</mat-label>
+          <mat-label>
+            Service Date
+          </mat-label>
 
           <input
             matInput
@@ -102,19 +131,22 @@
 
       </div>
 
+
       <!-- Name -->
       <mat-form-field
         appearance="outline"
         class="w-full"
       >
-        <mat-label>Name</mat-label>
+        <mat-label>
+          Name
+        </mat-label>
 
         <input
           matInput
           type="text"
           formControlName="name"
-          [disabled]="isViewMode"
           placeholder="Enter your name"
+          [readonly]="isViewMode"
         />
 
         @if (
@@ -127,19 +159,26 @@
         }
       </mat-form-field>
 
+
       <!-- Contact Number -->
       <div>
 
-        <label class="mb-2 block text-sm font-medium text-gray-700">
+        <label
+          class="mb-2 block text-sm font-medium text-gray-700"
+        >
           Contact Number
           <span class="text-red-500">*</span>
         </label>
 
-        <div class="flex flex-col gap-3 sm:flex-row">
+        <div
+          class="flex flex-col gap-3 sm:flex-row"
+        >
 
           <!-- Country -->
           @if (!isViewMode) {
-            <div class="w-full sm:w-48">
+            <div
+              class="w-full sm:w-48"
+            >
               <app-country-select-field
                 [selectedCountryCode]="
                   form.controls.countryCode.value ?? ''
@@ -149,35 +188,43 @@
                 (selectedCountryCodeChange)="
                   form.controls.countryCode.setValue($event)
                 "
-                (countryChange)="onCountryChange($event)"
+                (countryChange)="
+                  onCountryChange($event)
+                "
               />
 
               @if (
                 form.controls.countryCode.touched &&
                 form.controls.countryCode.hasError('required')
               ) {
-                <p class="mt-1 text-xs text-red-500">
+                <p
+                  class="mt-1 text-xs text-red-500"
+                >
                   Country is required
                 </p>
               }
             </div>
           }
 
-          <!-- Phone -->
-          <div class="min-w-0 flex-1">
 
+          <!-- Phone -->
+          <div
+            class="min-w-0 flex-1"
+          >
             <mat-form-field
               appearance="outline"
               class="w-full"
             >
-              <mat-label>Contact Number</mat-label>
+              <mat-label>
+                Contact Number
+              </mat-label>
 
               <input
                 matInput
                 type="tel"
                 formControlName="phone"
-                [disabled]="isViewMode"
                 placeholder="Phone number"
+                [readonly]="isViewMode"
               />
 
               @if (
@@ -189,28 +236,31 @@
                 </mat-error>
               }
             </mat-form-field>
-
           </div>
 
         </div>
 
       </div>
 
+
       <!-- Address -->
       <mat-form-field
         appearance="outline"
         class="w-full"
       >
-        <mat-label>Address</mat-label>
+        <mat-label>
+          Address
+        </mat-label>
 
         <textarea
           matInput
           formControlName="address"
-          [disabled]="isViewMode"
           [readonly]="isViewMode"
           rows="3"
           placeholder="Select delivery address"
-          (click)="openLocation()"
+          (click)="
+            !isViewMode && openLocation()
+          "
         ></textarea>
 
         @if (
@@ -225,13 +275,18 @@
 
     </div>
 
+
     <!-- Footer -->
     <div
-      class="mt-6 flex justify-end gap-3
-             border-t border-gray-200 pt-4"
+      class="mt-6 flex flex-col-reverse justify-end
+             gap-3 border-t border-gray-200 pt-4
+             sm:flex-row"
     >
 
-      @if (booking?.status?.toLowerCase() === 'booked') {
+      <!-- Booked -->
+      @if (
+        booking?.Status?.toLowerCase() === 'booked'
+      ) {
 
         <app-button
           variant="destructive"
@@ -245,7 +300,10 @@
           }}
         </app-button>
 
-      } @else if (booking) {
+      }
+
+      <!-- Existing Booking -->
+      @else if (booking) {
 
         <app-button
           class="bg-green-700 hover:bg-green-600"
@@ -254,7 +312,10 @@
           Track Booking
         </app-button>
 
-      } @else {
+      }
+
+      <!-- New Booking -->
+      @else {
 
         <app-button
           [disabled]="isSubmitting"
@@ -274,3 +335,4 @@
   </app-dialog>
 
 </form>
+

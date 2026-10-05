@@ -20,6 +20,7 @@ import { Button } from '../../../../../../components/button/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { CountrySelectField } from '../../../../../../components/country-select-field/country-select-field';
+
 import { formatDateToDDMMYYYY } from '../../../../../../utils/date';
 import { FileUploadService } from '../../../../../../services/file-upload-service';
 import { GHOService } from '../../../../../../services/gho.service';
@@ -38,8 +39,8 @@ import { ToastrService } from 'ngx-toastr';
   ],
   templateUrl: './lab-collection-dialog.html',
 })
-export class LabCollectionDialog implements OnChanges, OnInit {
-
+export class LabCollectionDialog
+  implements OnChanges, OnInit {
   private fb = inject(FormBuilder);
   private fileUploadService = inject(FileUploadService);
   private srv = inject(GHOService);
@@ -52,7 +53,14 @@ export class LabCollectionDialog implements OnChanges, OnInit {
   @Output() refetch = new EventEmitter<void>();
 
   patientId: string | null = null;
+
   file: File | null = null;
+
+  isSubmitting = false;
+  isCancelling = false;
+  isFileUploading = false;
+
+  view: 'form' | 'location' = 'form';
 
   form = this.fb.group({
     test: ['', Validators.required],
@@ -64,12 +72,6 @@ export class LabCollectionDialog implements OnChanges, OnInit {
     address: ['', Validators.required],
   });
 
-  isSubmitting = false;
-  isCancelling = false;
-  isFileUploading = false;
-
-  view: 'form' | 'location' = 'form';
-
   get isViewMode(): boolean {
     return !!this.booking;
   }
@@ -80,7 +82,9 @@ export class LabCollectionDialog implements OnChanges, OnInit {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['booking'] || changes['open']) {
-      this.loadBooking();
+      if (this.open && this.booking) {
+        this.loadBooking();
+      }
     }
 
     if (changes['open'] && !this.open) {
@@ -95,24 +99,89 @@ export class LabCollectionDialog implements OnChanges, OnInit {
 
     if (this.booking) {
       this.form.patchValue({
-        test: this.booking?.tests || '',
-        date: this.booking?.date || '',
-        time: this.booking?.time || '',
-        name: this.booking?.name || '',
-        countryId:
-          this.booking?.countryId ||
-          this.booking?.countryCode ||
-          '91',
-        phone: this.booking?.contact || '',
-        address: this.booking?.address || '',
+        test: this.booking.TestName ?? '',
+        date: this.formatApiDateForInput(
+          this.booking.CollectionDate
+        ),
+        time: this.formatApiTimeForInput(
+          this.booking.CollectionTime
+        ),
+        name: this.booking.PatientName ?? '',
+        countryId: String(
+          this.booking.CountryId ?? '91'
+        ),
+        phone: this.booking.ContactNumber?.trim() ?? '',
+        address: this.booking.Address ?? '',
       });
-    } else {
-      this.resetForm();
+
+      return;
     }
+
+    this.resetForm();
+  }
+
+  private formatApiDateForInput(
+    date: string | null | undefined
+  ): string {
+    if (!date) {
+      return '';
+    }
+
+    const parsedDate = new Date(date);
+
+    if (Number.isNaN(parsedDate.getTime())) {
+      return '';
+    }
+
+    const year = parsedDate.getFullYear();
+    const month = String(
+      parsedDate.getMonth() + 1
+    ).padStart(2, '0');
+    const day = String(
+      parsedDate.getDate()
+    ).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+  }
+
+  private formatApiTimeForInput(
+    time: string | null | undefined
+  ): string {
+    if (!time) {
+      return '';
+    }
+
+    const value = time
+      .trim()
+      .toUpperCase()
+      .replace(/\s+/g, '');
+
+    const match = value.match(
+      /^(\d{1,2}):(\d{2})(AM|PM)$/
+    );
+
+    if (!match) {
+      return '';
+    }
+
+    let hours = Number(match[1]);
+    const minutes = match[2];
+    const period = match[3];
+
+    if (period === 'AM' && hours === 12) {
+      hours = 0;
+    }
+
+    if (period === 'PM' && hours !== 12) {
+      hours += 12;
+    }
+
+    return `${String(hours).padStart(2, '0')}:${minutes}`;
   }
 
   close(): void {
     this.openChange.emit(false);
+    this.form.markAsUntouched();
   }
 
   resetForm(): void {
@@ -147,8 +216,13 @@ export class LabCollectionDialog implements OnChanges, OnInit {
     this.view = 'location';
   }
 
-  handleLocationSelect(selectedAddress: string): void {
-    this.form.controls.address.setValue(selectedAddress);
+  handleLocationSelect(
+    selectedAddress: string
+  ): void {
+    this.form.controls.address.setValue(
+      selectedAddress
+    );
+
     this.form.controls.address.markAsTouched();
 
     this.view = 'form';
@@ -168,9 +242,17 @@ export class LabCollectionDialog implements OnChanges, OnInit {
       return;
     }
 
+    if (!this.patientId) {
+      this.toastr.error(
+        'Patient ID not found'
+      );
+      return;
+    }
+
     this.isSubmitting = true;
 
     const data = this.form.getRawValue();
+
     const formattedDate = data.date
       ? formatDateToDDMMYYYY(data.date)
       : '';
@@ -178,7 +260,7 @@ export class LabCollectionDialog implements OnChanges, OnInit {
     const tags = [
       {
         T: 'dk1',
-        V: this.patientId ?? '',
+        V: this.patientId,
       },
       {
         T: 'dk2',
@@ -204,19 +286,22 @@ export class LabCollectionDialog implements OnChanges, OnInit {
         V: '1',
       },
     ];
+
     this.srv.getdata('hcare_', tags).subscribe({
       next: async (res) => {
-        if (res.Status !== 1) {
+        if (res?.Status !== 1) {
           this.isSubmitting = false;
 
           this.toastr.error(
-            res?.Info || 'Unable to create pharmacy delivery request'
+            res?.Info ||
+            'Unable to create lab collection request'
           );
 
           return;
         }
 
-        const bookingId = res?.Data?.[0]?.[0]?.id;
+        const bookingId =
+          res?.Data?.[0]?.[0]?.id;
 
         if (!bookingId) {
           this.isSubmitting = false;
@@ -229,6 +314,8 @@ export class LabCollectionDialog implements OnChanges, OnInit {
         }
 
         if (this.file) {
+          this.isFileUploading = true;
+
           const uploadSuccess =
             await this.fileUploadService.handleFileUpload(
               String(bookingId),
@@ -236,6 +323,8 @@ export class LabCollectionDialog implements OnChanges, OnInit {
               this.file,
               '33'
             );
+
+          this.isFileUploading = false;
 
           if (!uploadSuccess) {
             this.isSubmitting = false;
@@ -245,38 +334,58 @@ export class LabCollectionDialog implements OnChanges, OnInit {
 
         this.toastr.success(
           res?.Data?.[0]?.[0]?.msg ||
-          'Pharmacy delivery request submitted successfully'
+          'Lab sample collection request submitted successfully'
         );
 
         this.isSubmitting = false;
+
+        this.refetch.emit();
+
         this.close();
       },
 
       error: (error) => {
-        console.error('Pharmacy booking error:', error);
+        console.error(
+          'Lab collection booking error:',
+          error
+        );
 
         this.isSubmitting = false;
+        this.isFileUploading = false;
 
         this.toastr.error(
-          'Unable to submit pharmacy delivery request'
+          'Unable to submit lab collection request'
         );
       },
     });
-
-    this.isSubmitting = false;
   }
 
   cancelBooking(): void {
-    if (!this.booking?.id || this.isCancelling) {
+    if (
+      !this.booking?.BookingID ||
+      this.isCancelling
+    ) {
       return;
     }
-   this.isCancelling = true;
+
+    this.isCancelling = true;
+
+    // Cancellation API can be added here.
+
     this.isCancelling = false;
   }
 
   openExistingFile(): void {
-    if (this.booking?.fileUrl) {
-      window.open(this.booking.fileUrl, '_blank');
+    const fileUrl = this.booking?._url;
+
+    if (!fileUrl) {
+      this.toastr.error(
+        'Lab prescription file is not available'
+      );
+      return;
     }
+
+    window.open(fileUrl, '_blank');
   }
 }
+
