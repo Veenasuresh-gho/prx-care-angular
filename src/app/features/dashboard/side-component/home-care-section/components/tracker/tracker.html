@@ -1,0 +1,152 @@
+@if (isLoading) {
+
+  <div
+    class="w-full animate-pulse rounded-2xl border border-slate-200 bg-white p-5 sm:p-6"
+  >
+    <div
+      class="mb-2 h-4 w-32 rounded bg-slate-100"
+    ></div>
+
+    <div
+      class="mb-6 h-5 w-52 rounded bg-slate-100"
+    ></div>
+
+    <div
+      class="h-16 w-full rounded-xl bg-slate-50"
+    ></div>
+  </div>
+
+} @else {
+
+  <div
+    class="w-full overflow-hidden rounded-2xl border border-slate-200 bg-white"
+  >
+
+    <!-- Header -->
+    <div class="px-5 pb-4 pt-5 sm:px-6 sm:pt-6">
+
+      <p class="text-xs text-slate-400">
+        Booking #{{ orderId }}
+      </p>
+
+      <h3
+        class="mt-1 text-base font-medium text-slate-900"
+      >
+        {{ serviceLabel }}
+      </h3>
+
+    </div>
+
+    <!-- Tracker -->
+    <div
+      class="mx-5 mb-5 rounded-xl bg-slate-50 px-4 py-5 sm:mx-6 sm:mb-6 sm:px-5"
+    >
+
+      <div class="relative px-1">
+
+        <!-- Background line -->
+        <div
+          class="absolute left-4 right-4 top-4 h-0.5 bg-slate-200"
+        >
+
+          <!-- Progress -->
+          <div
+            class="h-full bg-teal-600 transition-all duration-500"
+            [style.width.%]="progressPct"
+          ></div>
+
+        </div>
+
+        <!-- Steps -->
+        <div
+          class="relative flex justify-between"
+        >
+
+          @for (
+            step of steps;
+            track step.id
+          ) {
+
+            <div
+              class="flex flex-col items-center"
+              style="width: 56px"
+            >
+
+              <!-- Circle -->
+              <div
+                class="flex h-8 w-8 items-center justify-center rounded-full"
+                [class.bg-teal-600]="
+                  step.status === 'completed' ||
+                  step.status === 'current'
+                "
+                [class.ring-4]="
+                  step.status === 'current'
+                "
+                [class.ring-teal-100]="
+                  step.status === 'current'
+                "
+                [class.border-2]="
+                  step.status === 'upcoming'
+                "
+                [class.border-slate-200]="
+                  step.status === 'upcoming'
+                "
+                [class.bg-white]="
+                  step.status === 'upcoming'
+                "
+              >
+
+                <mat-icon
+                  class="!text-base"
+                  [class.text-white]="
+                    step.status !== 'upcoming'
+                  "
+                  [class.text-slate-400]="
+                    step.status === 'upcoming'
+                  "
+                >
+                  {{ step.icon }}
+                </mat-icon>
+
+              </div>
+
+              <!-- Label -->
+              <p
+                class="mt-2.5 text-center text-[11px] leading-tight"
+                [class.font-medium]="
+                  step.status !== 'upcoming'
+                "
+                [class.text-slate-900]="
+                  step.status !== 'upcoming'
+                "
+                [class.text-slate-400]="
+                  step.status === 'upcoming'
+                "
+              >
+                {{ step.label }}
+              </p>
+
+              <!-- Time -->
+              @if (step.timestamp) {
+
+                <p
+                  class="mt-0.5 text-center text-[10px] leading-tight text-slate-400"
+                >
+                  {{ step.timestamp }}
+                </p>
+
+              }
+
+            </div>
+
+          }
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+}

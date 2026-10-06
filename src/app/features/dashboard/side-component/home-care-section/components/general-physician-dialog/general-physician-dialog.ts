@@ -34,6 +34,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 
+import { Tracker } from '../tracker/tracker';
+
 import {
   LocationSelectorComponent,
   LocationResult,
@@ -51,6 +53,7 @@ import {
     MatFormFieldModule,
     MatInputModule,
     MatIconModule,
+    Tracker
   ],
   templateUrl: './general-physician-dialog.html',
 })
@@ -60,6 +63,8 @@ export class GeneralPhysicianDialog
   private srv = inject(GHOService);
   private toastr = inject(ToastrService);
   private dialog = inject(MatDialog);
+
+  showTracker = false;
 
   patientId: string | null = null;
 
@@ -185,12 +190,6 @@ export class GeneralPhysicianDialog
             location.fullAddress ||
             location.formattedAddress ||
             '';
-
-          console.log(
-            'Selected address:',
-            address
-          );
-
           this.form.patchValue({
             address,
           });
@@ -276,6 +275,13 @@ export class GeneralPhysicianDialog
 
   cancelBooking(): void {
     this.close();
+  }
+
+  trackBooking(): void {
+    if (!this.booking?.BookingID) {
+      return;
+    }
+    this.showTracker = true;
   }
 }
 

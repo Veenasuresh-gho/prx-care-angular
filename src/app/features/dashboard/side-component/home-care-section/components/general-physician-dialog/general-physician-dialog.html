@@ -140,17 +140,40 @@
         <!-- Footer -->
         <div class="mt-6 flex flex-col-reverse gap-3 border-t border-gray-200 pt-5 sm:flex-row sm:justify-end">
             @if (booking?.Status?.toLowerCase() === 'booked') {
+
+            <!-- Cancel -->
             <app-button variant="destructive" (click)="close()">
                 Cancel Booking Request
             </app-button>
-            } @else if (booking) {
-            <app-button variant="destructive" (click)="close()">
+
+            <!-- Close -->
+            <app-button (click)="close()">
                 Close
             </app-button>
-            } @else {
-            <app-button (click)="confirmBooking()">
-                Confirm Booking Request
+
+            } @else if (booking) {
+
+            <!-- Track -->
+            <app-button (click)="trackBooking()">
+                Track Booking
             </app-button>
+
+            <!-- Close -->
+            <app-button (click)="close()">
+                Close
+            </app-button>
+
+            } @else {
+
+            <!-- New Booking -->
+            <app-button [disabled]="isLoading" (click)="confirmBooking()">
+                {{
+                isLoading
+                ? 'Submitting...'
+                : 'Confirm Booking Request'
+                }}
+            </app-button>
+
             }
         </div>
     </app-dialog>
