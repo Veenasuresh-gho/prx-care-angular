@@ -1,0 +1,219 @@
+<div class="md:py-10 px-4 md:px-10 lg:px-20 max-w-7xl mx-auto">
+    <div class="flex justify-between items-center gap-2 mt-2">
+        <button
+            type="button"
+            class="flex items-center gap-2 text-gray-700 cursor-pointer"
+            (click)="goBack()">
+            <mat-icon>arrow_back</mat-icon>
+            <span class="font-medium">
+                Food Scanner
+            </span>
+        </button>
+    </div>
+    <div class="bg-white p-4 md:p-6 mt-4 rounded-xl">
+        <p class="font-bold text-lg">
+            Snap your plate,
+            <span class="text-[#2AA39F]">
+                know your macros
+            </span>
+        </p>
+        <div class="py-4 grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <div
+                class="lg:col-span-2 h-64 relative flex justify-center items-center border-2 rounded-lg border-dashed border-gray-400 overflow-hidden">
+                @if (preview) {
+                    <img
+                        [src]="preview"
+                        alt="Food preview"
+                        class="absolute inset-0 w-full h-full object-cover" />
+                    @if (loading) {
+                        <div class="absolute inset-0 bg-black/40 flex items-center justify-center z-10">
+                            <div class="flex gap-2">
+                                <span
+                                    class="w-3 h-3 bg-white rounded-full animate-bounce">
+                                </span>
+                                <span
+                                    class="w-3 h-3 bg-white rounded-full animate-bounce"
+                                    style="animation-delay: 150ms">
+                                </span>
+                                <span
+                                    class="w-3 h-3 bg-white rounded-full animate-bounce"
+                                    style="animation-delay: 300ms">
+                                </span>
+                            </div>
+                        </div>
+                    }
+                    @if (!loading) {
+                        <div
+                            class="absolute bottom-4 left-1/2 -translate-x-1/2 z-10">
+                            <button
+                                type="button"
+                                (click)="resetScanner()"
+                                class="bg-white px-4 py-2 rounded-lg flex items-center gap-2 shadow">
+                                <mat-icon>
+                                    image
+                                </mat-icon>
+                                Upload another meal
+                            </button>
+                        </div>
+                    }
+                } @else {
+                    <div
+                        class="flex flex-col items-center text-center gap-2 px-4">
+                        <img
+                            src="/assets/upload-image.png"
+                            alt="Upload"
+                            class="w-16 h-16 md:w-20 md:h-20" />
+                        <h4 class="font-bold">
+                            Upload your meal
+                        </h4>
+                        <p class="text-gray-400 text-sm">
+                            Drag and drop or click to upload an image
+                        </p>
+                        <button
+                            type="button"
+                            (click)="openFilePicker()"
+                            class="bg-[#2AA39F] text-white px-5 py-2 rounded-lg hover:opacity-90 transition cursor-pointer">
+                            Upload Image
+                        </button>
+                    </div>
+                }
+                <input
+                    #fileInput
+                    type="file"
+                    accept="image/*"
+                    class="hidden"
+                    (change)="handleFileChange($event)" />
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+                <div
+                    class="border rounded-xl p-3 flex flex-col items-center text-center">
+                    <img
+                        src="/assets/Calorie.png"
+                        alt="Calories"
+                        class="w-10 h-10 md:w-12 md:h-12" />
+                    <p class="text-gray-500 text-sm">
+                        Total Calories
+                    </p>
+                    <p class="font-bold">
+                        {{ result
+                            ? result.nutrition.calories + ' kcal'
+                            : '-- kcal' }}
+                    </p>
+                </div>
+                <div
+                    class="border rounded-xl p-3 flex flex-col items-center text-center">
+                    <img
+                        src="/assets/protein.png"
+                        alt="Protein"
+                        class="w-10 h-10 md:w-12 md:h-12" />
+                    <p class="text-gray-500 text-sm">
+                        Protein
+                    </p>
+                    <p class="font-bold">
+                        {{ result
+                            ? result.nutrition.protein
+                            : '-- g' }}
+                    </p>
+                </div>
+                <div
+                    class="border rounded-xl p-3 flex flex-col items-center text-center">
+                    <img
+                        src="/assets/carbs.png"
+                        alt="Carbs"
+                        class="w-10 h-10 md:w-12 md:h-12" />
+                    <p class="text-gray-500 text-sm">
+                        Carbs
+                    </p>
+                    <p class="font-bold">
+                        {{ result
+                            ? result.nutrition.carbs
+                            : '-- g' }}
+                    </p>
+                </div>
+                <div
+                    class="border rounded-xl p-3 flex flex-col items-center text-center">
+                    <img
+                        src="/assets/fat.png"
+                        alt="Fat"
+                        class="w-10 h-10 md:w-12 md:h-12" />
+
+                    <p class="text-gray-500 text-sm">
+                        Fat
+                    </p>
+                    <p class="font-bold">
+                        {{ result
+                            ? result.nutrition.fat
+                            : '-- g' }}
+                    </p>
+                </div>
+            </div>
+        </div>
+        @if (result && result.food) {
+            <div class="mt-6 flex flex-col gap-5">
+                <h2 class="text-gray-500 text-md md:text-lg font-semibold">
+                    {{ result.food }}
+                </h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    @for (
+                        item of result.ingredients;
+                        track $index
+                    ) {
+                        <div
+                            class="bg-[#F8F9FF] rounded-xl p-4 flex flex-col gap-4">
+                            <div class="flex justify-between text-gray-600">
+                                <p class="font-semibold capitalize">
+                                    {{ item.name }}
+                                </p>
+                                <p class="text-sm">
+                                    {{ item.estimated_quantity }}
+                                </p>
+                            </div>
+                            <div class="grid grid-cols-4 gap-2 text-center text-sm">
+                                <div>
+                                    <p class="font-semibold">
+                                        ~{{ item.nutrition.calories }} kcal
+                                    </p>
+                                    <p class="text-gray-500">
+                                        Calories
+                                    </p>
+                                </div>
+                                <div>
+                                    <p class="font-semibold">
+                                        {{ item.nutrition.protein }}
+                                    </p>
+                                    <p class="text-gray-500">
+                                        Protein
+                                    </p>
+                                </div>
+                                <div>
+                                    <p class="font-semibold">
+                                        {{ item.nutrition.carbs }}
+                                    </p>
+                                    <p class="text-gray-500">
+                                        Carbs
+                                    </p>
+                                </div>
+                                <div>
+                                    <p class="font-semibold">
+                                        {{ item.nutrition.fat }}
+                                    </p>
+                                    <p class="text-gray-500">
+                                        Fat
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+        @if (noFoodDetected) {
+            <div class="mt-4 text-red-500 text-center">
+                ⚠️ No food detected in the image.
+            </div>
+        }
+    </div>
+    <div class="bg-white mt-6 rounded-xl">
+        <app-how-to-image-section />
+    </div>
+</div>

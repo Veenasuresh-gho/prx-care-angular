@@ -1,0 +1,87 @@
+<div class="min-h-screen bg-[#f8fbf9] shadow-xl rounded-2xl border border-violet-400 mt-10 overflow-hidden">
+    <div class="w-full bg-white py-4 px-4 flex justify-between items-center shadow-sm">
+        <div class="flex items-center gap-4">
+            <div class="w-12 h-12 rounded-lg overflow-hidden">
+                <img src="assets/wellness.png" alt="wellness" class="w-full h-full object-cover">
+            </div>
+            <div>
+                <h1 class="font-serif text-2xl font-semibold text-[#2d4739]">
+                    HabitHero
+                </h1>
+                <p class="text-sm text-[#6b8575]">
+                    Build better habits, one day at a time.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <main class="max-w-3xl mx-auto p-6 flex flex-col h-[calc(100vh-150px)] bg-[#E6E4FF]">
+        <div #chatContainer class="flex-1 flex flex-col gap-4 mb-4 overflow-y-auto pr-2 no-scrollbar">
+            @for (message of messages; track message.id) {
+            <div class="flex items-start gap-2" [class.justify-end]="message.type === 'user'"
+                [class.justify-start]="message.type === 'bot'">
+
+                @if (message.type === 'bot') {
+                <div class="w-8 h-8 rounded-full overflow-hidden shrink-0">
+                    <img src="assets/wellness.png" alt="bot" class="w-full h-full object-cover">
+                </div>
+                }
+                <div class="max-w-[75%] p-4 rounded-2xl text-sm leading-6 whitespace-pre-line"
+                    [class.bg-wellness]="message.type === 'user'" [class.text-white]="message.type === 'user'"
+                    [class.bg-white]="message.type === 'bot'" [class.text-[#3a4f44]]="message.type === 'bot'">
+
+                    {{ message.text }}
+                </div>
+                @if (message.type === 'user') {
+                <div
+                    class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-wellness font-bold shrink-0">
+                    <mat-icon>person</mat-icon>
+                </div>
+                }
+            </div>
+            }
+
+            @if (isTyping) {
+            <div class="flex items-start gap-2">
+                <div class="w-8 h-8 rounded-full overflow-hidden shrink-0">
+                    <img src="assets/wellness.png" alt="bot typing" class="w-full h-full object-cover">
+                </div>
+                <div class="bg-white px-4 py-3 rounded-2xl flex items-center gap-1">
+                    <span class="w-2 h-2 bg-[#7C5CFC] rounded-full animate-bounce"></span>
+                    <span class="w-2 h-2 bg-[#7C5CFC] rounded-full animate-bounce" style="animation-delay: 150ms">
+                    </span>
+                    <span class="w-2 h-2 bg-[#7C5CFC] rounded-full animate-bounce" style="animation-delay: 300ms">
+                    </span>
+                </div>
+            </div>
+            }
+        </div>
+
+        @if (messages.length === 1) {
+        <div class="flex flex-wrap gap-2 mb-4">
+            @for (reply of quickReplies; track reply) {
+            <button type="button" (click)="selectQuickReply(reply)"
+                class="px-3 py-1 rounded-full text-sm text-[#4a6b5a] bg-white/80 hover:bg-white transition-colors cursor-pointer">
+                {{ reply }}
+            </button>
+            }
+        </div>
+        }
+
+        <div class="flex items-end gap-2 bg-white rounded-3xl p-2">
+            <textarea [(ngModel)]="inputValue" (keydown)="handleKeyDown($event)" placeholder="Type your message..."
+                rows="1"
+                class="flex-1 resize-none min-h-[24px] max-h-[100px] mb-2 ml-2 bg-transparent outline-none border-none text-sm text-[#3a4f44]">
+            </textarea>
+            <button type="button" (click)="sendMessage()" [disabled]="!inputValue.trim() || isTyping"
+                class="w-10 h-10 rounded-lg flex items-center justify-center cursor-pointer"
+                [class.bg-gradient-to-br]="inputValue.trim() && !isTyping"
+                [class.from-violet-200]="inputValue.trim() && !isTyping"
+                [class.to-violet-400]="inputValue.trim() && !isTyping" [class.text-white]="true"
+                [class.bg-violet-200]="!inputValue.trim() || isTyping"
+                [class.cursor-not-allowed]="!inputValue.trim() || isTyping">
+                <mat-icon>send</mat-icon>
+            </button>
+        </div>
+    </main>
+</div>

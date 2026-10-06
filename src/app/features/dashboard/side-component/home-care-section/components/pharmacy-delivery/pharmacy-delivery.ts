@@ -122,10 +122,6 @@ export class PharmacyDeliveryDialog
     }
 
     if (this.booking) {
-      console.log(
-        'Pharmacy Booking:',
-        this.booking
-      );
 
       this.form.patchValue({
         name:
@@ -195,20 +191,12 @@ export class PharmacyDeliveryDialog
             return;
           }
 
-          console.log(
-            'Selected pharmacy location:',
-            location
-          );
+         
 
           const address =
             location.fullAddress ||
             location.formattedAddress ||
             '';
-
-          console.log(
-            'Selected pharmacy address:',
-            address
-          );
 
           this.form.patchValue({
             address,
