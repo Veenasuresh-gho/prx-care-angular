@@ -2,8 +2,7 @@ export const environment = {
   production: true,
 
   application: {
-    // apiUrl: 'https://ghoapps.com/abi/iin'
-    apiUrl: 'https://ghoapps.com/Prx2/iin'
+    apiUrl: 'https://ghoapps.com/abi/iin'
   },
   openAi: {
     baseUrl: 'https://ghoapps.com/AI/scan'
