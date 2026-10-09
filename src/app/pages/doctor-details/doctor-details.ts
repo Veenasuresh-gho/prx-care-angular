@@ -21,7 +21,8 @@ export class DoctorDetails implements OnInit {
   private route = inject(ActivatedRoute);
 
   doctorId: string | null = null;
-  
+  rescheduleId: string | null = null;
+
   getDoctorList(doctorId: string): void {
     const tv = [
       {
@@ -53,6 +54,8 @@ export class DoctorDetails implements OnInit {
     if (this.doctorId) {
       this.getDoctorList(this.doctorId);
     }
+    this.rescheduleId =
+      this.route.snapshot.queryParamMap.get('rescheduleId');
   }
 
 

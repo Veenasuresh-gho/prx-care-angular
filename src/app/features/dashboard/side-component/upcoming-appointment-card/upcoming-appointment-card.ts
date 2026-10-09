@@ -3,12 +3,14 @@ import {
   Input,
   ChangeDetectionStrategy,
   signal,
+  inject,
 } from '@angular/core';
 
 import { NgOptimizedImage } from '@angular/common';
 
 import { StatusBadge } from '../../../../components/status-badge/status-badge';
 import { CancelAppointment } from '../../../../components/cancel-appointment/cancel-appointment';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-upcoming-appointment-card',
@@ -22,6 +24,7 @@ import { CancelAppointment } from '../../../../components/cancel-appointment/can
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UpcomingAppointmentCard {
+  private readonly router = inject(Router);
 
   @Input() appointment: any;
 
@@ -33,6 +36,13 @@ export class UpcomingAppointmentCard {
 
   get paymentStatus(): string {
     return this.appointment?.PayStatus?.trim()?.toLowerCase() || 'unknown';
+  }
+
+  handleViewClick(): void {
+    this.router.navigate([
+      '/appointments',
+      this.appointment.ID,
+    ]);
   }
 
   openCancelDialog(): void {

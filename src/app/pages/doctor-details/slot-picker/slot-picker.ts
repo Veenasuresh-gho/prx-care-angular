@@ -31,6 +31,7 @@ import { ToastrService } from 'ngx-toastr';
 export class SlotPicker implements OnInit {
   @Input() doctorId: string | null = null;
   @Input() doctor: any = null;
+  @Input() rescheduleId: string | null = null;
   patientId: string | null = null;
 
   appointmentData = {
@@ -132,6 +133,32 @@ export class SlotPicker implements OnInit {
 
   onSlotSelect(slot: any): void {
     this.selectedSlot.set(slot);
+  }
+
+  rescheduleAppointment(): void {
+    const slot = this.selectedSlot();
+    const tv = [
+      { T: 'dk1', V: this.rescheduleId },
+      { T: 'dk2', V: slot.ID },
+      {
+        T: 'c1',
+        V: this.appointmentData.appointmentType === 'N' ? 0 : 1,
+      },
+      { T: 'c10', V: '9' },
+    ];
+    this.srv.getdata('care', tv).subscribe({
+      next: (res) => {
+        if (res.Status === 1) {
+          this.closeSheet();
+          this.toastr.success(res?.Data[0]?.[0]?.msg);
+        } else {
+          this.toastr.error(res?.Info)
+        }
+      },
+      error: (error) => {
+        console.error('Error adding appointment:', error);
+      },
+    });
   }
 
   onContinue(): void {

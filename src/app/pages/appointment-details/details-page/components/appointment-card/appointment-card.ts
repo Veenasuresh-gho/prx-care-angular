@@ -52,18 +52,14 @@ export class AppointmentCard {
   }
 
   handleReschedule(): void {
-    if (!this.appointment?.DoctorID || !this.appointment?.ID) {
-      return;
-    }
+    const doctorId = this.appointment?.DoctorID;
+    const appointmentId = this.appointment?.ID;
 
     this.router.navigate(
-      [
-        '/en/appointments/schedule-appointment/doctor',
-        this.appointment.DoctorID,
-      ],
+      ['/schedule-appointment', doctorId],
       {
         queryParams: {
-          rescheduleId: this.appointment.ID,
+          rescheduleId: appointmentId,
         },
       }
     );

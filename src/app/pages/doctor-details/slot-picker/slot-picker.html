@@ -79,9 +79,15 @@
             </p>
         </div>
         <div>
-            <app-button [disabled]="!selectedSlot()" (click)="onContinue()">
+            @if (rescheduleId) {
+            <app-button [disabled]="!selectedSlot() || isLoading()" (click)="rescheduleAppointment()">
+                Reschedule
+            </app-button>
+            } @else {
+            <app-button [disabled]="!selectedSlot() || isLoading()" (click)="onContinue()">
                 Continue
             </app-button>
+            }
         </div>
     </div>
 </div>
