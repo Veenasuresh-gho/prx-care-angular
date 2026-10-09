@@ -1,250 +1,303 @@
 <form [formGroup]="form">
+  <app-dialog
+    [open]="open"
+    (openChange)="openChange.emit($event)"
+  >
+    @if (isTracking) {
+      <!-- Tracker Header -->
+      <div>
+        <h1 class="text-2xl font-bold text-gray-900">
+          Track Nursing Services Booking
+        </h1>
 
-  <app-dialog [open]="open" (openChange)="openChange.emit($event)">
+        <p class="mt-2 text-sm font-semibold text-gray-700">
+          Track the current status of your home nursing service request.
+        </p>
+      </div>
 
-    <!-- Header -->
-    <div>
-      <h1 class="text-2xl font-bold text-gray-900">
-        {{
-        isViewMode
-        ? 'Nursing Services Booking Details'
-        : 'Book Home Nursing Services'
-        }}
-      </h1>
+      <div class="my-4 w-full border-t border-gray-200"></div>
 
-      <p class="mt-2 text-sm font-semibold text-gray-700">
-        When your request is received, our team
-        will reach out soon to schedule the service.
-      </p>
-    </div>
+      <!-- Tracker -->
+      <app-tracker
+        [orderId]="trackingBookingId"
+        serviceLabel="Home nursing services"
+      />
 
+      <!-- Tracker Footer -->
+      <div
+        class="mt-6 flex flex-col-reverse justify-end gap-3 border-t border-gray-200 pt-4 sm:flex-row"
+      >
+        <app-button (click)="backToDetails()">
+          Back to Details
+        </app-button>
 
-    <!-- Divider -->
-    <div class="my-4 w-full border-t border-gray-200"></div>
+        <app-button (click)="close()">
+          Close
+        </app-button>
+      </div>
+    } @else {
+      <!-- Header -->
+      <div>
+        <h1 class="text-2xl font-bold text-gray-900">
+          {{
+            isViewMode
+              ? 'Nursing Services Booking Details'
+              : 'Book Home Nursing Services'
+          }}
+        </h1>
 
+        <p class="mt-2 text-sm font-semibold text-gray-700">
+          When your request is received, our team
+          will reach out soon to schedule the service.
+        </p>
+      </div>
 
-    <!-- Form -->
-    <div class="space-y-4">
+      <!-- Divider -->
+      <div class="my-4 w-full border-t border-gray-200"></div>
 
-      <!-- Nursing Service -->
-      <mat-form-field appearance="outline" class="w-full">
-        <mat-label>
-          Nursing Service
-        </mat-label>
+      <!-- Form -->
+      <div class="space-y-4">
 
-        <mat-select formControlName="services" [disabled]="isViewMode">
-          @for (
-          service of nursingTypes;
-          track service.value
-          ) {
-          <mat-option [value]="service.value">
-            {{ service.label }}
-          </mat-option>
-          }
-        </mat-select>
-
-        @if (
-        form.controls.services.touched &&
-        form.controls.services.hasError('required')
-        ) {
-        <mat-error>
-          Nursing service is required
-        </mat-error>
-        }
-      </mat-form-field>
-
-
-      <!-- Duration + Date -->
-      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-
-        <!-- Duration -->
+        <!-- Nursing Service -->
         <mat-form-field appearance="outline" class="w-full">
-          <mat-label>
-            Estimated Duration
-          </mat-label>
+          <mat-label>Nursing Service</mat-label>
 
-          <mat-select formControlName="duration" [disabled]="isViewMode">
-            @for (
-            item of durationTypes;
-            track item.value
-            ) {
-            <mat-option [value]="item.value">
-              {{ item.label }}
-            </mat-option>
+          <mat-select
+            formControlName="services"
+            [disabled]="isViewMode"
+          >
+            @for (service of nursingTypes; track service.value) {
+              <mat-option [value]="service.value">
+                {{ service.label }}
+              </mat-option>
             }
           </mat-select>
 
           @if (
-          form.controls.duration.touched &&
-          form.controls.duration.hasError('required')
+            form.controls.services.touched &&
+            form.controls.services.hasError('required')
           ) {
-          <mat-error>
-            Duration is required
-          </mat-error>
+            <mat-error>
+              Nursing service is required
+            </mat-error>
           }
         </mat-form-field>
 
+        <!-- Duration + Date -->
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
 
-        <!-- Service Date -->
-        <mat-form-field appearance="outline" class="w-full">
-          <mat-label>
-            Service Date
-          </mat-label>
+          <!-- Duration -->
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Estimated Duration</mat-label>
 
-          <input matInput type="date" formControlName="date" [disabled]="isViewMode" />
-        </mat-form-field>
-
-      </div>
-
-
-      <!-- Name -->
-      <mat-form-field appearance="outline" class="w-full">
-        <mat-label>
-          Name
-        </mat-label>
-
-        <input matInput type="text" formControlName="name" placeholder="Enter your name" [readonly]="isViewMode" />
-
-        @if (
-        form.controls.name.touched &&
-        form.controls.name.hasError('required')
-        ) {
-        <mat-error>
-          Name is required
-        </mat-error>
-        }
-      </mat-form-field>
-
-
-      <!-- Contact Number -->
-      <div>
-
-        <label class="mb-2 block text-sm font-medium text-gray-700">
-          Contact Number
-          <span class="text-red-500">*</span>
-        </label>
-
-        <div class="flex flex-col gap-3 sm:flex-row">
-
-          <!-- Country -->
-          @if (!isViewMode) {
-          <div class="w-full sm:w-48">
-            <app-country-select-field [selectedCountryCode]="
-                  form.controls.countryCode.value ?? ''
-                " [disabled]="isViewMode" placeholder="Select country" (selectedCountryCodeChange)="
-                  form.controls.countryCode.setValue($event)
-                " (countryChange)="
-                  onCountryChange($event)
-                " />
+            <mat-select
+              formControlName="duration"
+              [disabled]="isViewMode"
+            >
+              @for (item of durationTypes; track item.value) {
+                <mat-option [value]="item.value">
+                  {{ item.label }}
+                </mat-option>
+              }
+            </mat-select>
 
             @if (
-            form.controls.countryCode.touched &&
-            form.controls.countryCode.hasError('required')
+              form.controls.duration.touched &&
+              form.controls.duration.hasError('required')
             ) {
-            <p class="mt-1 text-xs text-red-500">
-              Country is required
-            </p>
-            }
-          </div>
-          }
-
-
-          <!-- Phone -->
-          <div class="min-w-0 flex-1">
-            <mat-form-field appearance="outline" class="w-full">
-              <mat-label>
-                Contact Number
-              </mat-label>
-
-              <input matInput type="tel" formControlName="phone" placeholder="Phone number" [readonly]="isViewMode" />
-
-              @if (
-              form.controls.phone.touched &&
-              form.controls.phone.hasError('required')
-              ) {
               <mat-error>
-                Phone number is required
+                Duration is required
               </mat-error>
-              }
-            </mat-form-field>
-          </div>
+            }
+          </mat-form-field>
 
+          <!-- Service Date -->
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Service Date</mat-label>
+
+            <input
+              matInput
+              type="date"
+              formControlName="date"
+              [readonly]="isViewMode"
+            />
+          </mat-form-field>
         </div>
 
+        <!-- Name -->
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Name</mat-label>
+
+          <input
+            matInput
+            type="text"
+            formControlName="name"
+            placeholder="Enter your name"
+            [readonly]="isViewMode"
+          />
+
+          @if (
+            form.controls.name.touched &&
+            form.controls.name.hasError('required')
+          ) {
+            <mat-error>
+              Name is required
+            </mat-error>
+          }
+        </mat-form-field>
+
+        <!-- Contact Number -->
+        <div>
+          <label class="mb-2 block text-sm font-medium text-gray-700">
+            Contact Number
+            <span class="text-red-500">*</span>
+          </label>
+
+          <div class="flex flex-col gap-3 sm:flex-row">
+
+            <!-- Country -->
+            @if (!isViewMode) {
+              <div class="w-full sm:w-48">
+                <app-country-select-field
+                  [selectedCountryCode]="
+                    form.controls.countryCode.value ?? ''
+                  "
+                  [disabled]="isViewMode"
+                  placeholder="Select country"
+                  (selectedCountryCodeChange)="
+                    form.controls.countryCode.setValue($event)
+                  "
+                  (countryChange)="onCountryChange($event)"
+                />
+
+                @if (
+                  form.controls.countryCode.touched &&
+                  form.controls.countryCode.hasError('required')
+                ) {
+                  <p class="mt-1 text-xs text-red-500">
+                    Country is required
+                  </p>
+                }
+              </div>
+            }
+
+            <!-- Phone -->
+            <div class="min-w-0 flex-1">
+              <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Contact Number</mat-label>
+
+                <input
+                  matInput
+                  type="tel"
+                  formControlName="phone"
+                  placeholder="Phone number"
+                  [readonly]="isViewMode"
+                />
+
+                @if (
+                  form.controls.phone.touched &&
+                  form.controls.phone.hasError('required')
+                ) {
+                  <mat-error>
+                    Phone number is required
+                  </mat-error>
+                }
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+
+        <!-- Address -->
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Address</mat-label>
+
+          <textarea
+            matInput
+            formControlName="address"
+            [readonly]="isViewMode"
+            rows="3"
+            placeholder="Select service address"
+            (click)="!isViewMode && openLocation()"
+            [class.cursor-pointer]="!isViewMode"
+          ></textarea>
+
+          @if (!isViewMode) {
+            <mat-icon
+              matIconSuffix
+              class="cursor-pointer"
+              (click)="openLocation()"
+            >
+              location_on
+            </mat-icon>
+          }
+
+          @if (
+            form.controls.address.touched &&
+            form.controls.address.hasError('required')
+          ) {
+            <mat-error>
+              Address is required
+            </mat-error>
+          }
+        </mat-form-field>
       </div>
 
-      <!-- Address -->
-      <mat-form-field appearance="outline" class="w-full">
-        <mat-label>
-          Address
-        </mat-label>
+      <!-- Footer -->
+      <div
+        class="mt-6 flex flex-col-reverse justify-end gap-3 border-t border-gray-200 pt-4 sm:flex-row"
+      >
+        @if (booking?.Status?.toLowerCase() === 'booked') {
+          <!-- Cancel Booking -->
+          <app-button
+            variant="destructive"
+            [disabled]="isCancelling"
+            (click)="cancelBooking()"
+          >
+            {{
+              isCancelling
+                ? 'Cancelling...'
+                : 'Cancel Booking Request'
+            }}
+          </app-button>
 
-        <textarea matInput formControlName="address" [readonly]="isViewMode" rows="3"
-          placeholder="Select delivery address" (click)="openLocation()" class="cursor-pointer"></textarea>
+          <!-- Track Booking -->
+          @if (showTracker) {
+            <app-button (click)="trackBooking()">
+              Track Booking
+            </app-button>
+          }
 
-        @if (!isViewMode) {
-        <mat-icon matIconSuffix class="cursor-pointer" (click)="openLocation()">
-          location_on
-        </mat-icon>
+          <!-- Close -->
+          <app-button (click)="close()">
+            Close
+          </app-button>
+        } @else if (booking) {
+          <!-- Track Booking -->
+          @if (showTracker) {
+            <app-button (click)="trackBooking()">
+              Track Booking
+            </app-button>
+          }
+
+          <!-- Close -->
+          <app-button (click)="close()">
+            Close
+          </app-button>
+        } @else {
+          <!-- New Booking -->
+          <app-button
+            [disabled]="isSubmitting"
+            (click)="confirmBooking()"
+          >
+            {{
+              isSubmitting
+                ? 'Confirming...'
+                : 'Confirm Booking Request'
+            }}
+          </app-button>
         }
-
-        @if (
-        form.controls.address.touched &&
-        form.controls.address.hasError('required')
-        ) {
-        <mat-error>
-          Address is required
-        </mat-error>
-        }
-      </mat-form-field>
-
-    </div>
-
-
-    <!-- Footer -->
-    <div class="mt-6 flex flex-col-reverse justify-end
-             gap-3 border-t border-gray-200 pt-4
-             sm:flex-row">
-
-      <!-- Booked -->
-      @if (
-      booking?.Status?.toLowerCase() === 'booked'
-      ) {
-
-      <app-button variant="destructive" [disabled]="isCancelling" (click)="cancelBooking()">
-        {{
-        isCancelling
-        ? 'Cancelling...'
-        : 'Cancel Booking Request'
-        }}
-      </app-button>
-
-      }
-
-      <!-- Existing Booking -->
-      @else if (booking) {
-
-      <app-button class="bg-green-700 hover:bg-green-600" (click)="trackBooking()">
-        Track Booking
-      </app-button>
-
-      }
-
-      <!-- New Booking -->
-      @else {
-
-      <app-button [disabled]="isSubmitting" (click)="confirmBooking()">
-        {{
-        isSubmitting
-        ? 'Confirming...'
-        : 'Confirm Booking Request'
-        }}
-      </app-button>
-
-      }
-
-    </div>
-
+      </div>
+    }
   </app-dialog>
-
 </form>
+

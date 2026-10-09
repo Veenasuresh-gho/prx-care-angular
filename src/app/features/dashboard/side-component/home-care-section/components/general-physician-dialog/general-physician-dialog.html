@@ -1,180 +1,264 @@
 <form [formGroup]="form">
-    <app-dialog [open]="open" (openChange)="openChange.emit($event)">
-        <!-- Header -->
-        <div>
-            <h1 class="text-xl font-bold text-gray-900">
-                {{
-                isViewMode
-                ? 'General Physician Booking Details'
-                : 'Book a General Physician'
-                }}
-            </h1>
+  <app-dialog
+    [open]="open"
+    (openChange)="openChange.emit($event)"
+  >
+    @if (showTracker) {
+      <!-- Tracker Header -->
+      <div>
+        <h1 class="text-xl font-bold text-gray-900">
+          Track General Physician Booking
+        </h1>
 
-            <p class="mt-1 text-xs font-semibold text-gray-700">
-                Book a physical consultation at your home
-            </p>
+        <p class="mt-1 text-xs font-semibold text-gray-700">
+          Track the current status of your home consultation request.
+        </p>
+      </div>
+
+      <div class="my-4 border-t border-gray-200"></div>
+
+      <!-- Tracker -->
+      <app-tracker
+        [orderId]="trackingBookingId"
+        serviceLabel="General physician visit"
+      />
+
+      <!-- Tracker Footer -->
+      <div
+        class="mt-6 flex flex-col-reverse gap-3 border-t border-gray-200 pt-5 sm:flex-row sm:justify-end"
+      >
+        <app-button (click)="showTracker = false">
+          Back to Details
+        </app-button>
+
+        <app-button (click)="close()">
+          Close
+        </app-button>
+      </div>
+    } @else {
+      <!-- Header -->
+      <div>
+        <h1 class="text-xl font-bold text-gray-900">
+          {{
+            isViewMode
+              ? 'General Physician Booking Details'
+              : 'Book a General Physician'
+          }}
+        </h1>
+
+        <p class="mt-1 text-xs font-semibold text-gray-700">
+          Book a physical consultation at your home
+        </p>
+      </div>
+
+      <div class="my-2 border-t border-gray-200"></div>
+
+      <!-- Form -->
+      <div class="space-y-5">
+
+        <!-- Date & Time -->
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Date</mat-label>
+
+            <input
+              matInput
+              type="date"
+              formControlName="date"
+              [readonly]="isViewMode"
+            />
+
+            @if (
+              form.controls.date.touched &&
+              form.controls.date.hasError('required')
+            ) {
+              <mat-error>
+                Date is required
+              </mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Time</mat-label>
+
+            <input
+              matInput
+              type="time"
+              formControlName="time"
+              [readonly]="isViewMode"
+            />
+
+            @if (
+              form.controls.time.touched &&
+              form.controls.time.hasError('required')
+            ) {
+              <mat-error>
+                Time is required
+              </mat-error>
+            }
+          </mat-form-field>
         </div>
 
-        <div class="my-2 border-t border-gray-200"></div>
+        <!-- Name -->
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Name</mat-label>
 
-        <!-- Form -->
-        <div class="space-y-5">
+          <input
+            matInput
+            type="text"
+            formControlName="name"
+            placeholder="Enter your name"
+            [readonly]="isViewMode"
+          />
 
-            <!-- Date & Time -->
-            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                <mat-form-field appearance="outline" class="w-full">
-                    <mat-label>Date</mat-label>
+          @if (
+            form.controls.name.touched &&
+            form.controls.name.hasError('required')
+          ) {
+            <mat-error>
+              Name is required
+            </mat-error>
+          }
+        </mat-form-field>
 
-                    <input matInput type="date" formControlName="date" [readonly]="isViewMode" />
-                </mat-form-field>
+        <!-- Contact Number -->
+        <div>
+          <label class="mb-2 block text-sm font-medium text-gray-700">
+            Contact Number
+            <span class="text-red-500">*</span>
+          </label>
 
-                <mat-form-field appearance="outline" class="w-full">
-                    <mat-label>Time</mat-label>
+          <div class="flex flex-col gap-2 sm:flex-row">
 
-                    <input matInput type="time" formControlName="time" [readonly]="isViewMode" />
-
-                    @if (
-                    form.controls.time.touched &&
-                    form.controls.time.hasError('required')
-                    ) {
-                    <mat-error>
-                        Time is required
-                    </mat-error>
-                    }
-                </mat-form-field>
-            </div>
-
-            <!-- Name -->
-            <mat-form-field appearance="outline" class="w-full">
-                <mat-label>Name</mat-label>
-
-                <input matInput type="text" formControlName="name" placeholder="Enter your name"
-                    [readonly]="isViewMode" />
+            <!-- Country Selector -->
+            @if (!isViewMode) {
+              <div class="w-full sm:w-24">
+                <app-country-select-field
+                  [selectedCountryCode]="
+                    form.controls.countryCode.value ?? ''
+                  "
+                  (selectedCountryCodeChange)="
+                    form.controls.countryCode.setValue($event)
+                  "
+                  placeholder="Select country"
+                  (countryChange)="onCountryChange($event)"
+                />
 
                 @if (
-                form.controls.name.touched &&
-                form.controls.name.hasError('required')
+                  form.controls.countryCode.touched &&
+                  form.controls.countryCode.hasError('required')
                 ) {
-                <mat-error>
-                    Name is required
-                </mat-error>
+                  <p class="mt-1 text-xs text-red-500">
+                    Country is required
+                  </p>
                 }
-            </mat-form-field>
+              </div>
+            }
 
-            <!-- Contact Number -->
-            <div>
-                <label class="mb-2 block text-sm font-medium text-gray-700">
-                    Contact Number
-                    <span class="text-red-500">*</span>
-                </label>
+            <!-- Phone Number -->
+            <div class="min-w-0 flex-1">
+              <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Phone Number</mat-label>
 
-                <div class="flex flex-col gap-2 sm:flex-row">
+                <input
+                  matInput
+                  type="tel"
+                  formControlName="phone"
+                  placeholder="Enter phone number"
+                  [readonly]="isViewMode"
+                />
 
-                    <!-- Country -->
-                    @if (!isViewMode) {
-                    <div class="w-full sm:w-24">
-                        <app-country-select-field [selectedCountryCode]="
-                  form.controls.countryCode.value ?? ''
-                " (selectedCountryCodeChange)="
-                  form.controls.countryCode.setValue($event)
-                " placeholder="Select country" (countryChange)="onCountryChange($event)" />
-
-                        @if (
-                        form.controls.countryCode.touched &&
-                        form.controls.countryCode.hasError('required')
-                        ) {
-                        <p class="mt-1 text-xs text-red-500">
-                            Country is required
-                        </p>
-                        }
-                    </div>
-                    }
-
-                    <!-- Phone -->
-                    <div class="min-w-0 flex-1">
-                        <mat-form-field appearance="outline" class="w-full">
-                            <mat-label>Phone Number</mat-label>
-
-                            <input matInput type="tel" formControlName="phone" placeholder="Enter phone number"
-                                [readonly]="isViewMode" />
-
-                            @if (
-                            form.controls.phone.touched &&
-                            form.controls.phone.hasError('required')
-                            ) {
-                            <mat-error>
-                                Phone number is required
-                            </mat-error>
-                            }
-                        </mat-form-field>
-                    </div>
-
-                </div>
+                @if (
+                  form.controls.phone.touched &&
+                  form.controls.phone.hasError('required')
+                ) {
+                  <mat-error>
+                    Phone number is required
+                  </mat-error>
+                }
+              </mat-form-field>
             </div>
-            <!-- Address -->
-            <div>
-                <mat-form-field appearance="outline" class="w-full">
-                    <mat-label>Address</mat-label>
-
-                    <textarea matInput formControlName="address" rows="3" placeholder="Select your service address"
-                        [readonly]="isViewMode" (click)="!isViewMode && openLocation()"></textarea>
-
-                    @if (!isViewMode) {
-                    <mat-icon matIconSuffix class="cursor-pointer" (click)="openLocation()">
-                        location_on
-                    </mat-icon>
-                    }
-
-                    @if (
-                    form.controls.address.touched &&
-                    form.controls.address.hasError('required')
-                    ) {
-                    <mat-error>
-                        Address is required
-                    </mat-error>
-                    }
-                </mat-form-field>
-            </div>
+          </div>
         </div>
 
-        <!-- Footer -->
-        <div class="mt-6 flex flex-col-reverse gap-3 border-t border-gray-200 pt-5 sm:flex-row sm:justify-end">
-            @if (booking?.Status?.toLowerCase() === 'booked') {
+        <!-- Address -->
+        <div>
+          <mat-form-field appearance="outline" class="w-full">
+            <mat-label>Address</mat-label>
 
-            <!-- Cancel -->
-            <app-button variant="destructive" (click)="close()">
-                Cancel Booking Request
-            </app-button>
+            <textarea
+              matInput
+              formControlName="address"
+              rows="3"
+              placeholder="Select your service address"
+              [readonly]="isViewMode"
+              (click)="!isViewMode && openLocation()"
+            ></textarea>
 
-            <!-- Close -->
-            <app-button (click)="close()">
-                Close
-            </app-button>
+            @if (!isViewMode) {
+              <mat-icon
+                matIconSuffix
+                class="cursor-pointer"
+                (click)="openLocation()"
+              >
+                location_on
+              </mat-icon>
+            }
 
-            } @else if (booking) {
+            @if (
+              form.controls.address.touched &&
+              form.controls.address.hasError('required')
+            ) {
+              <mat-error>
+                Address is required
+              </mat-error>
+            }
+          </mat-form-field>
+        </div>
+      </div>
 
-            <!-- Track -->
-            <app-button (click)="trackBooking()">
-                Track Booking
-            </app-button>
+      <!-- Footer -->
+      <div
+        class="mt-6 flex flex-col-reverse gap-3 border-t border-gray-200 pt-5 sm:flex-row sm:justify-end"
+      >
+        @if (booking?.Status?.toLowerCase() === 'booked') {
+          <!-- Cancel Booking -->
+          <app-button
+            variant="destructive"
+            (click)="close()"
+          >
+            Cancel Booking Request
+          </app-button>
 
-            <!-- Close -->
-            <app-button (click)="close()">
-                Close
-            </app-button>
+          <!-- Close -->
+          <app-button (click)="close()">
+            Close
+          </app-button>
+        } @else if (booking) {
+          <!-- Track Booking -->
+          <app-button (click)="trackBooking()">
+            Track Booking
+          </app-button>
 
-            } @else {
-
-            <!-- New Booking -->
-            <app-button [disabled]="isLoading" (click)="confirmBooking()">
-                {{
-                isLoading
+          <!-- Close -->
+          <app-button (click)="close()">
+            Close
+          </app-button>
+        } @else {
+          <!-- New Booking -->
+          <app-button
+            [disabled]="isLoading"
+            (click)="confirmBooking()"
+          >
+            {{
+              isLoading
                 ? 'Submitting...'
                 : 'Confirm Booking Request'
-                }}
-            </app-button>
-
-            }
-        </div>
-    </app-dialog>
+            }}
+          </app-button>
+        }
+      </div>
+    }
+  </app-dialog>
 </form>
+

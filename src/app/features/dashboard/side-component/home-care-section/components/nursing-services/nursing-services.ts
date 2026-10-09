@@ -26,6 +26,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 
 import { CountrySelectField } from '../../../../../../components/country-select-field/country-select-field';
+import { Tracker } from '../tracker/tracker';
 
 import {
   LocationSelectorComponent,
@@ -48,7 +49,8 @@ import { ToastrService } from 'ngx-toastr';
     MatSelectModule,
     MatInputModule,
     CountrySelectField,
-    MatIconModule
+    MatIconModule,
+    Tracker
   ],
   templateUrl: './nursing-services.html',
 })
@@ -60,6 +62,7 @@ export class NursingServicesDialog
   private matDialog = inject(MatDialog);
 
   patientId: string | null = null;
+  trackingBookingId: string | number | null = null;
 
   @Input() open = false;
   @Input() booking: any = null;
@@ -73,6 +76,7 @@ export class NursingServicesDialog
   isLoading = false;
   isSubmitting = false;
   isCancelling = false;
+  isTracking = false;
 
   form = this.fb.group({
     date: [''],
@@ -195,13 +199,11 @@ export class NursingServicesDialog
       sessionStorage.getItem('id');
   }
 
-  ngOnChanges(
-    changes: SimpleChanges
-  ): void {
-    if (
-      changes['booking'] ||
-      changes['open']
-    ) {
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['booking'] || changes['open']) {
+      this.isTracking = false;
+      this.trackingBookingId = null;
+
       this.loadBooking();
     }
   }
@@ -309,11 +311,12 @@ export class NursingServicesDialog
   }
 
   close(): void {
-    this.openChange.emit(false);
+    this.isTracking = false;
+    this.trackingBookingId = null;
 
+    this.openChange.emit(false);
     this.form.markAsUntouched();
   }
-
   resetForm(): void {
     this.form.reset({
       date: '',
@@ -518,20 +521,44 @@ export class NursingServicesDialog
     ) {
       return;
     }
-
     this.isCancelling = true;
-
-    /*
-     * Add cancellation API here.
-     */
-
     this.isCancelling = false;
   }
 
+  get showTracker(): boolean {
+    const status = this.booking?.Status?.toLowerCase();
+
+    const bookingId =
+      this.booking?.ID ?? this.booking?.BookingID;
+
+    return (
+      this.isViewMode &&
+      status !== 'cancelled' &&
+      bookingId !== null &&
+      bookingId !== undefined &&
+      bookingId !== ''
+    );
+  }
+
   trackBooking(): void {
-    /*
-     * Add tracking logic here.
-     */
+    const bookingId =
+      this.booking?.ID ?? this.booking?.BookingID;
+
+    if (
+      bookingId === null ||
+      bookingId === undefined ||
+      bookingId === ''
+    ) {
+      this.toastr.error('Booking ID not found');
+      return;
+    }
+
+    this.trackingBookingId = bookingId;
+    this.isTracking = true;
+  }
+
+  backToDetails(): void {
+    this.isTracking = false;
   }
 }
 

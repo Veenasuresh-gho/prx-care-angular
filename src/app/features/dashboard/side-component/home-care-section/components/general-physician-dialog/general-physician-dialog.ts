@@ -65,6 +65,7 @@ export class GeneralPhysicianDialog
   private dialog = inject(MatDialog);
 
   showTracker = false;
+  trackingBookingId: string | number | null = null;
 
   patientId: string | null = null;
 
@@ -144,6 +145,9 @@ export class GeneralPhysicianDialog
   }
 
   close(): void {
+    this.showTracker = false;
+    this.trackingBookingId = null;
+
     this.openChange.emit(false);
     this.form.markAsUntouched();
   }
@@ -278,9 +282,13 @@ export class GeneralPhysicianDialog
   }
 
   trackBooking(): void {
-    if (!this.booking?.BookingID) {
+    const bookingId = this.booking?.BookingID;
+
+    if (!bookingId) {
       return;
     }
+
+    this.trackingBookingId = bookingId;
     this.showTracker = true;
   }
 }

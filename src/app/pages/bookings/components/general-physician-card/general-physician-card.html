@@ -1,83 +1,113 @@
 <div>
   @if (generalPhysician.length > 0) {
-  <div class="space-y-4">
+  <div class="space-y-2.5">
     @for (booking of generalPhysician; track booking.ID) {
-    <div (click)="handleCardClick(booking)" [class.opacity-60]="booking.Status?.toLowerCase() === 'cancelled'"
-      [class.cursor-not-allowed]="booking.Status?.toLowerCase() === 'cancelled'"
-      [class.cursor-pointer]="booking.Status?.toLowerCase() !== 'cancelled'"
-      [class.hover:shadow-md]="booking.Status?.toLowerCase() !== 'cancelled'"
-      class="w-full rounded-xl border-0 bg-white p-4 shadow-sm transition-shadow duration-150 md:p-5">
-      <div class="space-y-4">
+    @let status = booking.Status?.toLowerCase();
+    @let isCancelled = status === 'cancelled';
+    @let isBooked = status === 'booked';
+
+    <article (click)="handleCardClick(booking)" (keydown.enter)="handleCardClick(booking)"
+      [attr.role]="isCancelled ? null : 'button'" [attr.tabindex]="isCancelled ? -1 : 0"
+      [attr.aria-disabled]="isCancelled"
+      class="relative w-full overflow-hidden rounded-2xl bg-white p-3.5 shadow-sm ring-1 ring-slate-100 transition-all duration-200"
+      [class]="isCancelled
+  ? 'cursor-not-allowed opacity-60'
+  : 'cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary'">
+
+      <!-- Status accent bar -->
+      <span class="absolute inset-y-0 left-0 w-1"
+        [class]="isCancelled ? 'bg-red-400' : isBooked ? 'bg-primary' : 'bg-green-500'">
+      </span>
+
+      <div class="flex flex-col gap-3">
         <!-- Header -->
-        <div class="flex items-start justify-between">
-          <h4 class="font-semibold text-[#1F3159]">
-            General Physician
-          </h4>
+        <div class="flex items-center justify-between gap-2">
+          <div class="flex min-w-0 items-center gap-2.5">
+            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10">
+              <mat-icon class="!flex !h-5 !w-5 items-center justify-center !text-[20px] !leading-5 text-primary">
+                medical_services
+              </mat-icon>
+            </div>
+
+            <div class="min-w-0">
+              <h4 class="truncate text-sm font-semibold leading-tight text-[#1F3159]">
+                General Physician
+              </h4>
+              <p class="text-xs leading-tight text-slate-500">
+                Consultation
+              </p>
+            </div>
+          </div>
 
           @if (booking.Status) {
-          <span class="inline-flex items-center gap-1 whitespace-nowrap rounded-full px-2 py-1 text-xs font-semibold"
-            [class.bg-red-100]="booking.Status?.toLowerCase() === 'cancelled'"
-            [class.text-red-700]="booking.Status?.toLowerCase() === 'cancelled'"
-            [class.bg-primary/10]="booking.Status?.toLowerCase() === 'booked'"
-            [class.text-primary]="booking.Status?.toLowerCase() === 'booked'"
-            [class.bg-green-100]="booking.Status?.toLowerCase() !== 'cancelled' && booking.Status?.toLowerCase() !== 'booked'"
-            [class.text-green-700]="booking.Status?.toLowerCase() !== 'cancelled' && booking.Status?.toLowerCase() !== 'booked'">
-            @if (booking.Status?.toLowerCase() === 'cancelled') {
-            <mat-icon class="!h-4 !w-4 !text-base">
-              info
-            </mat-icon>
-            } @else {
-            <mat-icon class="!h-4 !w-4 !text-base">
-              verified
-            </mat-icon>
-            }
-
+          <span
+            class="inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full px-2.5 py-1 text-xs font-semibold capitalize leading-none"
+            [class]="isCancelled
+              ? 'bg-red-50 text-red-700'
+              : isBooked
+                ? 'bg-primary/10 text-primary'
+                : 'bg-green-50 text-green-700'">
+            <span class="h-1.5 w-1.5 rounded-full"
+              [class]="isCancelled ? 'bg-red-500' : isBooked ? 'bg-primary' : 'bg-green-500'">
+            </span>
             {{ booking.Status }}
           </span>
           }
         </div>
 
         <!-- Date and time -->
-        <div class="flex items-center justify-between gap-3">
+        <div class="grid grid-cols-2 gap-2">
           <!-- Preferred date -->
-          <div class="flex items-center gap-2.5">
-            <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/[0.08]">
-              <mat-icon class="!text-xl text-primary">
+          <div class="flex min-w-0 items-center gap-2.5 rounded-xl bg-slate-50 p-2.5">
+            <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white shadow-sm">
+              <mat-icon class="!flex !h-5 !w-5 items-center justify-center !text-[20px] !leading-5 text-primary">
                 calendar_today
               </mat-icon>
             </div>
 
-            <div>
+            <div class="min-w-0 leading-tight">
               <p class="text-xs text-slate-500">
                 Preferred date
               </p>
-              <p class="text-sm font-semibold text-[#1F3159]">
+              <p class="truncate text-sm font-semibold text-[#1F3159]">
                 {{ booking?.PreferredDate }}
               </p>
             </div>
           </div>
 
           <!-- Preferred time -->
-          <div class="flex items-center gap-2.5">
-            <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/[0.08]">
-              <mat-icon class=" !w-5 !text-xl text-primary">
+          <div class="flex min-w-0 items-center gap-2.5 rounded-xl bg-slate-50 p-2.5">
+            <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white shadow-sm">
+              <mat-icon class="!flex !h-5 !w-5 items-center justify-center !text-[20px] !leading-5 text-primary">
                 schedule
               </mat-icon>
             </div>
 
-            <div>
+            <div class="min-w-0 leading-tight">
               <p class="text-xs text-slate-500">
                 Preferred time
               </p>
-              <p class="text-sm font-semibold text-[#1F3159]">
+              <p class="truncate text-sm font-semibold text-[#1F3159]">
                 {{ booking?.PreferredTime }}
               </p>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </article>
     }
+  </div>
+  } @else {
+  <!-- Empty state -->
+  <div
+    class="flex flex-col items-center gap-1.5 rounded-2xl bg-white px-4 py-8 text-center shadow-sm ring-1 ring-slate-100">
+    <div class="flex h-11 w-11 items-center justify-center rounded-full bg-primary/10">
+      <mat-icon class="!flex !h-5 !w-5 items-center justify-center !text-[20px] !leading-5 text-primary">
+        event_busy
+      </mat-icon>
+    </div>
+    <p class="text-sm font-semibold text-[#1F3159]">No bookings yet</p>
+    <p class="text-xs text-slate-500">Your general physician appointments will show up here.</p>
   </div>
   }
 

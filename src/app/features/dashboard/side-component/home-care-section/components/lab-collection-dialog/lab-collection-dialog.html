@@ -1,313 +1,359 @@
+
 <form [formGroup]="form">
   <app-dialog
     [open]="open"
     (openChange)="openChange.emit($event)"
   >
-    <!-- Header -->
-    <div>
-      <h1 class="text-2xl font-bold">
-        {{
-          isViewMode
-            ? 'Lab Sample Collection Booking Details'
-            : 'Schedule Lab Sample Collection'
-        }}
-      </h1>
+    @if (isTracking) {
+      <!-- Tracker Header -->
+      <div>
+        <h1 class="text-2xl font-bold text-gray-900">
+          Track Lab Sample Collection Booking
+        </h1>
 
-      <p class="mt-2 text-sm font-semibold">
-        Book a phlebotomist to collect your samples at home.
-      </p>
-    </div>
+        <p class="mt-2 text-sm font-semibold text-gray-700">
+          Track the current status of your lab sample collection request.
+        </p>
+      </div>
 
-    <div class="my-4 w-full border-t border-gray-200"></div>
+      <div class="my-4 w-full border-t border-gray-200"></div>
 
-    <div class="space-y-4">
+      <!-- Tracker -->
+      <app-tracker
+        [orderId]="trackingBookingId"
+        serviceLabel="Lab Sample Collection"
+      />
 
-      <!-- Existing File -->
-      @if (booking) {
-        @if (booking._url) {
+      <!-- Tracker Footer -->
+      <div
+        class="mt-6 flex flex-col-reverse justify-end gap-3 border-t border-gray-200 pt-4 sm:flex-row"
+      >
+        <app-button
+          type="button"
+          (click)="backToDetails()"
+        >
+          Back to Details
+        </app-button>
+
+        <app-button
+          type="button"
+          (click)="close()"
+        >
+          Close
+        </app-button>
+      </div>
+    } @else {
+      <!-- Header -->
+      <div>
+        <h1 class="text-2xl font-bold text-gray-900">
+          {{
+            isViewMode
+              ? 'Lab Sample Collection Booking Details'
+              : 'Schedule Lab Sample Collection'
+          }}
+        </h1>
+
+        <p class="mt-2 text-sm font-semibold text-gray-700">
+          Book a phlebotomist to collect your samples at home.
+        </p>
+      </div>
+
+      <div class="my-4 w-full border-t border-gray-200"></div>
+
+      <div class="space-y-4">
+
+        <!-- Existing Prescription File -->
+        @if (booking) {
+          @if (booking._url) {
+            @if (
+              booking.Filename?.toLowerCase()?.endsWith('.pdf')
+            ) {
+              <div
+                class="flex w-full cursor-pointer items-center gap-4 rounded-xl bg-white p-4 shadow-md sm:w-3/4"
+                (click)="openExistingFile()"
+              >
+                <div
+                  class="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-red-50"
+                >
+                  <span class="text-xs font-bold text-red-600">
+                    PDF
+                  </span>
+                </div>
+
+                <div class="flex min-w-0 flex-1 flex-col overflow-hidden">
+                  <p class="truncate text-sm font-medium text-gray-800">
+                    {{ booking.Filename || 'Lab prescription' }}
+                  </p>
+
+                  <p class="mt-1 text-xs text-gray-500">
+                    Click to view prescription
+                  </p>
+                </div>
+
+                <mat-icon class="text-gray-500">
+                  open_in_new
+                </mat-icon>
+              </div>
+            } @else {
+              <div class="relative overflow-hidden rounded-md">
+                <img
+                  [src]="booking._url"
+                  [alt]="booking.Filename || 'Lab prescription'"
+                  class="h-auto max-h-80 max-w-full rounded-md object-contain"
+                />
+              </div>
+            }
+          }
+        } @else {
+          <!-- File Upload -->
+          <div>
+            <label
+              class="mb-2 block text-sm font-medium text-gray-700"
+            >
+              Upload Lab Prescription / File
+            </label>
+
+            <input
+              type="file"
+              accept=".pdf,.jpg,.jpeg,.png"
+              [disabled]="isSubmitting || isFileUploading"
+              (change)="
+                onFileChange(
+                  $any($event.target).files?.[0] || null
+                )
+              "
+              class="block w-full cursor-pointer rounded-lg border border-gray-300 bg-white text-sm file:mr-4 file:border-0 file:bg-gray-100 file:px-4 file:py-2.5 file:text-sm"
+            />
+
+            @if (file) {
+              <p class="mt-1 text-xs text-gray-500">
+                {{ file.name }}
+              </p>
+            }
+          </div>
+        }
+
+        <!-- Tests -->
+        <mat-form-field
+          appearance="outline"
+          class="w-full"
+        >
+          <mat-label>Tests</mat-label>
+
+          <input
+            matInput
+            type="text"
+            formControlName="test"
+            placeholder="Enter test name"
+            [readonly]="isViewMode"
+          />
 
           @if (
-            booking.Filename?.toLowerCase()?.endsWith('.pdf')
+            form.controls.test.touched &&
+            form.controls.test.hasError('required')
           ) {
-            <div
-              class="flex w-3/4 cursor-pointer items-center gap-4 rounded-xl bg-white p-4 shadow-xl"
-              (click)="openExistingFile()"
-            >
-              <div
-                class="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-red-50"
-              >
-                <span class="text-xs font-bold text-red-600">
-                  PDF
-                </span>
-              </div>
-
-              <div
-                class="flex min-w-0 flex-col overflow-hidden"
-              >
-                <p class="truncate text-xs text-gray-500">
-                  {{ booking.Filename }}
-                </p>
-              </div>
-            </div>
-          } @else {
-            <div class="relative overflow-hidden rounded-md">
-              <img
-                [src]="booking._url"
-                alt="Lab Collection"
-                class="h-auto max-h-80 w-auto max-w-full rounded-md object-cover"
-              />
-            </div>
+            <mat-error>
+              Test is required
+            </mat-error>
           }
+        </mat-form-field>
 
-        }
-      } @else {
+        <!-- Collection Date and Time -->
+        <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
 
-        <!-- File Upload -->
-        <div>
-          <label
-            class="mb-2 block text-sm font-medium text-black"
+          <!-- Collection Date -->
+          <mat-form-field
+            appearance="outline"
+            class="w-full"
           >
-            Upload Lab Prescription / File
+            <mat-label>Collection Date</mat-label>
+
+            <input
+              matInput
+              type="date"
+              formControlName="date"
+              [readonly]="isViewMode"
+            />
+
+            @if (
+              form.controls.date.touched &&
+              form.controls.date.hasError('required')
+            ) {
+              <mat-error>
+                Date is required
+              </mat-error>
+            }
+          </mat-form-field>
+
+          <!-- Collection Time -->
+          <mat-form-field
+            appearance="outline"
+            class="w-full"
+          >
+            <mat-label>Collection Time</mat-label>
+
+            <input
+              matInput
+              type="time"
+              formControlName="time"
+              [readonly]="isViewMode"
+            />
+
+            @if (
+              form.controls.time.touched &&
+              form.controls.time.hasError('required')
+            ) {
+              <mat-error>
+                Time is required
+              </mat-error>
+            }
+          </mat-form-field>
+
+        </div>
+
+        <!-- Patient Name -->
+        <mat-form-field
+          appearance="outline"
+          class="w-full"
+        >
+          <mat-label>Name</mat-label>
+
+          <input
+            matInput
+            type="text"
+            formControlName="name"
+            placeholder="Enter your name"
+            [readonly]="isViewMode"
+          />
+
+          @if (
+            form.controls.name.touched &&
+            form.controls.name.hasError('required')
+          ) {
+            <mat-error>
+              Name is required
+            </mat-error>
+          }
+        </mat-form-field>
+
+        <!-- Contact Number -->
+        <div>
+          <label class="mb-2 block text-sm font-medium text-gray-700">
+            Contact Number
+            <span class="text-red-500">*</span>
           </label>
 
-          <input
-            type="file"
-            accept=".pdf,.jpg,.jpeg,.png"
-            [disabled]="isSubmitting"
-            (change)="
-              onFileChange(
-                $any($event.target).files?.[0] || null
-              )
-            "
-            class="block w-full cursor-pointer rounded-lg border border-gray-300 bg-white text-sm file:mr-4 file:border-0 file:bg-gray-100 file:px-4 file:py-2.5 file:text-sm"
-          />
+          <div class="flex flex-col gap-3 sm:flex-row">
 
-          @if (file) {
-            <p class="mt-1 text-xs text-gray-500">
-              {{ file.name }}
-            </p>
-          }
-        </div>
+            <!-- Country Selector -->
+            @if (!isViewMode) {
+              <div class="w-full sm:w-48">
+                <app-country-select-field
+                  placeholder="Country"
+                  [selectedCountryCode]="
+                    form.controls.countryId.value ?? '91'
+                  "
+                  (selectedCountryCodeChange)="
+                    form.controls.countryId.setValue($event)
+                  "
+                />
 
-      }
+                @if (
+                  form.controls.countryId.touched &&
+                  form.controls.countryId.hasError('required')
+                ) {
+                  <p class="mt-1 text-xs text-red-500">
+                    Country is required
+                  </p>
+                }
+              </div>
+            }
 
-      <!-- Tests -->
-      <mat-form-field
-        appearance="outline"
-        class="w-full"
-      >
-        <mat-label>Tests</mat-label>
+            <!-- Phone -->
+            <div class="min-w-0 flex-1">
+              <mat-form-field
+                appearance="outline"
+                class="w-full"
+              >
+                <mat-label>Contact Number</mat-label>
 
-        <input
-          matInput
-          type="text"
-          formControlName="test"
-          placeholder="Enter test name"
-          [readonly]="isViewMode"
-        />
+                <input
+                  matInput
+                  type="tel"
+                  formControlName="phone"
+                  placeholder="Enter contact number"
+                  [readonly]="isViewMode"
+                />
 
-        @if (
-          form.controls.test.touched &&
-          form.controls.test.hasError('required')
-        ) {
-          <mat-error>
-            Test is required
-          </mat-error>
-        }
-      </mat-form-field>
-
-      <!-- Date + Time -->
-      <div
-        class="grid grid-cols-1 gap-3 sm:grid-cols-2"
-      >
-
-        <mat-form-field
-          appearance="outline"
-          class="w-full"
-        >
-          <mat-label>
-            Collection Date
-          </mat-label>
-
-          <input
-            matInput
-            type="date"
-            formControlName="date"
-            [readonly]="isViewMode"
-          />
-
-          @if (
-            form.controls.date.touched &&
-            form.controls.date.hasError('required')
-          ) {
-            <mat-error>
-              Date is required
-            </mat-error>
-          }
-        </mat-form-field>
-
-        <mat-form-field
-          appearance="outline"
-          class="w-full"
-        >
-          <mat-label>
-            Collection Time
-          </mat-label>
-
-          <input
-            matInput
-            type="time"
-            formControlName="time"
-            [readonly]="isViewMode"
-          />
-
-          @if (
-            form.controls.time.touched &&
-            form.controls.time.hasError('required')
-          ) {
-            <mat-error>
-              Time is required
-            </mat-error>
-          }
-        </mat-form-field>
-
-      </div>
-
-      <!-- Name -->
-      <mat-form-field
-        appearance="outline"
-        class="w-full"
-      >
-        <mat-label>Name</mat-label>
-
-        <input
-          matInput
-          type="text"
-          formControlName="name"
-          placeholder="Enter your name"
-          [readonly]="isViewMode"
-        />
-
-        @if (
-          form.controls.name.touched &&
-          form.controls.name.hasError('required')
-        ) {
-          <mat-error>
-            Name is required
-          </mat-error>
-        }
-      </mat-form-field>
-
-      <!-- Contact Number -->
-      <div>
-        <label
-          class="mb-2 block text-sm font-medium text-black"
-        >
-          Contact Number
-          <span class="text-red-500">*</span>
-        </label>
-
-        <div class="flex items-start gap-2">
-
-          @if (!isViewMode) {
-            <div class="w-[140px] shrink-0">
-              <app-country-select-field
-                placeholder="Country"
-                [selectedCountryCode]="
-                  form.controls.countryId.value ?? '91'
-                "
-                (selectedCountryCodeChange)="
-                  form.controls.countryId.setValue($event)
-                "
-              />
+                @if (
+                  form.controls.phone.touched &&
+                  form.controls.phone.hasError('required')
+                ) {
+                  <mat-error>
+                    Contact number is required
+                  </mat-error>
+                }
+              </mat-form-field>
             </div>
-          }
 
-          <div class="flex-1">
-            <mat-form-field
-              appearance="outline"
-              class="w-full"
-            >
-              <mat-label>
-                Contact Number
-              </mat-label>
-
-              <input
-                matInput
-                type="tel"
-                formControlName="phone"
-                placeholder="Enter contact number"
-                [readonly]="isViewMode"
-              />
-
-              @if (
-                form.controls.phone.touched &&
-                form.controls.phone.hasError('required')
-              ) {
-                <mat-error>
-                  Contact number is required
-                </mat-error>
-              }
-            </mat-form-field>
           </div>
-
         </div>
-      </div>
 
-      <!-- Address -->
-      <div
-        [class.cursor-pointer]="!isViewMode"
-        (click)="openLocation()"
-      >
-        <mat-form-field
-          appearance="outline"
-          class="w-full"
+        <!-- Address -->
+        <div
+          [class.cursor-pointer]="!isViewMode"
+          (click)="openLocation()"
         >
-          <mat-label>Address</mat-label>
+          <mat-form-field
+            appearance="outline"
+            class="w-full"
+          >
+            <mat-label>Address</mat-label>
 
-          <textarea
-            matInput
-            formControlName="address"
-            rows="3"
-            placeholder="Select collection address"
-            [readonly]="isViewMode"
-          ></textarea>
+            <textarea
+              matInput
+              formControlName="address"
+              rows="3"
+              placeholder="Select collection address"
+              [readonly]="isViewMode"
+            ></textarea>
 
-          @if (!isViewMode) {
-            <mat-icon
-              matIconSuffix
-              class="cursor-pointer"
-              (click)="
-                $event.stopPropagation();
-                openLocation()
-              "
-            >
-              location_on
-            </mat-icon>
-          }
+            @if (!isViewMode) {
+              <mat-icon
+                matIconSuffix
+                class="cursor-pointer"
+                (click)="
+                  $event.stopPropagation();
+                  openLocation()
+                "
+              >
+                location_on
+              </mat-icon>
+            }
 
-          @if (
-            form.controls.address.touched &&
-            form.controls.address.hasError('required')
-          ) {
-            <mat-error>
-              Address is required
-            </mat-error>
-          }
-        </mat-form-field>
+            @if (
+              form.controls.address.touched &&
+              form.controls.address.hasError('required')
+            ) {
+              <mat-error>
+                Address is required
+              </mat-error>
+            }
+          </mat-form-field>
+        </div>
+
       </div>
 
-      <!-- Footer -->
+      <!-- Booking Footer -->
       <div
-        class="mt-4 flex justify-end gap-3 border-t border-gray-200 pt-4"
+        class="mt-6 flex flex-col-reverse justify-end gap-3 border-t border-gray-200 pt-4 sm:flex-row"
       >
-
         @if (isViewMode) {
 
+          <!-- Cancel Booking -->
           @if (
             booking?.Status?.toLowerCase() === 'booked'
           ) {
-
             <app-button
               type="button"
               variant="destructive"
@@ -320,26 +366,32 @@
                   : 'Cancel Booking'
               }}
             </app-button>
+          }
 
-          } @else {
-
+          <!-- Track Booking -->
+          @if (showTracker) {
             <app-button
               type="button"
-              (click)="close()"
+              (click)="trackBooking()"
             >
-              Close
+              Track Booking
             </app-button>
-
           }
+
+          <!-- Close -->
+          <app-button
+            type="button"
+            (click)="close()"
+          >
+            Close
+          </app-button>
 
         } @else {
 
+          <!-- Submit New Booking -->
           <app-button
             type="button"
-            [disabled]="
-              isSubmitting ||
-              isFileUploading
-            "
+            [disabled]="isSubmitting || isFileUploading"
             (click)="confirmBooking()"
           >
             {{
@@ -350,9 +402,7 @@
           </app-button>
 
         }
-
       </div>
-
-    </div>
+    }
   </app-dialog>
 </form>
