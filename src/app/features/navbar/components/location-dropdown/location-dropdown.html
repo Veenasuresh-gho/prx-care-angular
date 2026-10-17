@@ -1,0 +1,262 @@
+
+<div class="relative w-full">
+  <!-- Location Selector -->
+  <button
+    type="button"
+    class="flex w-full items-center justify-between gap-3 rounded-full border border-slate-200 bg-white px-4 py-2.5 transition-all duration-200 hover:border-slate-300 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-primary/15 md:w-[260px]"
+    aria-label="Select location"
+    [attr.aria-expanded]="open"
+    (click)="toggleDropdown()"
+  >
+    <span class="flex min-w-0 items-center gap-3">
+      <span
+        class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10"
+      >
+        <mat-icon
+          class="!flex !h-5 !w-5 !items-center !justify-center !text-xl text-primary"
+        >
+          location_on
+        </mat-icon>
+      </span>
+
+      <span class="min-w-0 text-left">
+        <span class="block truncate text-sm font-semibold text-slate-700">
+          {{ displayLocation }}
+        </span>
+      </span>
+    </span>
+
+    <mat-icon
+      class="!flex !h-5 !w-5 !shrink-0 !items-center !justify-center !text-xl text-slate-400 transition-transform duration-200"
+      [class.rotate-180]="open"
+    >
+      keyboard_arrow_down
+    </mat-icon>
+  </button>
+
+  @if (open) {
+    <div
+      class="absolute right-0 top-full z-[100] mt-3 w-[320px] max-w-[90vw] overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_12px_40px_rgba(15,23,42,0.12)]"
+    >
+      <!-- Header and Search -->
+      <div class="border-b border-slate-100 px-4 pb-4 pt-4">
+        <h3 class="text-sm font-semibold text-slate-800">
+          Choose your location
+        </h3>
+
+        <p class="mt-1 text-xs leading-5 text-slate-500">
+          Find nearby services based on your location.
+        </p>
+
+        <div class="relative mt-3">
+          <mat-icon
+            class="pointer-events-none absolute left-3 top-1/2 !-translate-y-1/2 !text-xl text-slate-400"
+          >
+            search
+          </mat-icon>
+
+          <input
+            type="text"
+            [ngModel]="searchValue"
+            (ngModelChange)="onSearch($event)"
+            placeholder="Search city, area or postcode"
+            autocomplete="off"
+            class="w-full rounded-xl border border-slate-200 bg-slate-50 py-3 pl-10 pr-3 text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-primary focus:bg-white focus:ring-4 focus:ring-primary/10"
+          />
+        </div>
+      </div>
+
+      <!-- Dropdown Content -->
+      <div class="max-h-72 overflow-y-auto p-3">
+        <!-- Current Location -->
+        <button
+          type="button"
+          class="flex w-full items-center gap-3 rounded-xl border border-primary/15 bg-primary/[0.04] px-3 py-3 text-left transition-colors hover:bg-primary/[0.08] disabled:cursor-not-allowed disabled:opacity-60"
+          [disabled]="loadingLocation || loadingSelection"
+          (click)="useCurrentLocation()"
+        >
+          <span
+            class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-primary shadow-sm"
+          >
+            @if (loadingLocation) {
+              <mat-spinner
+                [diameter]="20"
+                [strokeWidth]="3"
+              ></mat-spinner>
+            } @else {
+              <mat-icon
+                class="!flex !h-5 !w-5 !items-center !justify-center !text-xl"
+              >
+                my_location
+              </mat-icon>
+            }
+          </span>
+
+          <span class="min-w-0 flex-1">
+            <span class="block text-sm font-semibold text-slate-800">
+              {{
+                loadingLocation
+                  ? 'Finding your location...'
+                  : 'Use current location'
+              }}
+            </span>
+
+            <span class="mt-0.5 block text-xs leading-5 text-slate-500">
+              {{
+                loadingLocation
+                  ? 'Please wait a moment'
+                  : 'Detect your location automatically'
+              }}
+            </span>
+          </span>
+
+          @if (!loadingLocation) {
+            <mat-icon
+              class="!flex !h-5 !w-5 !shrink-0 !items-center !justify-center !text-xl text-primary"
+            >
+              near_me
+            </mat-icon>
+          }
+        </button>
+
+        <!-- Search Loading -->
+        @if (loadingSearch) {
+          <div class="flex items-center justify-center gap-3 px-3 py-6">
+            <mat-spinner
+              [diameter]="20"
+              [strokeWidth]="3"
+            ></mat-spinner>
+
+            <span class="text-sm text-slate-500">
+              Searching locations...
+            </span>
+          </div>
+        } @else if (searchValue.trim() && suggestions.length === 0) {
+          <div class="px-3 py-7 text-center">
+            <mat-icon
+              class="!mb-2 !h-8 !w-8 !text-3xl text-slate-300"
+            >
+              location_off
+            </mat-icon>
+
+            <p class="text-sm font-medium text-slate-600">
+              No locations found
+            </p>
+
+            <p class="mt-1 text-xs text-slate-400">
+              Try another city or area name.
+            </p>
+          </div>
+        }
+
+        <!-- Suggestions -->
+        @if (suggestions.length > 0) {
+          <div class="mt-4">
+            <div class="mb-2 flex items-center justify-between px-2">
+              <p
+                class="text-[11px] font-semibold uppercase tracking-wider text-slate-400"
+              >
+                Suggested locations
+              </p>
+
+              <span class="text-xs text-slate-400">
+                {{ suggestions.length }} results
+              </span>
+            </div>
+
+            @for (item of suggestions; track item.placeId) {
+              <button
+                type="button"
+                class="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left transition-colors hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
+                [disabled]="loadingLocation || loadingSelection"
+                (click)="selectLocation(item)"
+              >
+                <!-- Suggestion Icon / Loading -->
+                <span
+                  class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-500"
+                >
+                  @if (
+                    selectedPlaceId === item.placeId &&
+                    loadingSelection
+                  ) {
+                    <mat-spinner
+                      [diameter]="18"
+                      [strokeWidth]="3"
+                    ></mat-spinner>
+                  } @else {
+                    <mat-icon
+                      class="!flex !h-5 !w-5 !items-center !justify-center !text-xl"
+                    >
+                      location_on
+                    </mat-icon>
+                  }
+                </span>
+
+                <!-- Suggestion Name -->
+                <span class="min-w-0 flex-1">
+                  <span
+                    class="block break-words text-sm font-medium leading-5 text-slate-700"
+                  >
+                    {{ item.description }}
+                  </span>
+                </span>
+
+                <!-- Selected Indicator -->
+                @if (location.address === item.description) {
+                  <mat-icon
+                    class="!flex !h-5 !w-5 !shrink-0 !items-center !justify-center !text-xl text-primary"
+                  >
+                    check_circle
+                  </mat-icon>
+                } @else if (
+                  selectedPlaceId !== item.placeId ||
+                  !loadingSelection
+                ) {
+                  <mat-icon
+                    class="!flex !h-5 !w-5 !shrink-0 !items-center !justify-center !text-xl text-slate-300"
+                  >
+                    arrow_outward
+                  </mat-icon>
+                }
+              </button>
+            }
+          </div>
+        }
+
+        <!-- Clear Saved Location -->
+        @if (location.address) {
+          <div class="mt-3 border-t border-slate-100 pt-3">
+            <button
+              type="button"
+              class="flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-left text-xs font-medium text-slate-500 transition-colors hover:bg-red-50 hover:text-red-600"
+              (click)="clearLocation()"
+            >
+              <mat-icon
+                class="!flex !h-4 !w-4 !items-center !justify-center !text-base"
+              >
+                location_off
+              </mat-icon>
+
+              Clear saved location
+            </button>
+          </div>
+        }
+      </div>
+
+      <!-- Footer -->
+      <div class="border-t border-slate-100 bg-slate-50/70 px-4 py-2.5">
+        <p
+          class="flex items-center justify-center gap-1.5 text-[10px] text-slate-400"
+        >
+          <mat-icon
+            class="!flex !h-3.5 !w-3.5 !items-center !justify-center !text-sm"
+          >
+            verified_user
+          </mat-icon>
+
+          Your location helps personalize nearby services
+        </p>
+      </div>
+    </div>
+  }
+</div>

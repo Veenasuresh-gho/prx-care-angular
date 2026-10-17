@@ -185,11 +185,6 @@ export class GeneralPhysicianDialog
             return;
           }
 
-          console.log(
-            'Selected location:',
-            location
-          );
-
           const address =
             location.fullAddress ||
             location.formattedAddress ||

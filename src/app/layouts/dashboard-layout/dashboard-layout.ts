@@ -14,6 +14,7 @@ import { WelcomeCard } from '../../features/dashboard/components/welcome-card/we
 import { Footer } from '../../features/footer/footer';
 import { MatIconModule } from '@angular/material/icon';
 import { Button } from '../../components/button/button';
+import { LocationDropdown } from '../../features/navbar/components/location-dropdown/location-dropdown';
 
 @Component({
   selector: 'app-dashboard-layout',
@@ -25,7 +26,8 @@ import { Button } from '../../components/button/button';
     WelcomeCard,
     Footer,
     MatIconModule,
-    Button
+    Button,
+    LocationDropdown
   ],
   templateUrl: './dashboard-layout.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
