@@ -5,6 +5,7 @@ import { ServicesDropdown } from './components/services-dropdown/services-dropdo
 import { NotificationPopover } from './components/notification-popover/notification-popover';
 import { ProfilePopover } from './components/profile-popover/profile-popover';
 import { Logo } from './components/logo/logo';
+import { LocationDropdown } from './components/location-dropdown/location-dropdown';
 
 @Component({
   selector: 'app-navbar',
@@ -14,6 +15,7 @@ import { Logo } from './components/logo/logo';
     ServicesDropdown,
     NotificationPopover,
     ProfilePopover,
+    LocationDropdown
   ],
   templateUrl: './navbar.html',
 })

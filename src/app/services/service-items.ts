@@ -28,6 +28,12 @@ export const DASHBOARD_SERVICES: DashboardServices = {
       icon: '/assets/vitals-icon.png',
     },
     {
+      title: 'Allergies',
+      description: 'View and manage your allergies and known allergic reactions.',
+      link: '/allergy',
+      icon: '/assets/allergy.png',
+    },
+    {
       title: 'Kids Development',
       description:
         'Monitor your child’s growth and development milestones.',
