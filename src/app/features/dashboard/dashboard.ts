@@ -10,6 +10,7 @@ import { FeaturedServicesComponent } from './components/featured-services/featur
 import { AbdmCompliantSectionComponent } from './components/abdm-complaint-section/abdm-complaint-section';
 import { FaqSectionComponent } from './components/faq-section/faq-section';
 import { HealthWellnessCareComponent } from './components/health-wellness-care-section/health-wellness-care';
+import { SearchByLocation } from './components/search-by-location/search-by-location';
 
 @Component({
   selector: 'app-dashboard',
@@ -22,6 +23,7 @@ import { HealthWellnessCareComponent } from './components/health-wellness-care-s
       FeaturedServicesComponent,
       AbdmCompliantSectionComponent,
       FaqSectionComponent,
+      SearchByLocation,
       HealthWellnessCareComponent],
   standalone: true,
   templateUrl: './dashboard.html'

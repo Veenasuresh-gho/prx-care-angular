@@ -1,0 +1,130 @@
+<div class="relative mr-3 flex w-full items-center gap-2.5">
+  <div class="relative min-w-0 flex-1">
+    <div
+      class="flex h-12 items-center rounded-full border bg-white pl-4 pr-2 transition-all"
+      [ngClass]="
+        isFocused
+          ? 'border-primary ring-2 ring-primary/15'
+          : 'border-slate-200 hover:border-slate-300'
+      "
+    >
+      <mat-icon class="shrink-0 !text-[20px] !text-primary">
+        search
+      </mat-icon>
+
+      <input
+        type="text"
+        [ngModel]="searchTerm"
+        (ngModelChange)="handleInputChange($event)"
+        (focus)="isFocused = true; handleInitialSearch()"
+        (blur)="isFocused = false"
+        (keydown.enter)="handleTypedSearch()"
+        [placeholder]="displayText"
+        class="h-full min-w-0 flex-1 border-none bg-transparent px-3 text-sm text-slate-900 outline-none placeholder:font-medium placeholder:text-slate-400"
+        autocomplete="off"
+        aria-label="Search doctors, specialities or hospitals"
+        [attr.aria-expanded]="showSuggestions"
+        aria-controls="location-search-suggestions"
+      />
+
+      @if (showSuggestions) {
+        <button
+          type="button"
+          (click)="handleClose()"
+          aria-label="Clear search"
+          class="flex shrink-0 items-center justify-center rounded-full p-1.5 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600"
+        >
+          <mat-icon
+            class="!flex !h-4 !w-4 !items-center !justify-center !text-[16px]"
+          >
+            close
+          </mat-icon>
+        </button>
+      }
+    </div>
+
+    @if (showSuggestions) {
+      <div
+        id="location-search-suggestions"
+        class="absolute left-0 right-0 z-50 mt-2 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-lg"
+      >
+        @if (loading) {
+          <div
+            class="flex items-center justify-center gap-2 py-8 text-slate-400"
+          >
+            <mat-icon class="animate-spin !text-[20px]">
+              autorenew
+            </mat-icon>
+            <span class="text-sm">Searching...</span>
+          </div>
+        } @else if (activeList.length > 0) {
+          <div class="max-h-72 overflow-y-auto py-1.5">
+            @for (item of activeList; track $index) {
+              <button
+                type="button"
+                (click)="handleSelect(item)"
+                class="flex w-full items-start gap-3 px-4 py-2.5 text-left transition-colors hover:bg-primary/5 focus-visible:bg-primary/5 focus-visible:outline-none"
+              >
+                <span
+                  class="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary/10"
+                >
+                  <mat-icon
+                    class="!flex !h-4 !w-4 !items-center !justify-center !text-[18px] !text-primary"
+                  >
+                    {{ getIconForType(item.type) }}
+                  </mat-icon>
+                </span>
+
+                <span class="min-w-0 flex-1">
+                  @for (
+                    line of (item.tenantName || '').split('\n');
+                    track $index
+                  ) {
+                    <span
+                      class="block truncate"
+                      [ngClass]="
+                        $index === 0
+                          ? 'text-sm font-medium text-slate-900'
+                          : 'text-xs text-slate-500'
+                      "
+                    >
+                      {{ line.trim() }}
+                    </span>
+                  }
+
+                  @if (item.type) {
+                    <span class="mt-0.5 block text-xs text-slate-400">
+                      {{ item.type }}
+                    </span>
+                  }
+                </span>
+              </button>
+            }
+          </div>
+        } @else {
+          <div class="flex flex-col items-center gap-2 py-8 text-center">
+            <mat-icon class="!text-[30px] !text-slate-300">
+              search_off
+            </mat-icon>
+            <p class="text-sm text-slate-500">No results found</p>
+          </div>
+        }
+      </div>
+    }
+  </div>
+
+  <button
+    type="button"
+    (click)="handleTypedSearch()"
+    [disabled]="!searchTerm.trim() || loading"
+    class="flex h-12 shrink-0 items-center gap-1.5 rounded-full bg-primary px-5 text-sm font-semibold text-white transition-all hover:opacity-90 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40"
+  >
+    @if (loading) {
+      <mat-icon class="animate-spin !text-[18px]">
+        autorenew
+      </mat-icon>
+    }
+
+    Search
+  </button>
+</div>
