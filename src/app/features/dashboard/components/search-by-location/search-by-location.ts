@@ -22,6 +22,7 @@ interface SuggestionItem {
   type: string;
   slug?: string;
   tenantIdAlt?: string;
+  isCondition?: boolean;
 }
 
 interface SavedLocation {
@@ -167,39 +168,6 @@ export class SearchByLocation implements OnInit, OnDestroy {
       : '';
   }
 
-  /**
-   * Converts whatever the backend returns into SuggestionItem[].
-   * Handles a flat `data` array or a `Data` list of tables.
-   * Adjust the field names below once you confirm the real response.
-   */
-  private normalizeResults(response: any): SuggestionItem[] {
-    // Case 1: flat array
-    let rows: any[] = Array.isArray(response?.data) ? response.data : [];
-
-    // Case 2: Data is a list of tables -> use the first non-empty table
-    if (!rows.length && Array.isArray(response?.Data)) {
-      const table = response.Data.find(
-        (t: any) => Array.isArray(t) && t.length > 0,
-      );
-      rows = table ?? [];
-    }
-
-    return rows
-      .map(
-        (r: any): SuggestionItem => ({
-          doctorId: r?.doctorId ?? r?.DoctorId ?? r?.DoctorID,
-          tenantName: String(
-            r?.tenantName ?? r?.TenantName ?? r?.Name ?? r?.name ?? '',
-          ),
-          tenantId: r?.tenantId ?? r?.TenantId ?? r?.TenantID ?? '',
-          tenantIdAlt: r?.tenantIdAlt ?? r?.TenantIdAlt,
-          type: String(r?.type ?? r?.Type ?? ''),
-          slug: r?.slug ?? r?.Slug,
-        }),
-      )
-      .filter((r) => r.tenantName.trim() !== '');
-  }
-
   handleInitialSearch(): void {
     this.showSuggestions = true;
 
@@ -238,7 +206,8 @@ export class SearchByLocation implements OnInit, OnDestroy {
               tenantName: String(item?.Condition ?? ''),
               tenantId: String(item?.SpecialtyName ?? ''),
               type: '',
-            }),
+              isCondition: true,
+            })
           );
 
           this.suggestions = this.conditions;
@@ -278,7 +247,7 @@ export class SearchByLocation implements OnInit, OnDestroy {
       { T: 'c1', V: String(savedLocation.distance ?? '') },
       { T: 'c8', V: String(savedLocation.latitude ?? '') },
       { T: 'c9', V: String(savedLocation.longitude ?? '') },
-      { T: 'c10', V: '19' },
+      { T: 'c10', V: '25' },
     ];
 
     if (this.isFromCondition) {
@@ -291,7 +260,7 @@ export class SearchByLocation implements OnInit, OnDestroy {
     this.cdr.markForCheck();
 
     this.service
-      .getdata('prxcare', tags)
+      .getdata('care', tags)
       .pipe(
         finalize(() => {
           this.loading = false;
@@ -301,25 +270,68 @@ export class SearchByLocation implements OnInit, OnDestroy {
       .subscribe({
         next: (response: any) => {
           console.log('Search API response:', response);
-          const rawItems = Array.isArray(response?.Data)
-            ? response.Data.flat()
+
+          const rawItems: any[] = Array.isArray(response?.Data)
+            ? response.Data.flat(Infinity)
             : Array.isArray(response?.data)
-              ? response.data
+              ? response.data.flat(Infinity)
               : [];
 
-          this.suggestions = rawItems.map((item: any) => ({
-            doctorId: item?.DoctorID ?? item?.DoctorId ?? item?.doctorId ?? '',
-            tenantName: String(
-              item?.TenantName ?? item?.tenantName ?? '',
-            ),
-            tenantId: item?.TenantID ?? item?.TenantId ?? item?.tenantId ?? '',
-            tenantIdAlt:
+          this.suggestions = rawItems.map((item: any): SuggestionItem => {
+            const doctorId =
+              item?.DoctorID ??
+              item?.DoctorId ??
+              item?.doctorID ??
+              item?.doctorId ??
+              item?.DoctorIDAlt ??
+              item?.d ??
+              '';
+
+            const tenantName = String(
+              item?.TenantName ??
+              item?.tenantName ??
+              item?.Name ??
+              item?.name ??
+              item?.SpecialtyName ??
+              ''
+            ).trim();
+
+            const tenantId =
+              item?.TenantID ??
+              item?.TenantId ??
+              item?.tenantId ??
+              item?.SpecialtyID ??
+              item?.SpecialtyId ??
+              item?.SpecialtyName ??
+              '';
+
+            const tenantIdAlt =
               item?.TenantIDAlt ??
               item?.tenantIdAlt ??
-              '',
-            type: String(item?.Type ?? item?.type ?? ''),
-            slug: String(item?.Slug ?? item?.slug ?? ''),
-          }));
+              '';
+
+            let type = String(
+              item?.Type ??
+              item?.type ??
+              ''
+            ).trim();
+
+            if (!type && doctorId) {
+              type = 'Doctor';
+            }
+
+            return {
+              doctorId: doctorId != null ? String(doctorId).trim() : '',
+              tenantName,
+              tenantId,
+              tenantIdAlt: String(tenantIdAlt ?? ''),
+              type,
+              slug: String(item?.Slug ?? item?.slug ?? ''),
+              isCondition: false,
+            };
+          });
+
+          console.log('Normalized search suggestions:', this.suggestions);
 
           this.cdr.markForCheck();
         },
@@ -346,12 +358,15 @@ export class SearchByLocation implements OnInit, OnDestroy {
   }
 
   handleSelect(item: SuggestionItem): void {
-    console.log("item", item)
-    const firstLine = (item.tenantName || '').split(/\r?\n/)[0].trim();
+    const firstLine = (item.tenantName || '')
+      .split(/\r?\n/)
+      .map(line => line.trim())
+      .find(Boolean) ?? '';
 
     this.showSuggestions = false;
 
-    if (!item.type) {
+    // Only condition suggestions should trigger another specialty search.
+    if (item.isCondition) {
       this.searchTerm = firstLine;
       this.selectedCondition = String(item.tenantId ?? '').trim();
       this.isFromCondition = true;
@@ -370,35 +385,42 @@ export class SearchByLocation implements OnInit, OnDestroy {
     this.selectedCondition = '';
 
     if (!this.isAuthenticated) {
-      void this.router.navigate([`/auth/sign-in`]);
+      void this.router.navigate(['/auth/sign-in']);
       this.cdr.markForCheck();
       return;
     }
 
-    if (item.type === 'Doctor') {
+    // Doctor result
+    if (item.doctorId) {
       void this.router.navigate([
-        `/schedule-appointment/${item.doctorId}`,
+        '/schedule-appointment',
+        item.doctorId,
       ]);
-    } else if (item.type === 'Hospital') {
-      void this.router.navigate([`/hospital`], {
+    }
+    // Hospital result
+    else if (item.type.toLowerCase() === 'hospital') {
+      void this.router.navigate(['/hospital'], {
         queryParams: {
           tenantId: item.tenantId,
           tenantIdAlt: item.tenantIdAlt,
         },
       });
-    } else {
-      void this.router.navigate([`/schedule-appointment`], {
+    }
+    // Specialty or tenant result without a doctor ID
+    else if (item.tenantId) {
+      void this.router.navigate(['/schedule-appointment'], {
         queryParams: {
           tenantId: item.tenantId,
           type: item.type,
           name: firstLine,
         },
       });
+    } else {
+      console.error('Cannot navigate: missing doctor and tenant IDs', item);
     }
 
     this.cdr.markForCheck();
   }
-
   handleClose(): void {
     this.showSuggestions = false;
     this.searchTerm = '';
