@@ -1,5 +1,6 @@
 
 import {
+    ChangeDetectorRef,
     Component,
     NgZone,
     OnDestroy,
@@ -12,6 +13,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { environment } from '../../../../../enviornments/environment';
+import { LocationService } from '../../../../services/location-service';
 
 declare global {
     interface Window {
@@ -63,21 +65,18 @@ export class LocationDropdown implements OnInit, OnDestroy {
 
     open = false;
     googleLoaded = false;
-
     loadingLocation = false;
     loadingSelection = false;
     loadingSearch = false;
-
     selectedPlaceId: string | null = null;
-
     searchValue = '';
     suggestions: LocationSuggestion[] = [];
-
     location: LocationDetails = this.defaultLocation();
+    private readonly cdr = inject(ChangeDetectorRef);
+    private readonly locationService = inject(LocationService);
 
     ngOnInit(): void {
         this.restoreLocation();
-
         this.loadGoogleMaps()
             .then(() => {
                 if (!this.destroyed) {
@@ -86,7 +85,6 @@ export class LocationDropdown implements OnInit, OnDestroy {
             })
             .catch(error => {
                 if (this.destroyed) return;
-
                 console.error('Google Maps loading failed:', error);
                 this.toastr.error('Unable to load location services');
             });
@@ -94,10 +92,8 @@ export class LocationDropdown implements OnInit, OnDestroy {
 
     ngOnDestroy(): void {
         this.destroyed = true;
-
         clearTimeout(this.searchTimer);
         clearTimeout(this.scriptTimer);
-
         this.searchRequestId++;
     }
 
@@ -128,10 +124,8 @@ export class LocationDropdown implements OnInit, OnDestroy {
 
     toggleDropdown(): void {
         this.open = !this.open;
-
         if (!this.open) {
             clearTimeout(this.searchTimer);
-
             this.searchRequestId++;
             this.searchValue = '';
             this.suggestions = [];
@@ -181,13 +175,10 @@ export class LocationDropdown implements OnInit, OnDestroy {
                     handleLoad();
                     return;
                 }
-
                 script.addEventListener('load', handleLoad, { once: true });
                 script.addEventListener('error', handleError, { once: true });
-
                 return;
             }
-
             script = document.createElement('script');
             script.id = 'google-maps-script';
             script.src =
@@ -199,9 +190,7 @@ export class LocationDropdown implements OnInit, OnDestroy {
                 script!.dataset['loaded'] = 'true';
                 handleLoad();
             };
-
             script.onerror = handleError;
-
             document.head.appendChild(script);
         });
     }
@@ -210,20 +199,14 @@ export class LocationDropdown implements OnInit, OnDestroy {
         if (!window.google?.maps?.places) {
             return;
         }
-
-        this.autocompleteService =
-            new window.google.maps.places.AutocompleteService();
-
+        this.autocompleteService = new window.google.maps.places.AutocompleteService();
         this.geocoder = new window.google.maps.Geocoder();
-
         this.googleLoaded = true;
     }
 
     onSearch(value: string): void {
         this.searchValue = value;
-
         clearTimeout(this.searchTimer);
-
         const requestId = ++this.searchRequestId;
         const input = value.trim();
 
@@ -237,14 +220,11 @@ export class LocationDropdown implements OnInit, OnDestroy {
             this.loadingSearch = false;
             return;
         }
-
         this.loadingSearch = true;
-
         this.searchTimer = setTimeout(() => {
             if (this.destroyed || requestId !== this.searchRequestId) {
                 return;
             }
-
             this.autocompleteService.getPlacePredictions(
                 {
                     input,
@@ -258,9 +238,7 @@ export class LocationDropdown implements OnInit, OnDestroy {
                         ) {
                             return;
                         }
-
                         this.loadingSearch = false;
-
                         this.suggestions =
                             status ===
                                 window.google.maps.places.PlacesServiceStatus.OK
@@ -283,24 +261,19 @@ export class LocationDropdown implements OnInit, OnDestroy {
         ) {
             return;
         }
-
         this.loadingSelection = true;
         this.selectedPlaceId = suggestion.placeId;
-
         this.geocoder.geocode(
             { placeId: suggestion.placeId },
             (results: any[], status: string) => {
                 this.zone.run(() => {
                     if (this.destroyed) return;
-
                     this.loadingSelection = false;
                     this.selectedPlaceId = null;
-
                     if (status !== 'OK' || !results?.length) {
                         this.toastr.error('Unable to fetch location details');
                         return;
                     }
-
                     this.saveLocation(results);
                 });
             }
@@ -311,19 +284,15 @@ export class LocationDropdown implements OnInit, OnDestroy {
         if (this.loadingLocation || this.loadingSelection) {
             return;
         }
-
         if (!navigator.geolocation) {
             this.toastr.error('Geolocation is not supported by your browser');
             return;
         }
-
         if (!this.geocoder) {
             this.toastr.error('Location service is not ready yet');
             return;
         }
-
         this.loadingLocation = true;
-
         navigator.geolocation.getCurrentPosition(
             position => {
                 if (this.destroyed) return;
@@ -338,14 +307,11 @@ export class LocationDropdown implements OnInit, OnDestroy {
                     (results: any[], status: string) => {
                         this.zone.run(() => {
                             if (this.destroyed) return;
-
                             this.loadingLocation = false;
-
                             if (status !== 'OK' || !results?.length) {
                                 this.toastr.error('Unable to identify your location');
                                 return;
                             }
-
                             this.saveLocation(results);
                         });
                     }
@@ -354,9 +320,7 @@ export class LocationDropdown implements OnInit, OnDestroy {
             error => {
                 this.zone.run(() => {
                     if (this.destroyed) return;
-
                     this.loadingLocation = false;
-
                     if (error.code === error.PERMISSION_DENIED) {
                         this.toastr.error(
                             'Please allow location access in your browser'
@@ -379,6 +343,63 @@ export class LocationDropdown implements OnInit, OnDestroy {
             }
         );
     }
+
+    // private saveLocation(results: any[]): void {
+    //     const result =
+    //         results.find(item =>
+    //             item.address_components?.some((component: any) =>
+    //                 component.types.includes('administrative_area_level_3')
+    //             )
+    //         ) || results[0];
+
+    //     const components = result.address_components || [];
+
+    //     const get = (type: string): string | null =>
+    //         components.find((component: any) =>
+    //             component.types.includes(type)
+    //         )?.long_name || null;
+
+    //     const nextLocation: LocationDetails = {
+    //         place:
+    //             get('sublocality_level_1') ||
+    //             get('sublocality') ||
+    //             get('neighborhood'),
+    //         district:
+    //             get('administrative_area_level_3') ||
+    //             get('administrative_area_level_2'),
+    //         city:
+    //             get('locality') ||
+    //             get('administrative_area_level_2'),
+    //         state: get('administrative_area_level_1'),
+    //         country: get('country'),
+    //         address: result.formatted_address || null,
+    //         latitude: result.geometry?.location?.lat() ?? null,
+    //         longitude: result.geometry?.location?.lng() ?? null,
+    //         distance: this.location.distance || '50 Km'
+    //     };
+
+    //     this.location = nextLocation;
+
+    //     try {
+    //         sessionStorage.setItem(
+    //             this.storageKey,
+    //             JSON.stringify(nextLocation)
+    //         );
+    //     } catch (error) {
+    //         console.error('Unable to save location:', error);
+    //     }
+
+    //     clearTimeout(this.searchTimer);
+
+    //     this.searchRequestId++;
+    //     this.searchValue = '';
+    //     this.suggestions = [];
+    //     this.loadingSearch = false;
+    //     this.loadingLocation = false;
+    //     this.loadingSelection = false;
+    //     this.selectedPlaceId = null;
+    //     this.open = false;
+    // }
 
     private saveLocation(results: any[]): void {
         const result =
@@ -417,10 +438,11 @@ export class LocationDropdown implements OnInit, OnDestroy {
         this.location = nextLocation;
 
         try {
-            sessionStorage.setItem(
+            localStorage.setItem(
                 this.storageKey,
                 JSON.stringify(nextLocation)
             );
+            this.locationService.notifyLocationChanged();
         } catch (error) {
             console.error('Unable to save location:', error);
         }
@@ -435,11 +457,13 @@ export class LocationDropdown implements OnInit, OnDestroy {
         this.loadingSelection = false;
         this.selectedPlaceId = null;
         this.open = false;
+
+        this.cdr.detectChanges();
     }
 
     private restoreLocation(): void {
         try {
-            const saved = sessionStorage.getItem(this.storageKey);
+            const saved = localStorage.getItem(this.storageKey);
 
             if (saved) {
                 this.location = {
@@ -454,7 +478,8 @@ export class LocationDropdown implements OnInit, OnDestroy {
 
     clearLocation(): void {
         try {
-            sessionStorage.removeItem(this.storageKey);
+            localStorage.removeItem(this.storageKey);
+            this.locationService.notifyLocationChanged();
         } catch (error) {
             console.error('Unable to clear saved location:', error);
         }
@@ -466,5 +491,7 @@ export class LocationDropdown implements OnInit, OnDestroy {
         this.loadingLocation = false;
         this.loadingSelection = false;
         this.selectedPlaceId = null;
+
+        this.cdr.detectChanges();
     }
 }

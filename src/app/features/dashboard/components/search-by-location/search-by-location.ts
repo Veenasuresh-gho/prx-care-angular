@@ -269,8 +269,6 @@ export class SearchByLocation implements OnInit, OnDestroy {
       )
       .subscribe({
         next: (response: any) => {
-          console.log('Search API response:', response);
-
           const rawItems: any[] = Array.isArray(response?.Data)
             ? response.Data.flat(Infinity)
             : Array.isArray(response?.data)
@@ -330,9 +328,6 @@ export class SearchByLocation implements OnInit, OnDestroy {
               isCondition: false,
             };
           });
-
-          console.log('Normalized search suggestions:', this.suggestions);
-
           this.cdr.markForCheck();
         },
         error: (error: any) => {
