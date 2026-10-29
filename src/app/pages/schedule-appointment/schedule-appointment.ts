@@ -18,12 +18,22 @@ export class ScheduleAppointment {
 
   onSearchChange(value: string): void {
     this.searchTerm = value;
+    let place = '';
+
+    try {
+      const locationData = localStorage.getItem('navbar-location');
+      const location = locationData ? JSON.parse(locationData) : null;
+      place = location?.place || location?.district || location?.city || '';
+    } catch {
+      place = '';
+    }
 
     const tv = [
       {
         T: 'dk1',
         V: this.searchTerm,
       },
+      { T: 'dk2', V: place },
       {
         T: 'c10',
         V: '10',
