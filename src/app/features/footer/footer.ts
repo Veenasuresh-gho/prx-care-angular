@@ -42,23 +42,23 @@ export class Footer {
   readonly logo = 'assets/logo.svg';
   readonly tagline = 'Empowering your healthcare journey with innovative solutions.';
 
-  readonly socialLinks: SocialLink[] = [
-    {
-      icon: 'business',
-      link: 'https://www.linkedin.com/company/prx-care',
-      label: 'LinkedIn',
-    },
-    {
-      icon: 'facebook',
-      link: 'https://www.facebook.com/people/PRxcare/61560169178371/',
-      label: 'Facebook',
-    },
-    {
-      icon: 'photo_camera',
-      link: 'https://www.instagram.com/prx.care?stkn=MW9zZGk3ODVwcnhnNg==',
-      label: 'Instagram',
-    },
-  ];
+readonly socialLinks: SocialLink[] = [
+  {
+    icon: 'business',
+    link: 'https://www.linkedin.com/company/prx-care',
+    label: 'LinkedIn',
+  },
+  {
+    icon: 'facebook',
+    link: 'https://www.facebook.com/people/PRxcare/61560169178371/',
+    label: 'Facebook',
+  },
+  {
+    icon: 'photo_camera',
+    link: 'https://www.instagram.com/prx.care?stkn=MW9zZGk3ODVwcnhnNg==',
+    label: 'Instagram',
+  },
+];
 
   readonly footerSections: FooterSection[] = [
     {
@@ -78,19 +78,19 @@ export class Footer {
       links: [{ label: 'Book Appointment', link: '/schedule-appointment' }],
     },
     ...(this.countryService.isIndia() ? [
-      {
-        title: 'Ayushman Bharath Digital Mission (ABDM)',
-        links: [
-          { label: 'View All ABDM Services', link: '/ayushman-bharath-digital-mission' },
-          {
-            label: 'ABDM Website',
-            link: 'https://abdm.gov.in/',
-            external: true,
-          },
-        ],
+    {
+      title: 'Ayushman Bharath Digital Mission (ABDM)',
+      links: [
+        { label: 'View All ABDM Services', link: '/ayushman-bharath-digital-mission' },
+        {
+          label: 'ABDM Website',
+          link: 'https://abdm.gov.in/',
+          external: true,
+        },
+      ],
 
-      },
-    ] : [])
+    },
+     ] : [])
   ];
 
   readonly storeBadges: StoreBadge[] = [
