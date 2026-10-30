@@ -142,21 +142,28 @@
           </a>
 
           <span class="mx-2 hidden sm:inline">|</span>
-
+          @if (countryService.isIndia()) {
           <span class="block sm:inline">
-
             <a href="tel:+914844524780" class="hover:underline">
               +91 484 452 4780
             </a>
-
             <span class="mx-1">·</span>
-
             <a href="tel:+919995441220" class="hover:underline">
               +91 99954 41220
             </a>
-
           </span>
-
+          }
+          @if (countryService.isUS()) {
+          <span class="block sm:inline">
+            <a href="tel:+914844524780" class="hover:underline">
+              +1 731 364 8087
+            </a>
+            <span class="mx-1">·</span>
+            <a href="tel:+919995441220" class="hover:underline">
+              +1 713 402 9573
+            </a>
+          </span>
+          }
         </div>
 
       </address>

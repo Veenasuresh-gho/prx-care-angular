@@ -631,7 +631,7 @@
                                 support@prx.care
                             </a>
                         </div>
-
+                        @if (countryService.isIndia()) {
                         <div class="rounded-xl border border-gray-200 bg-white p-5">
                             <div class="text-2xl">📞</div>
 
@@ -643,7 +643,8 @@
                                 +91 88484 41220
                             </a>
                         </div>
-
+                        }
+                        @if (countryService.isIndia()) {
                         <div class="rounded-xl border border-gray-200 bg-white p-5">
                             <div class="text-2xl">📞</div>
 
@@ -659,7 +660,7 @@
                                 +91 999 544 1220
                             </a>
                         </div>
-
+                        }
                     </div>
                 </div>
             </section>
