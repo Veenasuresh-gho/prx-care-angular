@@ -94,7 +94,8 @@
             </div>
         </div>
 
-        <div class="mb-12 flex flex-col gap-2 rounded-xl border border-gray-200 bg-gray-50 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+        <div
+            class="mb-12 flex flex-col gap-2 rounded-xl border border-gray-200 bg-gray-50 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
             <div class="flex items-center gap-2">
                 <span>📅</span>
                 <span class="text-sm font-medium text-gray-700">
@@ -487,7 +488,8 @@
                         <tbody>
                             <tr>
                                 <td class="border-b border-gray-100 px-5 py-4">Account & Profile Data</td>
-                                <td class="border-b border-gray-100 px-5 py-4">Duration of account + 3 years after closure</td>
+                                <td class="border-b border-gray-100 px-5 py-4">Duration of account + 3 years after
+                                    closure</td>
                                 <td class="border-b border-gray-100 px-5 py-4">Service delivery & legal obligation</td>
                             </tr>
 
@@ -567,19 +569,22 @@
                         <tbody>
                             <tr>
                                 <td class="border-b border-gray-100 px-5 py-4 font-medium">Essential Cookies</td>
-                                <td class="border-b border-gray-100 px-5 py-4">Authentication, security, and core platform functionality</td>
+                                <td class="border-b border-gray-100 px-5 py-4">Authentication, security, and core
+                                    platform functionality</td>
                                 <td class="border-b border-gray-100 px-5 py-4">Required</td>
                             </tr>
 
                             <tr>
                                 <td class="border-b border-gray-100 px-5 py-4 font-medium">Performance Cookies</td>
-                                <td class="border-b border-gray-100 px-5 py-4">Measuring page load speeds and identifying technical issues</td>
+                                <td class="border-b border-gray-100 px-5 py-4">Measuring page load speeds and
+                                    identifying technical issues</td>
                                 <td class="border-b border-gray-100 px-5 py-4">Optional</td>
                             </tr>
 
                             <tr>
                                 <td class="border-b border-gray-100 px-5 py-4 font-medium">Functionality Cookies</td>
-                                <td class="border-b border-gray-100 px-5 py-4">Remembering your preferences, language, and location</td>
+                                <td class="border-b border-gray-100 px-5 py-4">Remembering your preferences, language,
+                                    and location</td>
                                 <td class="border-b border-gray-100 px-5 py-4">Optional</td>
                             </tr>
 
@@ -639,8 +644,7 @@
                             <p class="mt-3 text-sm font-medium text-gray-500">
                                 Email (Privacy)
                             </p>
-                            <a
-                                href="mailto:admin@gho.care"
+                            <a href="mailto:admin@gho.care"
                                 class="mt-1 block font-semibold text-[#2D4680] hover:underline">
                                 admin@gho.care
                             </a>
@@ -651,29 +655,40 @@
                             <p class="mt-3 text-sm font-medium text-gray-500">
                                 Email (Support)
                             </p>
-                            <a
-                                href="mailto:support@prx.care"
+                            <a href="mailto:support@prx.care"
                                 class="mt-1 block font-semibold text-[#2D4680] hover:underline">
                                 support@prx.care
                             </a>
                         </div>
-
+                        @if (countryService.isIndia()) {
                         <div class="rounded-xl border border-gray-200 bg-white p-5">
                             <div class="text-2xl">📞</div>
                             <p class="mt-3 text-sm font-medium text-gray-500">
                                 Phone
                             </p>
-                            <a
-                                href="tel:+914844524780"
-                                class="mt-1 block font-semibold text-[#2D4680] hover:underline">
+                            <a href="tel:+914844524780" class="mt-1 block font-semibold text-[#2D4680] hover:underline">
                                 +91 484 452 4780
                             </a>
-                            <a
-                                href="tel:+919995441220"
-                                class="mt-1 block font-semibold text-[#2D4680] hover:underline">
+                            <a href="tel:+919995441220" class="mt-1 block font-semibold text-[#2D4680] hover:underline">
                                 +91 999 544 1220
                             </a>
                         </div>
+                        }
+
+                         @if (countryService.isUS()) {
+                        <div class="rounded-xl border border-gray-200 bg-white p-5">
+                            <div class="text-2xl">📞</div>
+                            <p class="mt-3 text-sm font-medium text-gray-500">
+                                Phone
+                            </p>
+                            <a href="tel:+914844524780" class="mt-1 block font-semibold text-[#2D4680] hover:underline">
+                               +1 731 364 8087
+                            </a>
+                            <a href="tel:+919995441220" class="mt-1 block font-semibold text-[#2D4680] hover:underline">
+                                +1 713 402 9573
+                            </a>
+                        </div>
+                        }
 
                     </div>
 
