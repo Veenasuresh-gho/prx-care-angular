@@ -1,0 +1,230 @@
+<div class="message-panel">
+    @if (!doctorid && !selectedChat) {
+    <div class="message-toolbar">
+        <div class="message-search">
+            <mat-icon>search</mat-icon>
+            <input type="text" placeholder="Search doctors..." [(ngModel)]="searchText">
+        </div>
+
+        <button type="button" class="refresh-btn" title="Refresh messages" [disabled]="loading" (click)="get()">
+            <mat-icon [class.spinning]="loading">refresh</mat-icon>
+        </button>
+    </div>
+    @if (loading) {
+    <div class="empty-messages">
+        <mat-icon>hourglass_empty</mat-icon>
+        <p>Loading messages...</p>
+    </div>
+    } @else {
+    <div class="message-list">
+        @for (item of filteredMessages; track item.id) {
+        <div class="message-item" [class.unread]="item.unread > 0" (click)="openChat(item)">
+            <div class="patient-avatar">
+                @if (item.image) {
+                <img [src]="item.image" [alt]="item.name">
+                } @else {
+                {{ item.name?.charAt(0) || '?' }}
+                }
+            </div>
+            <div class="message-content">
+                <div class="message-top">
+                    <h4>{{ item.name }}</h4>
+                    <span class="message-time">{{ item.time }}</span>
+                </div>
+                <div class="message-bottom">
+                    <p>
+                        @if (item.isSentByMe == 1) {
+                        <span class="message-prefix">You: </span>
+                        }
+                        {{ item.message }}
+                    </p>
+                    @if (item.unread > 0) {
+                    <span class="message-count">
+                        {{ item.unread }}
+                    </span>
+                    }
+                </div>
+            </div>
+        </div>
+        } @empty {
+        <div class="empty-messages">
+            <mat-icon>chat_bubble_outline</mat-icon>
+            <p>No doctor messages found</p>
+        </div>
+        }
+    </div>
+    }
+    <div class="message-footer">
+        Doctor Messages
+    </div>
+    }
+    @if (selectedChat) {
+    <div class="chat-header">
+        @if (!doctorid) {
+        <button type="button" class="back-btn" (click)="backToMessages()">
+            <mat-icon>arrow_back</mat-icon>
+        </button>
+        }
+        <div class="patient-avatar">
+            @if (selectedChat.image) {
+            <img [src]="selectedChat.image" [alt]="selectedChat.name">
+            } @else {
+            {{ selectedChat.name?.charAt(0) || '?' }}
+            }
+        </div>
+        <div class="chat-patient-info">
+            <h3>{{ selectedChat.name }}</h3>
+            <span>Doctor</span>
+        </div>
+    </div>
+
+    <div class="chat-messages">
+        @if (chatLoading) {
+        <div class="empty-messages">
+            <mat-icon>hourglass_empty</mat-icon>
+            <p>Loading conversation...</p>
+        </div>
+        } @else {
+        @for (item of selectedChat.messages; track item.id) {
+        <div class="chat-message-row" [class.sent]="item.sender === 'patient'">
+            <div class="chat-bubble">
+                <div class="chat-message-content">
+                    @if (item.type === 'Audio' && item.fileURL) {
+                    <div class="chat-audio-message">
+                        <div class="audio-icon">
+                            <mat-icon>graphic_eq</mat-icon>
+                        </div>
+                        <div class="audio-player-content">
+                            <span class="audio-label">Voice message</span>
+                            <audio controls preload="metadata" [src]="item.fileURL" class="chat-audio-player">
+                            </audio>
+                        </div>
+                    </div>
+                    } @else if (item.type === 'File' && item.fileURL) {
+                    @if (isImageFile(item.fileURL)) {
+                    <a [href]="item.fileURL" target="_blank" rel="noopener noreferrer">
+                        <img [src]="item.fileURL" alt="Shared attachment" class="chat-file-image">
+                    </a>
+                    } @else {
+                    <a [href]="item.fileURL" target="_blank" rel="noopener noreferrer" class="chat-file-link">
+                        <mat-icon>insert_drive_file</mat-icon>
+                        <span>View attachment</span>
+                        <mat-icon>open_in_new</mat-icon>
+                    </a>
+                    }
+                    } @else if (item.type === 'Text') {
+                    <p>{{ item.text }}</p>
+                    } @else {
+                    <p class="file-unavailable">Attachment unavailable</p>
+                    }
+                </div>
+                <div class="chat-message-footer">
+                    <span class="message-timestamp">
+                        {{ item.time }}
+                    </span>
+
+                    @if (canDeleteMessage(item)) {
+
+                    @if (confirmDeleteMessageId === item.id) {
+
+                    <!-- <div class="delete-confirm">
+            <span>Delete?</span>
+            <button type="button" class="confirm-delete-btn" [disabled]="deletingMessageId === item.id"
+              (click)="deleteMessage(item, $event)">
+              {{ deletingMessageId === item.id ? 'Deleting...' : 'Yes' }}
+            </button>
+            <button type="button" class="cancel-delete-btn" [disabled]="deletingMessageId === item.id"
+              (click)="cancelDeleteMessage($event)">
+              No
+            </button>
+          </div> -->
+
+                    } @else {
+
+                    <!-- <button type="button" class="delete-message-btn" title="Delete message" aria-label="Delete message"
+            (click)="requestDeleteMessage(item, $event)">
+            <mat-icon>delete_outline</mat-icon>
+          </button> -->
+
+                    }
+
+                    }
+                </div>
+            </div>
+        </div>
+
+        } @empty {
+        <div class="empty-messages">
+            <mat-icon>chat_bubble_outline</mat-icon>
+            <p>No messages yet</p>
+        </div>
+        }
+        }
+    </div>
+
+    <div class="chat-input-area">
+        @if (selectedFile) {
+        <div class="selected-file-preview">
+            @if (selectedFile.type.startsWith('image/')) {
+            <img [src]="selectedFilePreview" class="file-preview-image" alt="Selected file">
+            } @else if (selectedFile.type.startsWith('audio/')) {
+            <audio controls [src]="selectedFilePreview" preload="auto" style="width: 220px;">
+            </audio>
+            } @else {
+            <mat-icon class="file-preview-icon">insert_drive_file</mat-icon>
+            }
+
+            <div class="selected-file-info">
+                <span class="selected-file-name">{{ selectedFile.name }}</span>
+                <small>{{ formatFileSize(selectedFile.size) }}</small>
+            </div>
+
+            <button type="button" class="remove-file-btn" (click)="removeSelectedFile()">
+                <mat-icon>close</mat-icon>
+            </button>
+
+        </div>
+
+        } @else if (isRecording) {
+        <div class="recording-controls">
+            <span class="recording-indicator"></span>
+            <span>Recording {{ formatRecordingTime() }}</span>
+
+            <button type="button" class="send-btn" (click)="stopRecording()">
+                <mat-icon>stop</mat-icon>
+            </button>
+        </div>
+
+        } @else {
+        <input type="text" placeholder="Type your message..." [(ngModel)]="newMessage" (keydown.enter)="sendMessage()">
+        }
+
+        @if (!selectedFile && !isRecording) {
+        <button type="button" class="attachment-btn" title="Attach file"
+            [disabled]="chatLoading || sending || uploadingFile" (click)="fileInput.click()">
+            <mat-icon>attach_file</mat-icon>
+        </button>
+
+        <button type="button" class="attachment-btn" title="Record voice"
+            [disabled]="chatLoading || sending || uploadingFile" (click)="startRecording()">
+            <mat-icon>mic</mat-icon>
+        </button>
+        }
+
+        <input #fileInput type="file" hidden accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+            (change)="onAttachmentSelected($event)">
+
+        @if (!isRecording) {
+        <button type="button" class="send-btn"
+            [disabled]="(!newMessage.trim() && !selectedFile) || chatLoading || sending || uploadingFile"
+            (click)="selectedFile ? uploadFile(selectedFile.type.startsWith('audio/') ? 'Audio' : 'File') : sendMessage()">
+            @if (sending || uploadingFile) {
+            <mat-icon>hourglass_empty</mat-icon>
+            } @else {
+            <mat-icon>send</mat-icon>
+            }
+        </button>
+        }
+    </div>
+    }
+</div>

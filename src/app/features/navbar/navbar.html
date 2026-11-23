@@ -20,6 +20,12 @@
       </div>
 
       @if (isAuthenticated()) {
+      <div>
+        <app-message-center></app-message-center>
+      </div>
+      }
+
+      @if (isAuthenticated()) {
 
       <app-profile-popover [patientDetails]="patientDetails" />
 

@@ -15,6 +15,7 @@ import { Button } from '../../../components/button/button';
 import { SheetComponent } from '../../../components/sheet/sheet-component';
 import { AppointmentPreviewSheet } from '../appointment-preview-sheet/appointment-preview-sheet';
 import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-slot-picker',
@@ -48,7 +49,8 @@ export class SlotPicker implements OnInit {
 
   isLoading = signal(false);
   isSheetOpen = false;
-
+  isBooking = signal(false);
+  private router = inject(Router);
   private srv = inject(GHOService);
   toastr = inject(ToastrService);
 
@@ -102,8 +104,14 @@ export class SlotPicker implements OnInit {
   }
 
   confirmAppointment(): void {
+    if (this.isBooking()) return;
+
     const slot = this.selectedSlot();
     const doctor = this.doctorDetails();
+
+    if (!slot || !doctor || !this.patientId) return;
+
+    this.isBooking.set(true);
 
     const tv = [
       { T: 'dk1', V: this.patientId },
@@ -119,14 +127,20 @@ export class SlotPicker implements OnInit {
     this.srv.getdata('care', tv).subscribe({
       next: (res) => {
         if (res.Status === 1) {
-          this.closeSheet();
           this.toastr.success(res?.Data[0]?.[0]?.msg);
+
+          this.closeSheet();
+
+          this.router.navigate(['/dashboard']);
         } else {
-          this.toastr.error(res?.Info)
+          this.toastr.error(res?.Info);
+          this.isBooking.set(false);
         }
       },
       error: (error) => {
         console.error('Error adding appointment:', error);
+        this.toastr.error('Unable to book appointment. Please try again.');
+        this.isBooking.set(false);
       },
     });
   }

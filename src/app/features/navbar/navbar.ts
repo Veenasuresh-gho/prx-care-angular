@@ -6,6 +6,7 @@ import { NotificationPopover } from './components/notification-popover/notificat
 import { ProfilePopover } from './components/profile-popover/profile-popover';
 import { Logo } from './components/logo/logo';
 import { LocationDropdown } from './components/location-dropdown/location-dropdown';
+import { MessageCenterComponent } from '../../pages/messages/message-center/message-center';
 
 @Component({
   selector: 'app-navbar',
@@ -15,7 +16,8 @@ import { LocationDropdown } from './components/location-dropdown/location-dropdo
     ServicesDropdown,
     NotificationPopover,
     ProfilePopover,
-    LocationDropdown
+    LocationDropdown,
+    MessageCenterComponent
   ],
   templateUrl: './navbar.html',
 })
