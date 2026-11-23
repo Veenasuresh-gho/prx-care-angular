@@ -1,0 +1,135 @@
+
+<!-- Notification Dropdown -->
+<div class="message-center">
+
+  <button
+    class="message-trigger"
+    type="button"
+    cdkOverlayOrigin
+    #messageOrigin="cdkOverlayOrigin"
+    (click)="toggleMessages()">
+
+    <mat-icon>chat</mat-icon>
+
+    @if (unreadCount > 0) {
+      <span class="unread-badge">
+        {{ unreadCount > 99 ? '99+' : unreadCount }}
+      </span>
+    }
+
+  </button>
+
+  <ng-template
+    cdkConnectedOverlay
+    [cdkConnectedOverlayOrigin]="messageOrigin"
+    [cdkConnectedOverlayOpen]="isMessageDropdown"
+    [cdkConnectedOverlayPositions]="messagePositions"
+    [cdkConnectedOverlayHasBackdrop]="true"
+    cdkConnectedOverlayBackdropClass="cdk-overlay-transparent-backdrop"
+    (backdropClick)="closeMessageDropdown()">
+    <div class="message-dropdown">
+
+      <div class="dropdown-header">
+        <span>Notifications</span>
+      </div>
+
+      <div class="dropdown-content">
+
+        @if (loading && messages.length === 0) {
+
+          <div class="empty-notifications">
+            Loading notifications...
+          </div>
+
+        } @else {
+
+          @for (message of messages; track message.id) {
+
+            <div
+              class="notification-item unread"
+              (click)="openChat(message)">
+
+              <div class="notification-avatar">
+                @if (message.image) {
+                  <img [src]="message.image" [alt]="message.name">
+                } @else {
+                  {{ message.name.charAt(0) }}
+                }
+              </div>
+
+              <div class="notification-details">
+
+                <div class="notification-top">
+
+                  <span class="patient-name">
+                    {{ message.name }}
+                  </span>
+
+                  <span class="notification-time">
+                    {{ message.time }}
+                  </span>
+
+                </div>
+
+                <div class="notification-message">
+                  {{ message.message }}
+                </div>
+
+                <div class="notification-role">
+                  {{ message.contactType }}
+                </div>
+
+              </div>
+
+              @if (message.unread > 0) {
+                <span class="notification-count">
+                  {{ message.unread > 99 ? '99+' : message.unread }}
+                </span>
+              }
+
+            </div>
+
+          } @empty {
+
+            <div class="empty-notifications">
+              <mat-icon>mark_chat_read</mat-icon>
+              <span>No unread messages</span>
+            </div>
+
+          }
+
+        }
+
+      </div>
+
+      <div class="dropdown-footer">
+        <span (click)="openChat()">
+          View all messages
+        </span>
+      </div>
+
+    </div>
+
+  </ng-template>
+
+</div>
+
+<!-- Chat Side Panel -->
+<ng-template #chatSheetTemplate>
+
+  <div class="chat-sheet">
+
+    <div class="azure-header edit-header">
+      <span>Messages</span>
+
+      <mat-icon (click)="closeChat()">close</mat-icon>
+    </div>
+
+    <div class="blade-content">
+      <app-message>
+      </app-message>
+    </div>
+
+  </div>
+
+</ng-template>
