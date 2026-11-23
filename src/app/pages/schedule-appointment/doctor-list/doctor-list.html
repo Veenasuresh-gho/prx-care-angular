@@ -1,19 +1,21 @@
-@if (doctorList.length > 0) {
+@if (isLoading || loading) {
 
-<div class="grid grid-cols-1 gap-2 md:gap-4 lg:grid-cols-2">
+  <div class="flex justify-center py-8">
+    <mat-spinner diameter="32" />
+  </div>
 
-  @for (doctor of doctorList; track doctor.id) {
+} @else if (doctorList.length > 0) {
 
-  <app-doctor-card [doctor]="doctor" />
-
-  }
-
-</div>
+  <div class="grid grid-cols-1 gap-2 md:gap-4 lg:grid-cols-2">
+    @for (doctor of doctorList; track doctor.id) {
+      <app-doctor-card [doctor]="doctor" />
+    }
+  </div>
 
 } @else {
 
-<p class="text-center text-muted-foreground">
-  No doctors found
-</p>
+  <p class="text-center text-muted-foreground">
+    No doctors found
+  </p>
 
 }

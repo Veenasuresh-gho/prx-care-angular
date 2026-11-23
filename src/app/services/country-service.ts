@@ -20,9 +20,6 @@ export class CountryService {
       } else {
         this.country.set('OTHER');
       }
-
-      console.log('Detected Country:', this.country());
-
     } catch (error) {
       console.error('Country detection failed', error);
       this.country.set('OTHER');

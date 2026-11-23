@@ -3,15 +3,19 @@ import { AppointmentDetailsCard } from './components/appointment-details-card/ap
 import { GHOService } from '../../services/gho.service';
 import { JsonPipe } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
+import { finalize } from 'rxjs';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-appointment-details',
-  imports: [AppointmentDetailsCard, JsonPipe, MatIconModule],
+  standalone: true,
+  imports: [AppointmentDetailsCard, JsonPipe, MatIconModule,MatProgressSpinnerModule],
   templateUrl: './appointment-details.html',
 })
 export class AppointmentDetails implements OnInit {
   patientId: string | null = null;
   appontmentList: any[] = [];
+  isLoading = false;
 
   private srv = inject(GHOService);
   private cdr = inject(ChangeDetectorRef);
@@ -22,6 +26,8 @@ export class AppointmentDetails implements OnInit {
   }
 
   getAppointmentList(): void {
+    this.isLoading = true;
+
     const tv = [
       {
         T: 'dk1',
@@ -33,16 +39,22 @@ export class AppointmentDetails implements OnInit {
       }
     ];
 
-    this.srv.getdata('care', tv).subscribe({
-      next: (res) => {
-        if (res.Status === 1) {
-          this.appontmentList = res.Data[0] || [];
+    this.srv.getdata('care', tv)
+      .pipe(
+        finalize(() => {
+          this.isLoading = false;
           this.cdr.detectChanges();
-        }
-      },
-      error: (error) => {
-        console.error('Error fetching doctors:', error);
-      },
-    });
+        })
+      )
+      .subscribe({
+        next: (res) => {
+          if (res.Status === 1) {
+            this.appontmentList = res.Data[0] || [];
+          }
+        },
+        error: (error) => {
+          console.error('Error fetching appointments:', error);
+        },
+      });
   }
 }
