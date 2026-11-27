@@ -26,7 +26,8 @@
         class="h-14 w-full rounded-xl border border-slate-200 bg-white px-4 text-[15px] text-slate-900 outline-none placeholder:text-slate-400 focus:border-primary focus:ring-1 focus:ring-primary" />
       <div class="grid grid-cols-[minmax(0,0.32fr)_minmax(0,0.68fr)] gap-3">
         <app-country-select-field [selectedCountryCode]="form.controls.countryCode.value"
-          (selectedCountryCodeChange)="onCountryCodeChange($event)" placeholder="Country Code" />
+          (selectedCountryCodeChange)="form.controls.countryCode.setValue($event)"
+          (countryIdChange)="form.controls.countryId.setValue($event)" placeholder="Country Code" />
 
         <!-- Phone -->
         <input type="tel" formControlName="phoneNumber" placeholder="Phone Number"

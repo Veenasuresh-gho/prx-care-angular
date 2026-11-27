@@ -102,13 +102,14 @@ export class PaymentAlert {
     this.activeShareTarget = null;
   }
 
-  handleSendPaymentRequest(data: {
-    fullName: string;
-    countryCode: string;
-    phoneNumber: string;
-    email: string;
-    amount: number;
-  }): void {
+handleSendPaymentRequest(data: {
+  fullName: string;
+  countryId: number;
+  countryCode: string;
+  phoneNumber: string;
+  email: string;
+  amount: number;
+}): void {
     if (
       !this.activeShareTarget ||
       this.isCancelled ||
@@ -126,7 +127,7 @@ export class PaymentAlert {
 
     const billDetails = {
       RequestToName: data.fullName,
-      RequestToCountryID: data.countryCode,
+      RequestToCountryID: data.countryId,
       RequestToPhone: data.phoneNumber,
       RequestToEmail: data.email,
       AmountRequested: this.activeShareTarget.amount,
