@@ -100,7 +100,9 @@ export class MedicalRecords implements OnInit {
             },
             {
                 T: 'c1',
-                V: this.activeCategoryId.toString()
+                V: this.tabContent.find(
+                    item => item.value === this.activeCategoryId
+                )?.label || ''
             },
             {
                 T: 'c10',

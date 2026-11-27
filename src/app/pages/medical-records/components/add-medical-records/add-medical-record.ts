@@ -162,6 +162,17 @@ export class AddMedicalRecord implements OnInit {
         );
     }
 
+    get selectedDocumentType() {
+        const type =
+            this.medicalRecordForm
+                .get('documentType')
+                ?.value;
+
+        return this.selectedCategory?.typeList.find(
+            item => item.value === type
+        );
+    }
+
     get isPdf(): boolean {
         return this.selectedFile?.type === 'application/pdf';
     }
@@ -206,6 +217,10 @@ export class AddMedicalRecord implements OnInit {
             {
                 T: 'c2',
                 V: this.selectedCategory?.label || ''
+            },
+            {
+                T: 'c3',
+                V: this.selectedDocumentType?.label || ''
             },
             {
                 T: 'c10',
