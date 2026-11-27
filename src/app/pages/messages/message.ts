@@ -6,7 +6,9 @@ import {
   Input,
   OnInit,
   OnChanges,
-  SimpleChanges
+  SimpleChanges,
+  ViewChild,
+  ElementRef
 } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
@@ -55,6 +57,8 @@ export class MessageComponent implements OnInit, OnChanges {
   private recordingTimer: ReturnType<typeof setInterval> | null = null;
   private mediaStream: MediaStream | null = null;
   private chatRequestId = 0;
+  @ViewChild('chatMessages')
+  private chatMessages?: ElementRef<HTMLDivElement>;
   ngOnInit(): void {
     this.initializeMessaging();
   }
@@ -139,6 +143,19 @@ export class MessageComponent implements OnInit, OnChanges {
     );
   }
 
+  scrollToLatestMessage(): void {
+    requestAnimationFrame(() => {
+      const container = this.chatMessages?.nativeElement;
+
+      if (container) {
+        container.scrollTo({
+          top: container.scrollHeight,
+          behavior: 'smooth'
+        });
+      }
+    });
+  }
+
   get unreadCount(): number {
     return this.messages.reduce(
       (total, item) => total + item.unread,
@@ -184,6 +201,7 @@ export class MessageComponent implements OnInit, OnChanges {
           message.unread = 0;
         }
         this.cdr.detectChanges();
+        this.scrollToLatestMessage();
       },
       error: () => {
         if (requestId !== this.chatRequestId) {
@@ -329,48 +347,48 @@ export class MessageComponent implements OnInit, OnChanges {
   //   });
   // }
 
-deleteMessage(item: any, event: MouseEvent): void {
-  event.stopPropagation();
+  deleteMessage(item: any, event: MouseEvent): void {
+    event.stopPropagation();
 
-  if (
-    !this.canDeleteMessage(item) ||
-    this.deletingMessageId !== null ||
-    this.confirmDeleteMessageId !== Number(item.id)
-  ) {
-    return;
-  }
-
-  this.deletingMessageId = Number(item.id);
-
-  this.tv = [];
-  this.tv.push({ T: 'dk1', V: 'PATIENT' });
-  this.tv.push({ T: 'dk2', V: String(item.id) });
-  this.tv.push({ T: 'c10', V: '32' });
-
-  this.srv.getdata('assist', this.tv).subscribe({
-    next: (r) => {
-      this.deletingMessageId = null;
-      this.confirmDeleteMessageId = null;
-
-      if (r.Status == 1) {
-        // Remove deleted message immediately from UI
-        this.selectedChat.messages =
-          this.selectedChat.messages.filter(
-            (msg: any) => Number(msg.id) !== Number(item.id)
-          );
-        if (!this.doctorid) {
-          this.get();
-        }
-      }
-
-      this.cdr.detectChanges();
-    },
-    error: () => {
-      this.deletingMessageId = null;
-      this.cdr.detectChanges();
+    if (
+      !this.canDeleteMessage(item) ||
+      this.deletingMessageId !== null ||
+      this.confirmDeleteMessageId !== Number(item.id)
+    ) {
+      return;
     }
-  });
-}
+
+    this.deletingMessageId = Number(item.id);
+
+    this.tv = [];
+    this.tv.push({ T: 'dk1', V: 'PATIENT' });
+    this.tv.push({ T: 'dk2', V: String(item.id) });
+    this.tv.push({ T: 'c10', V: '32' });
+
+    this.srv.getdata('assist', this.tv).subscribe({
+      next: (r) => {
+        this.deletingMessageId = null;
+        this.confirmDeleteMessageId = null;
+
+        if (r.Status == 1) {
+          // Remove deleted message immediately from UI
+          this.selectedChat.messages =
+            this.selectedChat.messages.filter(
+              (msg: any) => Number(msg.id) !== Number(item.id)
+            );
+          if (!this.doctorid) {
+            this.get();
+          }
+        }
+
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.deletingMessageId = null;
+        this.cdr.detectChanges();
+      }
+    });
+  }
 
 
   onAttachmentSelected(event: Event): void {

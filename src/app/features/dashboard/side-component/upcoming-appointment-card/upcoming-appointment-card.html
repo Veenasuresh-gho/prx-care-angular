@@ -120,38 +120,50 @@
         </div>
         <!-- Meta Chips -->
         <div class="flex flex-wrap gap-2 pt-1">
+
             <!-- Hospital -->
             <span
-                class="inline-flex items-center gap-1.5 rounded-lg bg-light-grey px-2.5 py-1 text-[12.5px] font-medium text-grey">
+                class="inline-flex items-center gap-1.5 rounded-lg bg-teal-50 px-2.5 py-1 text-[12.5px] font-medium text-teal-700">
                 <span class="material-icons text-[14px]">
                     local_hospital
                 </span>
                 {{ appointment.TenantName || '—' }}
             </span>
+
             <!-- Appointment ID -->
             <span
-                class="inline-flex items-center gap-1.5 rounded-lg bg-light-grey px-2.5 py-1 font-mono text-[12.5px] font-medium text-grey">
+                class="inline-flex items-center gap-1.5 rounded-lg bg-indigo-50 px-2.5 py-1 font-mono text-[12.5px] font-medium text-indigo-700">
                 <span class="material-icons text-[14px]">
                     info
                 </span>
                 {{ appointment.ID || '—' }}
             </span>
+
         </div>
     </div>
-    <!-- Footer -->
-    <div class="flex justify-end gap-2 border-t border-slate-100 px-5 py-4">
-        <!-- View Details -->
-        <button type="button"
-            class="h-10 rounded-lg border border-primary bg-white px-4 text-sm font-medium text-primary transition-colors hover:bg-primary-light"
-            (click)="handleViewClick()">
-            View details
+
+    <div class="flex flex-col-reverse gap-2.5 border-t border-slate-100
+           bg-slate-50/50 px-4 py-3.5
+           sm:flex-row sm:justify-end sm:px-5 sm:py-4">
+        <button type="button" class="flex h-11 w-full items-center justify-center gap-2
+               rounded-lg border border-primary bg-white px-4
+               text-sm font-semibold text-primary
+               transition-all duration-200
+               hover:bg-primary-light active:scale-[0.98]
+               sm:w-auto" (click)="handleViewClick()">
+            View Details
         </button>
-        <!-- Cancel Appointment -->
         @if (appointment.AppointmentStatus === 'Confirmed') {
-        <button type="button"
-            class="h-10 rounded-lg bg-red px-4 text-sm font-medium text-white transition-colors hover:bg-red/90"
-            (click)="openCancelDialog()">
-            Cancel appointment
+        <button type="button" class="flex h-11 w-full items-center justify-center gap-2
+               rounded-lg border border-red-200 bg-red-50 px-4
+               text-sm font-semibold text-red-600
+               transition-all duration-200
+               hover:border-red-300 hover:bg-red-100
+               active:scale-[0.98]
+               sm:w-auto">
+
+
+            Cancel Appointment
         </button>
         }
     </div>
