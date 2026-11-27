@@ -8,13 +8,11 @@ import {
   SimpleChanges,
   inject,
 } from '@angular/core';
-
 import {
   FormBuilder,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-
 import { Dialog } from '../../../../../components/dialog/dialog';
 import { Button } from '../../../../../components/button/button';
 import { GHOService } from '../../../../../services/gho.service';
@@ -44,27 +42,32 @@ export class SendPaymentRequestDialog implements OnChanges {
 
   @Output() send = new EventEmitter<{
     fullName: string;
+    countryId: number;
     countryCode: string;
     phoneNumber: string;
     email: string;
     amount: number;
   }>();
-
   private readonly fb = inject(FormBuilder);
   private readonly srv = inject(GHOService);
 
   isCountryLoading = false;
   countries: any[] = [];
-
   form = this.fb.nonNullable.group({
     fullName: ['', Validators.required],
     countryCode: ['91', Validators.required],
+    countryId: [102, Validators.required],
     phoneNumber: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
   });
 
-  onCountryCodeChange(code: string): void {
-    this.form.controls.countryCode.setValue(code);
+
+  onCountryCodeChange(code: string, countryId: number): void {
+    this.form.patchValue({
+      countryCode: code,
+      countryId: countryId,
+    });
+
     this.form.controls.countryCode.markAsTouched();
   }
 
@@ -135,6 +138,7 @@ export class SendPaymentRequestDialog implements OnChanges {
     );
   }
 
+
   handleSend(): void {
     if (this.form.invalid || this.loading) {
       this.form.markAllAsTouched();
@@ -145,6 +149,7 @@ export class SendPaymentRequestDialog implements OnChanges {
 
     this.send.emit({
       fullName: value.fullName,
+      countryId: value.countryId,
       countryCode: value.countryCode,
       phoneNumber: value.phoneNumber,
       email: value.email,
