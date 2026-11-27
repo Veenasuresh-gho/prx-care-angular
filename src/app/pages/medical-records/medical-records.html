@@ -19,17 +19,17 @@
             </button>
         </div>
     </div>
+    <mat-tab-group class="medical-record-tabs" [selectedIndex]="selectedTab" (selectedIndexChange)="onTabChange($event)"
+        animationDuration="200ms">
 
-    <mat-tab-group class="medical-record-tabs" [selectedIndex]="selectedTab"
-        (selectedIndexChange)="onTabChange($event)">
         @for (tab of tabContent; track tab.value) {
         <mat-tab>
             <ng-template mat-tab-label>
-                <div class="flex w-full items-center justify-center gap-1.5 rounded-md px-1 py-0.5"
-                    [style.background-color]="tab.color">
-                    <img [src]="tab.icon" [alt]="tab.label" class="h-7 w-7 shrink-0 object-contain" />
+                <div class="medical-tab-label" [style.background-color]="tab.color">
 
-                    <span class="whitespace-nowrap text-[11px] font-medium">
+                    <img [src]="tab.icon" [alt]="tab.label" class="medical-tab-icon" />
+
+                    <span class="medical-tab-text">
                         {{ tab.label }}
                     </span>
                 </div>
@@ -60,9 +60,7 @@
                                 </p>
 
                                 <p class="mt-1 text-xs text-gray-400">
-                                    {{ record.UploadedDate }}
-                                    ·
-                                    {{ record.Size }} bytes
+                                    {{ record.UploadedDate }} · {{ record.Size }} bytes
                                 </p>
                             </div>
 
@@ -77,6 +75,7 @@
                                 <button mat-stroked-button type="button" (click)="deleteRecord(record)"
                                     [disabled]="deletingRecordId !== null"
                                     class="!flex !h-9 !w-9 !min-w-0 items-center justify-center !p-0 !text-red-600">
+
                                     @if (deletingRecordId === record.ID) {
                                     <mat-spinner diameter="18"></mat-spinner>
                                     } @else {
@@ -96,6 +95,7 @@
         </mat-tab>
         }
     </mat-tab-group>
+
 </div>
 
 <app-sheet [(open)]="isSheetOpen" side="right" width="500px" title="Add Medical Records"

@@ -1,41 +1,79 @@
+
 .medication-tabs {
-width: 100%;
+    display: block;
+    width: 100%;
+    max-width: 100%;
 }
 
+/* Tab header */
 .medication-tabs ::ng-deep .mat-mdc-tab-header {
-width: fit-content;
-background-color: #f3f4f6;
-border-radius: 10px;
-padding: 4px;
+    width: fit-content;
+    max-width: 100%;
+    background-color: #f3f4f6;
+    border-radius: 10px;
+    padding: 4px;
+    overflow: hidden;
+}
+
+/* Tab list */
+.medication-tabs ::ng-deep .mat-mdc-tab-label-container {
+    width: 100%;
+}
+
+.medication-tabs ::ng-deep .mat-mdc-tab-list {
+    width: 100%;
 }
 
 .medication-tabs ::ng-deep .mat-mdc-tab {
-min-width: 150px !important;
-width: 205px !important;
-padding: 0 !important;
-border-radius: 8px;
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
+    width: auto !important;
+    padding: 0 !important;
+    border-radius: 8px;
 }
 
+/* Center tab content */
 .medication-tabs ::ng-deep .mat-mdc-tab .mdc-tab__content {
-width: 100%;
-justify-content: center;
+    width: 100%;
+    justify-content: center;
 }
 
 .medication-tabs ::ng-deep .tab-label {
-font-size: 14px;
-font-weight: 500;
-padding: 8px 12px;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 8px 12px;
+    white-space: nowrap;
 }
 
+/* Active tab */
 .medication-tabs ::ng-deep .mat-mdc-tab.mdc-tab--active {
-background-color: #ffffff !important;
+    background-color: #ffffff !important;
 }
 
 .medication-tabs ::ng-deep .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
-color: #111827 !important;
-font-weight: 600;
+    color: #111827 !important;
+    font-weight: 600;
 }
 
+/* Remove underline */
 .medication-tabs ::ng-deep .mdc-tab-indicator__content--underline {
-display: none !important;
+    display: none !important;
+}
+
+/* Mobile responsive */
+@media (max-width: 600px) {
+    .medication-tabs ::ng-deep .mat-mdc-tab-header {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .medication-tabs ::ng-deep .mat-mdc-tab {
+        flex: 1 1 50% !important;
+        min-width: 0 !important;
+    }
+
+    .medication-tabs ::ng-deep .tab-label {
+        font-size: 13px;
+        padding: 8px 4px;
+    }
 }
