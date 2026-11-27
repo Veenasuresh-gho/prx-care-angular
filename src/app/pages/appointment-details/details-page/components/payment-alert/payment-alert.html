@@ -170,6 +170,7 @@
   [open]="isRequestDialogOpen"
   [amount]="activeShareTarget?.amount ?? 0"
   [appointmentId]="appointment?.ID"
+   [loading]="isGetPatientBillingLoading"
   (openChange)="
     $event
       ? (isRequestDialogOpen = true)

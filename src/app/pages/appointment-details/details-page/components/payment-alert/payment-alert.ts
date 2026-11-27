@@ -1,15 +1,18 @@
+
 import {
   Component,
   Input,
   inject,
+  ChangeDetectorRef,
 } from '@angular/core';
 
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
-
 import { Button } from '../../../../../components/button/button';
 import { SendPaymentRequestDialog } from '../send-payment-request-dialog/send-payment-request-dialog';
 import { GHOService } from '../../../../../services/gho.service';
+import { ToastrService } from 'ngx-toastr';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-payment-alert',
@@ -26,15 +29,16 @@ export class PaymentAlert {
   @Input({ required: true }) appointment!: any;
 
   private readonly srv = inject(GHOService);
+  private readonly toastr = inject(ToastrService);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   isRequestDialogOpen = false;
+  isGetPatientBillingLoading = false;
 
   activeShareTarget: {
     amount: number;
     billingId?: number;
   } | null = null;
-
-  isGetPatientBillingLoading = false;
 
   get amountDue(): number {
     return Number(this.appointment?.AmountDue ?? 0);
@@ -79,19 +83,21 @@ export class PaymentAlert {
     if (
       this.isCancelled ||
       !this.appointment?.ID ||
-      amount <= 0
+      amount <= 0 ||
+      this.isGetPatientBillingLoading
     ) {
       return;
     }
 
-    this.activeShareTarget = {
-      amount,
-    };
-
+    this.activeShareTarget = { amount };
     this.isRequestDialogOpen = true;
   }
 
   closeShareDialog(): void {
+    if (this.isGetPatientBillingLoading) {
+      return;
+    }
+
     this.isRequestDialogOpen = false;
     this.activeShareTarget = null;
   }
@@ -101,23 +107,78 @@ export class PaymentAlert {
     countryCode: string;
     phoneNumber: string;
     email: string;
+    amount: number;
   }): void {
-    if (!this.activeShareTarget || this.isCancelled) {
+    if (
+      !this.activeShareTarget ||
+      this.isCancelled ||
+      this.isGetPatientBillingLoading
+    ) {
       return;
     }
 
-    const paymentLink = this.buildPaymentLink(
-      this.activeShareTarget.amount
-    );
-  }
+    const patientId = sessionStorage.getItem('id');
 
-  private buildPaymentLink(amount: number): string {
-    const params = new URLSearchParams({
-      appointmentId: String(this.appointment?.ID),
-      amount: String(amount),
-    });
+    if (!patientId) {
+      this.toastr.error('Patient ID not found');
+      return;
+    }
 
-    return `${window.location.origin}/pay?${params.toString()}`;
+    const billDetails = {
+      RequestToName: data.fullName,
+      RequestToCountryID: data.countryCode,
+      RequestToPhone: data.phoneNumber,
+      RequestToEmail: data.email,
+      AmountRequested: this.activeShareTarget.amount,
+    };
+
+    const tv = [
+      { T: 'dk1', V: String(this.appointment?.ID) },
+      { T: 'dk2', V: String(patientId) },
+      { T: 'c1', V: JSON.stringify(billDetails) },
+      { T: 'c10', V: '1' },
+    ];
+
+    this.isGetPatientBillingLoading = true;
+
+    this.srv.getdata('patientpaymentrequest', tv)
+      .pipe(
+        finalize(() => {
+          this.isGetPatientBillingLoading = false;
+          this.cdr.detectChanges();
+        })
+      )
+      .subscribe({
+        next: (res) => {
+          if (res?.Status === 1) {
+            const successMessage =
+              res.Data?.[0]?.[0]?.msg ||
+              'Payment request sent successfully';
+
+            this.isRequestDialogOpen = false;
+            this.activeShareTarget = null;
+
+            this.toastr.success(successMessage);
+          } else {
+            this.toastr.error(
+              res?.Info || 'Failed to send payment request'
+            );
+          }
+
+          this.cdr.detectChanges();
+        },
+        error: (error) => {
+          console.error('Payment Request API Error:', error);
+
+          this.toastr.error(
+            error?.Message ||
+            error?.error?.Info ||
+            'Something went wrong while sending payment request'
+          );
+
+          this.cdr.detectChanges();
+        },
+      });
   }
 
   handlePayment(amount: number): void {
@@ -128,6 +189,5 @@ export class PaymentAlert {
     if (!this.appointment?.ID || amount <= 0) {
       return;
     }
-
   }
 }
