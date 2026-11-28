@@ -145,7 +145,7 @@
     <div class="flex flex-col-reverse gap-2.5 border-t border-slate-100
            bg-slate-50/50 px-4 py-3.5
            sm:flex-row sm:justify-end sm:px-5 sm:py-4">
-        <button type="button" class="flex h-11 w-full items-center justify-center gap-2
+        <button type="button" class="flex h-11 w-full items-center justify-center gap-2 cursor-pointer
                rounded-lg border border-primary bg-white px-4
                text-sm font-semibold text-primary
                transition-all duration-200
@@ -154,7 +154,7 @@
             View Details
         </button>
         @if (appointment.AppointmentStatus === 'Confirmed') {
-        <button type="button" class="flex h-11 w-full items-center justify-center gap-2
+        <button type="button" class="flex h-11 w-full items-center justify-center gap-2 cursor-pointer
                rounded-lg border border-red-200 bg-red-50 px-4
                text-sm font-semibold text-red-600
                transition-all duration-200
