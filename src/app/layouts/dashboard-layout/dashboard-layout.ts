@@ -41,10 +41,8 @@ export class DashboardLayout implements OnInit {
   appointmentDetails: any = null;
   patientDetails: any = null;
   advertisements: any[] = [];
-
   patientId: string | null = null;
   isLoading = true;
-
   get isDashboard(): boolean {
     return this.router.url === '/dashboard';
   }
@@ -113,17 +111,14 @@ export class DashboardLayout implements OnInit {
           this.appointmentDetails = null;
           this.advertisements = [];
         }
-
         this.isLoading = false;
         this.cdr.markForCheck();
       },
       error: (error) => {
         console.error('Failed to get dashboard data:', error);
-
         this.appointmentDetails = null;
         this.advertisements = [];
         this.isLoading = false;
-
         this.cdr.markForCheck();
       },
     });

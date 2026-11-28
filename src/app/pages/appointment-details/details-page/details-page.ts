@@ -5,6 +5,7 @@ import {
   OnInit,
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { AppointmentCard } from './components/appointment-card/appointment-card';
 import { GHOService } from '../../../services/gho.service';
@@ -17,6 +18,7 @@ import { AppointmentFlow } from './components/appointment-flow/appointment-flow'
   selector: 'app-details-page',
   standalone: true,
   imports: [
+    MatProgressSpinnerModule,
     AppointmentCard,
     PatientDetails,
     PaymentAlert,
@@ -35,6 +37,9 @@ export class DetailsPage implements OnInit {
 
   appointmentDetails: any = null;
   appointmentTrack: any[] = [];
+
+  loading = false;
+  pendingRequests = 0;
 
   ngOnInit(): void {
     this.appointmentId =
@@ -73,10 +78,11 @@ export class DetailsPage implements OnInit {
           this.appointmentDetails = res.Data?.[0]?.[0] ?? null;
         }
 
-        this.cdr.detectChanges();
+        this.finishRequest();
       },
       error: (error) => {
         console.error('Error fetching appointment details:', error);
+        this.finishRequest();
       },
     });
   }
@@ -94,15 +100,29 @@ export class DetailsPage implements OnInit {
           this.appointmentTrack = res.Data?.[0] ?? [];
         }
 
-        this.cdr.detectChanges();
+        this.finishRequest();
       },
       error: (error) => {
         console.error('Error fetching appointment tracker:', error);
+        this.finishRequest();
       },
     });
   }
 
+  private finishRequest(): void {
+    this.pendingRequests--;
+
+    if (this.pendingRequests === 0) {
+      this.loading = false;
+    }
+
+    this.cdr.detectChanges();
+  }
+
   refetch(): void {
+    this.loading = true;
+    this.pendingRequests = 2;
+
     this.getAppointmentDetails();
     this.getAppointmentTracker();
   }

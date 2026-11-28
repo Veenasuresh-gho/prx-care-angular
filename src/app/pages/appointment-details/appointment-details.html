@@ -16,7 +16,7 @@
     } @else if (appontmentList?.length) {
     <div class="space-y-4">
         @for (appointment of appontmentList; track appointment.ID) {
-        <app-appointment-details-card [appointment]="appointment" />
+        <app-appointment-details-card [appointment]="appointment" (refetch)="getAppointmentList()" />
         }
     </div>
     } @else {

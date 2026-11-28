@@ -1,3 +1,13 @@
+@if (loading) {
+<div class="flex min-h-[60vh] w-full items-center justify-center">
+    <div class="flex flex-col items-center gap-3">
+        <mat-spinner diameter="40" />
+        <p class="text-sm font-medium text-slate-500">
+            Loading appointment details...
+        </p>
+    </div>
+</div>
+} @else if (appointmentDetails) {
 <div class="space-y-4">
     <h4 class="mt-4 text-lg font-bold">
         Appointment Details
@@ -9,20 +19,29 @@
         <app-patient-details [appointment]="appointmentDetails" />
     </div>
 
+    @if (!isCancelled) {
     <div>
-        @if (!isCancelled) {
         <app-payment-alert [appointment]="appointmentDetails" />
-        }
     </div>
+    }
+    @if (isConfirmed) {
     <div>
-        @if (isConfirmed) {
-        <app-checkin-or-payment-proceed [appointment]="appointmentDetails" (cancelled)="refetch()" />
-        }
+        <app-checkin-or-payment-proceed
+            [appointment]="appointmentDetails"
+            (cancelled)="refetch()"
+        />
     </div>
+    }
+    @if (!isConfirmed) {
     <div>
-        @if (!isConfirmed) {
         <app-appointment-flow [appointmenttrack]="appointmentTrack" />
-        }
     </div>
-
+    }
 </div>
+} @else {
+<div class="flex min-h-[40vh] items-center justify-center">
+    <p class="text-sm text-slate-500">
+        Appointment details not found.
+    </p>
+</div>
+}
